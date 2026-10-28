@@ -279,6 +279,61 @@ table.pk .rec{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spa
 .pdf .plogo.sm{height:11px}
 .pdf .ptop{align-items:center}
 
+/* ---------- phone layout (desktop untouched) ---------- */
+.pkm{display:none}
+@media (max-width:640px){
+  body{overflow-x:visible}
+  .topline .cities{display:none}
+  .hero{padding-block:22px 14px}
+  .hero-main{margin-top:22px;gap:18px}
+  .tagline{font-size:15px;margin-top:14px}
+  .strip{padding-block:8px 10px}
+  .strip-inner{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;scroll-snap-type:x proximity;scroll-padding-inline:16px}
+  .strip-inner::-webkit-scrollbar{display:none}
+  .seg{flex:0 0 62px;height:40px;font-size:12px;font-stretch:110%;padding:6px 8px;scroll-snap-align:start}
+  .seg .dots{display:flex}
+  .grid{gap:12px;margin-top:16px}
+  .month{min-height:0;padding:16px 14px 12px;scroll-margin-top:70px}
+  .mnum{font-size:104px;top:-12px}
+  .mk{font-size:26px}
+  .plist{padding-top:18px;gap:8px}
+  .proj{padding:12px 44px 12px 12px;min-height:64px}
+  .proj .pt{font-size:16.5px}
+  .proj .go{width:26px;height:26px;margin-top:-13px;right:10px}
+  .ov-bar{padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+  .ov-bar .crumb{font-size:10.5px}
+  .bhero .motif{position:relative;display:block;width:100%;height:170px;-webkit-mask-image:none;mask-image:none;opacity:.95;margin-bottom:-18px}
+  .bhero-in{padding-block:8px 28px}
+  .blogo{height:17px;margin-bottom:16px}
+  .bt{font-size:clamp(30px,9.4vw,40px);margin:16px 0 10px}
+  .btag{font-size:15px}
+  .kpis{gap:10px 22px;margin-top:22px;padding-top:14px}
+  .kpi b{font-size:23px}
+  .bbody{padding-top:26px}
+  .lead{font-size:20px}
+  .p{font-size:15.5px}
+  .sec{margin-top:40px}
+  .callout{font-size:15.5px;padding:14px 16px}
+  .tscroll{display:none}
+  .pkm{display:grid;gap:12px;margin-top:16px}
+  .pkm-card{border-radius:10px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden}
+  .pkm-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:14px 16px;background:linear-gradient(150deg,var(--c2),var(--c1));color:var(--ink)}
+  .pkm-name{font-family:var(--f-display);font-weight:900;font-stretch:115%;text-transform:uppercase;font-size:16px;line-height:1.15;min-width:0}
+  .pkm-name .rec{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;margin-top:4px;opacity:.85}
+  .pkm-badge{display:table;font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;border:1px solid var(--ink);border-radius:3px;padding:1px 6px;margin-bottom:6px}
+  .pkm-price{font-family:var(--f-display);font-weight:900;font-stretch:110%;font-size:19px;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .pkm-list{list-style:none;margin:0;padding:6px 16px 10px}
+  .pkm-list li{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .pkm-list li:last-child{border-bottom:0}
+  .pkm-l{color:#b9bdcc;min-width:0}
+  .pkm-v{color:var(--fg);font-weight:600;text-align:right;flex:0 0 auto;max-width:48%}
+  .pkgs{grid-template-columns:minmax(0,1fr)}
+  .pkg-price{font-size:26px}
+  .bens,.cols{grid-template-columns:minmax(0,1fr)}
+  .q{font-size:15px}
+  .nn b{font-size:16px}
+}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
 
@@ -1031,7 +1086,16 @@ function tableHTML(t){
   let h=`<div class="tscroll"><table class="pk"><thead><tr><th>${esc(t.rowHead||"Šta nudimo")}</th>${t.cols.map((c,i)=>`<th>${esc(c)}${b[i]?`<br><span class="badge">${esc(b[i])}</span>`:""}</th>`).join("")}</tr></thead><tbody>`;
   t.rows.forEach(r=>h+=`<tr>${r.map(c=>`<td>${md(c)}</td>`).join("")}</tr>`);
   if(t.price)h+=`<tr class="price"><td>${esc(t.priceLabel||"Investicija")}</td>${t.price.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`;
-  return h+`</tbody></table></div>`;
+  return h+`</tbody></table></div>`+tableCards(t);
+}
+function tableCards(t){
+  let cards=[];
+  if(t.rowHead==="Paket"){
+    cards=t.rows.map(r=>({name:r[0],badge:"",price:r[r.length-1],rows:t.cols.slice(0,-1).map((c,i)=>[c,r[i+1]])}));
+  }else{
+    cards=t.cols.map((c,ci)=>({name:esc(c),badge:(t.badges||{})[ci]||"",price:t.price?esc(t.price[ci]):"",rows:t.rows.map(r=>[r[0],r[ci+1]]).filter(([,v])=>v&&v!=="—")}));
+  }
+  return `<div class="pkm">${cards.map(k=>`<div class="pkm-card"><div class="pkm-top"><span class="pkm-name">${k.badge?`<span class="pkm-badge">${esc(k.badge)}</span>`:""}${t.rowHead==="Paket"?md(k.name):k.name}</span>${k.price?`<span class="pkm-price">${md(k.price)}</span>`:""}</div><ul class="pkm-list">${k.rows.map(([l,v])=>`<li><span class="pkm-l">${md(l)}</span><span class="pkm-v">${md(v)}</span></li>`).join("")}</ul></div>`).join("")}</div>`;
 }
 function pkgHTML(k){
   let h=`<div class="pkg avoid"><div class="pkg-top">${k.tag?`<span class="pkg-tag">${esc(k.tag)}</span>`:""}<span class="pkg-name">${esc(k.name)}</span><span class="pkg-price">${esc(k.price)}</span></div><div class="pkg-body">`;
@@ -1137,6 +1201,12 @@ document.addEventListener("keydown",e=>{
   else if(e.key==="Tab"){const f=[...$("ov").querySelectorAll("button,a[href]")].filter(x=>x.offsetParent!==null);if(!f.length)return;const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}
 });
 
+/* ---------- swipe between projects (touch) ---------- */
+(function(){let sx=0,sy=0,ok=false;const ov=$("ov");
+  ov.addEventListener("touchstart",e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;ok=!e.target.closest(".tscroll")},{passive:true});
+  ov.addEventListener("touchend",e=>{if(!ok||!current)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+    if(Math.abs(dx)>80&&Math.abs(dy)<50){(dx<0?$("nextBtn"):$("prevBtn")).click()}},{passive:true});
+})();
 /* ---------- toast ---------- */
 let tt;function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("on"),3400)}
 
