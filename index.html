@@ -1,0 +1,1206 @@
+<!doctype html>
+<html lang="bs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Bloomberg Adria · Kalendar komercijalnih projekata 2027">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}</style>
+<title>Kalendar projekata 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+[hidden]{display:none!important}
+/* Layout: a year as a wall of twelve saturated tiles (one hue per month, a full turn of the colour wheel, winter ending in ice),
+   a season strip to jump between them, and a full-screen project brief that takes on the month's colour. */
+:root{
+  color-scheme:dark;
+  --bg:#07080c;
+  --bg-2:#0e1017;
+  --line:#22263a;
+  --fg:#f2f3f8;
+  --muted:#8e95ab;
+  --faint:#555d75;
+  --hl:#5b4dff;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.wrap{max-width:1440px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+@media (max-width:540px){.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding-block:36px 26px;isolation:isolate}
+.aurora{position:absolute;inset:-120px 0 auto;height:520px;z-index:-1;filter:blur(70px);opacity:.38;pointer-events:none;
+  background:radial-gradient(30% 50% at 12% 40%,#5b4dff,transparent 70%),radial-gradient(26% 46% at 40% 20%,#14b8d4,transparent 70%),radial-gradient(28% 50% at 66% 40%,#ff7a1a,transparent 70%),radial-gradient(26% 46% at 90% 30%,#f0388f,transparent 70%)}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-family:var(--f-display);font-weight:800;font-stretch:115%;letter-spacing:.08em;font-size:13px}
+.topline .cities{font-family:var(--f-mono);font-weight:500;font-stretch:100%;letter-spacing:.18em;color:var(--muted);font-size:11px}
+.hero-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end;margin-top:34px}
+.hero h1{margin:0;font-family:var(--f-display);font-weight:900;font-stretch:125%;text-transform:uppercase;line-height:.86;letter-spacing:-.02em;font-size:clamp(40px,7.4vw,112px)}
+.hero h1 .yr{display:block;-webkit-text-stroke:2px var(--fg);color:transparent;font-size:1.32em;letter-spacing:-.04em}
+.hero h1 .yr span{color:var(--fg);-webkit-text-stroke:0}
+.stats{display:grid;grid-template-columns:repeat(3,auto);gap:10px 28px;padding-bottom:10px}
+.stat b{display:block;font-family:var(--f-display);font-weight:900;font-stretch:120%;font-size:clamp(28px,3.4vw,44px);line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.tagline{margin-top:18px;max-width:62ch;color:#c4c8d6;font-size:16px}
+@media (max-width:860px){.hero-main{grid-template-columns:minmax(0,1fr)}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* ---------- season strip ---------- */
+.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:linear-gradient(var(--bg) 70%,transparent);padding-block:12px 14px}
+.strip-inner{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.seg{position:relative;border:0;border-radius:3px;height:44px;cursor:pointer;background:linear-gradient(150deg,var(--c2),var(--c1));color:var(--ink);font-family:var(--f-display);font-weight:800;font-stretch:115%;font-size:12px;letter-spacing:.06em;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:6px 8px;transition:transform .15s,filter .15s,opacity .2s}
+.seg:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.seg .dots{display:flex;gap:3px}
+.seg .dots i{width:5px;height:5px;border-radius:50%;background:var(--ink);opacity:.85}
+.seg .dots i.p{opacity:.3}
+.seg.off{opacity:.25}
+@media (max-width:640px){.seg{height:34px;padding:4px 4px;font-size:9.5px;font-stretch:100%}.seg .dots{display:none}}
+
+/* ---------- filter ---------- */
+.filter{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.filter-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-right:4px}
+.chip{border:1px solid var(--line);background:var(--bg-2);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:#c4c8d6;transition:all .15s}
+.chip:hover{color:var(--fg);border-color:var(--faint)}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+@media (max-width:640px){.filter{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-inline:-16px;padding-inline:16px}.filter::-webkit-scrollbar{display:none}.chip,.filter-label{flex:none}}
+.chip .n{font-family:var(--f-mono);font-size:11px;opacity:.6;margin-left:5px}
+
+/* ---------- month tiles ---------- */
+.grid{margin-top:22px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding-bottom:20px}
+@media (max-width:1180px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:860px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
+.month{position:relative;border-radius:10px;overflow:hidden;color:var(--ink);isolation:isolate;min-height:330px;display:flex;flex-direction:column;padding:18px 16px 14px;
+  background:linear-gradient(155deg,var(--c2) 0%,var(--c1) 78%);scroll-margin-top:90px;transition:transform .25s ease,box-shadow .25s ease,opacity .25s}
+.month::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.16;background-image:linear-gradient(var(--ink) 1px,transparent 1px),linear-gradient(90deg,var(--ink) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:linear-gradient(200deg,#000,transparent 55%);mask-image:linear-gradient(200deg,#000,transparent 55%)}
+.month:hover{transform:translateY(-4px);box-shadow:0 22px 50px -18px var(--c2)}
+.month.flash{animation:flash .9s ease}
+@keyframes flash{0%{box-shadow:0 0 0 0 var(--c2)}40%{box-shadow:0 0 0 6px var(--c2)}100%{box-shadow:0 0 0 0 transparent}}
+.mnum{position:absolute;right:-6px;top:-20px;z-index:-1;font-family:var(--f-display);font-weight:900;font-stretch:125%;font-size:150px;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px var(--ink);opacity:.28;pointer-events:none}
+.mhead{display:flex;align-items:baseline;gap:10px}
+.mk{font-family:var(--f-display);font-weight:900;font-stretch:125%;font-size:30px;line-height:1;letter-spacing:.01em}
+.mname{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.75}
+.season{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:2px}
+.plist{margin-top:auto;padding-top:28px;display:grid;gap:7px}
+.proj{position:relative;display:block;width:100%;text-align:left;border:1px solid var(--glass-line);background:var(--glass);border-radius:7px;padding:10px 38px 10px 12px;cursor:pointer;color:var(--ink);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background .15s,transform .15s,opacity .2s}
+.proj:hover{background:var(--glass-hi);transform:translateX(2px)}
+.proj .role{display:flex;gap:6px;align-items:center;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.78}
+.proj .pt{display:block;font-family:var(--f-display);font-weight:900;font-stretch:108%;text-transform:uppercase;line-height:1.1;margin-top:3px;font-size:17.5px;text-wrap:balance}
+.proj .meta{display:block;font-family:var(--f-mono);font-size:11px;margin-top:5px;opacity:.85;font-variant-numeric:tabular-nums}
+.proj .go{position:absolute;right:10px;top:50%;width:22px;height:22px;margin-top:-11px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--c1);font-size:12px;font-weight:700;transition:transform .15s}
+.proj:hover .go{transform:scale(1.12)}
+.proj.pending{cursor:default;background:transparent;border-style:dashed;opacity:.62}
+.proj.pending:hover{transform:none}
+.proj.dim{opacity:.18}
+.proj.hit{background:var(--glass-hi);box-shadow:0 0 0 2px var(--ink) inset}
+.month.off{opacity:.35}
+.foot{border-top:1px solid var(--line);margin-top:20px;padding-block:18px 40px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--f-display);font-weight:700;font-stretch:115%;letter-spacing:.06em;color:var(--muted);font-size:12px}
+.foot .hint{font-family:var(--f-body);font-weight:400;font-stretch:100%;letter-spacing:0;font-size:13px}
+
+/* ---------- full-screen brief ---------- */
+.ov{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;opacity:0;transform:scale(.985);transition:opacity .22s ease,transform .22s ease}
+.ov.on{opacity:1;transform:none}
+.ov-bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:10px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));background:rgba(7,8,12,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ov-bar .crumb{flex:1;min-width:0;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ov-bar .crumb i{display:inline-block;width:10px;height:10px;border-radius:2px;background:linear-gradient(150deg,var(--c2),var(--c1));vertical-align:-1px;margin-right:8px}
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg-2);border-radius:6px;padding:8px 12px;cursor:pointer;font-size:13.5px;font-weight:600;white-space:nowrap;transition:border-color .15s,filter .15s}
+.btn:hover{border-color:var(--faint)}
+.btn.dl{background:var(--c2);border-color:var(--c2);color:var(--ink)}
+.btn.dl:hover{filter:brightness(1.1)}
+.btn[disabled]{opacity:.6;cursor:progress}
+.btn.sq{padding:8px 11px}
+@media (max-width:600px){.btn .long{display:none}.ov-bar{gap:6px}}
+
+.bhero{position:relative;overflow:hidden;isolation:isolate;color:var(--ink);background:linear-gradient(150deg,var(--c2) 0%,var(--c1) 85%)}
+.bhero::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.14;background-image:linear-gradient(var(--ink) 1px,transparent 1px),linear-gradient(90deg,var(--ink) 1px,transparent 1px);background-size:28px 28px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 70%);mask-image:linear-gradient(90deg,transparent,#000 70%)}
+.bhero .big{position:absolute;right:-2vw;bottom:-6vw;z-index:-1;font-family:var(--f-display);font-weight:900;font-stretch:125%;font-size:clamp(160px,26vw,380px);line-height:.8;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:2px var(--ink);opacity:.22;pointer-events:none}
+.bhero-in{max-width:1180px;margin:0 auto;padding-block:48px 40px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.eyebrow{display:flex;flex-wrap:wrap;gap:8px}
+.eyebrow span{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);border-radius:999px;padding:3px 10px;opacity:.9}
+.bt{font-family:var(--f-display);font-weight:900;font-stretch:125%;text-transform:uppercase;line-height:.92;letter-spacing:-.015em;font-size:clamp(36px,6.4vw,84px);margin:20px 0 12px;max-width:15ch;text-wrap:balance}
+.btag{font-size:clamp(15px,1.6vw,18px);max-width:60ch;margin:0;opacity:.88}
+.kpis{display:flex;flex-wrap:wrap;gap:12px 36px;margin-top:30px;padding-top:18px;border-top:1px solid var(--glass-line)}
+.kpi b{display:block;font-family:var(--f-display);font-weight:900;font-stretch:118%;font-size:28px;line-height:1.05;font-variant-numeric:tabular-nums}
+.kpi span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.inds{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.inds span{font-size:12.5px;font-weight:500;background:var(--glass);border:1px solid var(--glass-line);border-radius:999px;padding:4px 11px}
+
+.bbody{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:200px minmax(0,1fr);gap:48px;padding-block:44px 40px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.toc{position:sticky;top:76px;align-self:start;display:grid;gap:2px}
+.toc a{display:block;color:var(--muted);text-decoration:none;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;padding:7px 0 7px 12px;border-left:2px solid var(--line);transition:color .15s,border-color .15s}
+.toc a:hover,.toc a.on{color:var(--fg);border-left-color:var(--c2)}
+@media (max-width:860px){.bbody{grid-template-columns:minmax(0,1fr);gap:0;padding-top:28px}.toc{display:none}}
+.content{min-width:0}
+.lead{font-family:var(--f-display);font-weight:700;font-stretch:104%;font-size:clamp(21px,2.3vw,28px);line-height:1.22;margin:0 0 18px;max-width:34ch;text-wrap:balance}
+.p{margin:0 0 12px;color:#c6cad8;max-width:66ch;font-size:16px}
+.p strong,.list li strong{color:var(--fg)}
+.callout{margin:22px 0 0;padding:18px 20px;border-radius:8px;background:linear-gradient(120deg,color-mix(in srgb,var(--c2) 22%,transparent),color-mix(in srgb,var(--c1) 10%,transparent));border:1px solid color-mix(in srgb,var(--c2) 40%,transparent);font-weight:600;font-size:16.5px;max-width:66ch}
+.sec{margin-top:56px;scroll-margin-top:80px}
+.h{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--c2);margin:0 0 10px;font-weight:600}
+.h::after{content:"";flex:1;height:1px;background:var(--line)}
+.h2{font-family:var(--f-display);font-weight:800;font-stretch:110%;font-size:clamp(22px,2.4vw,30px);line-height:1.12;margin:0 0 12px;max-width:28ch;text-wrap:balance}
+.list{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px;max-width:70ch}
+.list li{position:relative;padding-left:22px;color:#c6cad8;font-size:15.5px}
+.list li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:2px;background:linear-gradient(150deg,var(--c2),var(--c1))}
+.bens{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:16px}
+.ben{border:1px solid var(--line);background:var(--bg-2);border-radius:8px;padding:16px;position:relative;overflow:hidden}
+.ben::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,var(--c2),var(--c1))}
+.ben h4{margin:0 0 6px;font-family:var(--f-display);font-weight:800;font-stretch:108%;font-size:16px;line-height:1.2}
+.ben p{margin:0;color:#b9bdcc;font-size:14.5px}
+.ben .n{font-family:var(--f-mono);font-size:11px;color:var(--c2);letter-spacing:.1em}
+.qs{display:grid;gap:8px;margin-top:16px;max-width:70ch}
+.q{display:flex;gap:14px;align-items:baseline;padding:12px 16px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line);font-size:16px;font-weight:500}
+.q b{font-family:var(--f-display);font-weight:900;font-stretch:120%;color:var(--c2);font-size:18px;min-width:26px}
+.after{margin-top:16px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
+.col{border-radius:8px;padding:16px;background:var(--bg-2);border:1px solid var(--line)}
+.col h4{margin:0 0 6px;font-family:var(--f-display);font-weight:800;font-stretch:112%;font-size:15px;text-transform:uppercase;letter-spacing:.02em;color:var(--c2)}
+.col p{margin:0;color:#c6cad8;font-size:14.5px}
+
+.tscroll{overflow-x:auto;margin-top:18px;border-radius:10px;border:1px solid var(--line);background:var(--bg-2)}
+table.pk{border-collapse:collapse;width:100%;min-width:600px;font-size:14px}
+table.pk th,table.pk td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+table.pk thead th{font-family:var(--f-display);font-weight:900;font-stretch:115%;font-size:15px;text-transform:uppercase;letter-spacing:.02em;color:var(--fg);background:linear-gradient(180deg,color-mix(in srgb,var(--c2) 16%,transparent),transparent);border-bottom:2px solid var(--c2)}
+table.pk thead th:first-child{font-family:var(--f-mono);font-weight:600;font-stretch:100%;font-size:10.5px;letter-spacing:.14em;color:var(--muted)}
+table.pk .badge{display:inline-block;margin-top:5px;font-family:var(--f-mono);font-size:9.5px;font-weight:600;letter-spacing:.12em;background:var(--c2);color:var(--ink);border-radius:3px;padding:2px 6px}
+table.pk td:first-child{color:#c6cad8;width:40%}
+table.pk td:not(:first-child){font-variant-numeric:tabular-nums;font-weight:500}
+table.pk tr:hover td{background:rgba(255,255,255,.02)}
+table.pk tr.price td{border-bottom:0;font-family:var(--f-display);font-weight:900;font-stretch:112%;font-size:19px;color:var(--fg);background:color-mix(in srgb,var(--c2) 12%,transparent)}
+table.pk tr.price td:first-child{font-family:var(--f-mono);font-weight:600;font-stretch:100%;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+table.pk .rec{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;color:var(--c2);margin-top:4px}
+.pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:18px}
+.pkg{position:relative;border-radius:10px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column}
+.pkg-top{padding:16px 18px 14px;background:linear-gradient(150deg,var(--c2),var(--c1));color:var(--ink);position:relative}
+.pkg-top::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:12px;background:radial-gradient(circle at 6px 6px,var(--bg-2) 5px,transparent 5.5px) 0 0/16px 12px repeat-x}
+.pkg-name{display:block;font-family:var(--f-display);font-weight:900;font-stretch:118%;text-transform:uppercase;font-size:17px;line-height:1.1}
+.pkg-price{display:block;font-family:var(--f-display);font-weight:900;font-stretch:112%;font-size:30px;line-height:1.1;margin-top:8px;font-variant-numeric:tabular-nums}
+.pkg-tag{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--ink);border-radius:3px;padding:1px 6px;margin-bottom:8px}
+.pkg-body{padding:18px}
+.pkg-note{margin:0 0 10px;color:var(--muted);font-size:14px;font-style:italic}
+.pkg .list{margin-top:0;gap:8px}
+.pkg .list li{font-size:14.5px}
+.pkg .phase{padding:0;margin-top:10px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--c2)}
+.pkg .phase::before{display:none}
+.notes{margin-top:18px;display:grid;gap:8px;max-width:72ch}
+.notes p{margin:0;color:#c6cad8;font-size:14.5px}
+.notes p.small{color:var(--muted);font-size:13.5px}
+.close{margin-top:60px;padding:34px 0 0;border-top:3px solid var(--c2);font-family:var(--f-display);font-weight:900;font-stretch:115%;text-transform:uppercase;font-size:clamp(22px,2.8vw,36px);line-height:1.08;max-width:24ch;text-wrap:balance}
+.pending-box{margin-top:6px;border:1px dashed var(--faint);border-radius:10px;padding:24px;color:var(--muted);max-width:60ch;font-size:16px}
+.pending-box strong{color:var(--fg)}
+.nextnav{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-block:20px calc(48px + env(safe-area-inset-bottom,0px));padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.nn{border:0;border-radius:10px;padding:18px 20px;cursor:pointer;text-align:left;color:var(--ink);background:linear-gradient(150deg,var(--c2),var(--c1));transition:transform .15s,filter .15s}
+.nn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.nn.r{text-align:right}
+.nn small{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.nn b{display:block;font-family:var(--f-display);font-weight:900;font-stretch:112%;text-transform:uppercase;font-size:clamp(15px,1.8vw,22px);line-height:1.1;margin-top:4px}
+@media (max-width:560px){.nextnav{grid-template-columns:1fr}.nn.r{text-align:left}}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--fg);color:var(--bg);padding:11px 16px;border-radius:6px;font-size:14px;font-weight:600;z-index:90;opacity:0;transition:opacity .2s,transform .2s;max-width:calc(100% - 32px);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- PDF page (light, A4). font-stretch reset because the PDF renderer draws text at normal width. ---------- */
+#pdfhost{position:fixed;left:-14000px;top:0;width:740px}
+.pdf{width:740px;background:#fff;color:#141824;font-family:var(--f-body);font-size:12.5px;line-height:1.45}
+.pdf *{font-stretch:100%!important}
+.pdf .phero{background:linear-gradient(150deg,var(--c2),var(--c1));color:var(--ink);padding:26px 30px 24px;border-radius:0 0 0 0}
+.pdf .ptop{display:flex;justify-content:space-between;font-family:var(--f-display);font-weight:800;font-size:10.5px;letter-spacing:.1em}
+.pdf .pey{margin-top:22px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase}
+.pdf .pt{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:34px;line-height:1;margin:8px 0 8px}
+.pdf .ptag{font-size:12.5px;margin:0;opacity:.9}
+.pdf .pk2{display:flex;gap:28px;margin-top:16px;padding-top:12px;border-top:1px solid var(--glass-line)}
+.pdf .pk2 b{display:block;font-family:var(--f-display);font-weight:900;font-size:18px}
+.pdf .pk2 span{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.pdf .pbody{padding:22px 30px 10px}
+.pdf .pinds{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.pdf .pinds span{font-size:10px;border:1px solid #d9dce6;border-radius:999px;padding:2px 8px;color:#2c3242}
+.pdf .lead{font-size:17px;max-width:none;color:#0b0e17;margin-bottom:10px}
+.pdf .p{font-size:12.5px;color:#2c3242;max-width:none;margin-bottom:8px}
+.pdf .p strong,.pdf .list li strong{color:#0b0e17}
+.pdf .callout{background:#f3f4f8;border:0;border-left:4px solid var(--d);border-radius:0;color:#0b0e17;font-size:13px;padding:11px 14px;max-width:none;margin-top:12px}
+.pdf .sec{margin-top:22px}
+.pdf .h{color:var(--d);font-size:9.5px}
+.pdf .h::after{background:#e3e5ec}
+.pdf .h2{font-size:17px;color:#0b0e17;max-width:none}
+.pdf .list li{font-size:12.5px;color:#2c3242}
+.pdf .list li::before{background:var(--d);width:7px;height:7px}
+.pdf .bens{grid-template-columns:1fr 1fr;gap:8px}
+.pdf .ben,.pdf .col,.pdf .q{background:#f6f7fa;border-color:#e3e5ec}
+.pdf .ben::before{background:var(--d)}
+.pdf .ben h4{font-size:13px;color:#0b0e17}
+.pdf .ben p,.pdf .col p{font-size:12px;color:#2c3242}
+.pdf .ben .n,.pdf .col h4,.pdf .q b{color:var(--d)}
+.pdf .q{font-size:13px;color:#0b0e17;padding:8px 12px}
+.pdf .q b{font-size:14px}
+.pdf .cols{grid-template-columns:repeat(var(--nc,2),1fr);gap:8px}
+.pdf .tscroll{overflow:visible;background:#fff;border-color:#e3e5ec}
+.pdf table.pk{min-width:0;font-size:11px}
+.pdf table.pk th,.pdf table.pk td{padding:7px 9px;border-color:#e3e5ec}
+.pdf table.pk thead th{background:#f3f4f8;color:#0b0e17;font-size:11.5px;border-bottom:2px solid var(--d)}
+.pdf table.pk td:first-child{color:#2c3242}
+.pdf table.pk tr.price td{background:#f3f4f8;color:#0b0e17;font-size:13.5px}
+.pdf table.pk .rec{color:var(--d)}
+.pdf table.pk .badge{background:var(--d);color:#fff}
+.pdf .pkgs{grid-template-columns:1fr 1fr;gap:10px}
+.pdf .pkg{background:#fff;border-color:#e3e5ec}
+.pdf .pkg-top::after{display:none}
+.pdf .pkg-price{font-size:21px}
+.pdf .pkg-name{font-size:14px}
+.pdf .pkg-body{padding:12px 14px}
+.pdf .pkg .list li{font-size:11.5px}
+.pdf .pkg .phase{color:var(--d)}
+.pdf .pkg-note{font-size:11.5px;color:#5d6477}
+.pdf .notes p{font-size:11.5px;color:#2c3242}
+.pdf .notes p.small{color:#5d6477}
+.pdf .close{font-size:18px;color:#0b0e17;margin-top:24px;padding-top:12px;border-top-color:var(--d);max-width:none}
+.pdf .pfoot{margin:22px 30px 0;padding:10px 0 4px;border-top:1px solid #e3e5ec;display:flex;justify-content:space-between;font-family:var(--f-display);font-weight:700;letter-spacing:.06em;font-size:9px;color:#5d6477}
+
+.logo{display:block;height:22px;width:auto}
+.logo.sm{height:14px}
+.fbrand{display:inline-flex;align-items:center;gap:12px}
+.blogo{display:block;height:20px;width:auto;margin-bottom:22px}
+.bhero .motif{position:absolute;right:0;top:0;height:100%;width:min(64%,820px);z-index:-1;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 38%);mask-image:linear-gradient(90deg,transparent 0%,#000 38%);animation:mfade .9s ease both}
+.bhero .motif .d{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.2s cubic-bezier(.2,.7,.15,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes mfade{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@media (max-width:760px){.bhero .motif{width:100%;opacity:.38}}
+@media (prefers-reduced-motion:reduce){.bhero .motif .d{stroke-dasharray:none!important;stroke-dashoffset:0!important}}
+.pdf .phero{position:relative;overflow:hidden}
+.pdf .phero .motif{position:absolute;right:-6px;top:4px;opacity:.55}
+.pdf .phero>*:not(.motif){position:relative}
+.pdf .plogo{display:block;height:15px;width:auto}
+.pdf .plogo.sm{height:11px}
+.pdf .ptop{align-items:center}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="topline"><img class="logo" data-logo="w" alt="Bloomberg Adria" width="190" height="22"><span class="cities">SARAJEVO · ZAGREB · BEOGRAD · LJUBLJANA · SKOPJE</span></div>
+    <div class="hero-main">
+      <h1>Kalendar projekata <span class="yr">20<span>27</span></span></h1>
+      <div class="stats" id="stats"></div>
+    </div>
+    <p class="tagline">Dvanaest mjeseci, jedan komercijalni ritam. Odaberite mjesec ili industriju i otvorite projekat za razradu i pakete.</p>
+  </header>
+</div>
+
+<nav class="strip" aria-label="Mjeseci">
+  <div class="wrap"><div class="strip-inner" id="strip"></div></div>
+</nav>
+<div class="wrap"><div class="filter" id="filter" role="group" aria-label="Filtriraj po industriji"><span class="filter-label">Industrija</span></div></div>
+
+<div class="wrap">
+  <main class="grid" id="grid"></main>
+  <footer class="foot"><span class="fbrand"><img class="logo sm" data-logo="w" alt="Bloomberg Adria" width="120" height="14"><span>KOMERCIJALNA STRATEGIJA 2027</span></span><span class="hint">Sve cijene su informativne i odnose se na pakete opisane u razradi.</span></footer>
+</div>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="bTitle" hidden>
+  <div class="ov-bar">
+    <span class="crumb" id="crumb"></span>
+    <button class="btn sq" id="prevBtn" type="button" aria-label="Prethodni projekat">←</button>
+    <button class="btn sq" id="nextBtn" type="button" aria-label="Sljedeći projekat">→</button>
+    <button class="btn dl" id="pdfBtn" type="button" hidden><span aria-hidden="true">↓</span> PDF<span class="long">&nbsp;ponude</span></button>
+    <button class="btn sq" id="closeBtn" type="button" aria-label="Zatvori">✕</button>
+  </div>
+  <div id="ovBody"></div>
+</div>
+<div id="pdfhost" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- Months: one hue per month, a full turn of the wheel; December ends in ice ---------- */
+const MONTHS=[
+ {k:"JAN",name:"Januar",s:"Zima",c1:"#231c7a",c2:"#5b4dff",ink:"#ffffff",d:"#4a3df0"},
+ {k:"FEB",name:"Februar",s:"Zima",c1:"#0a3a80",c2:"#2f8cff",ink:"#ffffff",d:"#1a6fd6"},
+ {k:"MAR",name:"Mart",s:"Proljeće",c1:"#04505f",c2:"#14b8d4",ink:"#ffffff",d:"#0a8aa1"},
+ {k:"APR",name:"April",s:"Proljeće",c1:"#065540",c2:"#1fc48f",ink:"#ffffff",d:"#0f936a"},
+ {k:"MAJ",name:"Maj",s:"Proljeće",c1:"#1b5e1b",c2:"#57c93a",ink:"#ffffff",d:"#2f9a1f"},
+ {k:"JUN",name:"Juni",s:"Ljeto",c1:"#7e9a0c",c2:"#d4ef3a",ink:"#141a02",d:"#5f7a00"},
+ {k:"JUL",name:"Juli",s:"Ljeto",c1:"#c98300",c2:"#ffcf3d",ink:"#1d1300",d:"#a06a00"},
+ {k:"AVG",name:"August",s:"Ljeto",c1:"#8a3300",c2:"#ff7a1a",ink:"#ffffff",d:"#d35d08"},
+ {k:"SEP",name:"Septembar",s:"Jesen",c1:"#7e1212",c2:"#ff4a3d",ink:"#ffffff",d:"#d0281e"},
+ {k:"OKT",name:"Oktobar",s:"Jesen",c1:"#700d47",c2:"#f0388f",ink:"#ffffff",d:"#c71a6c"},
+ {k:"NOV",name:"Novembar",s:"Jesen",c1:"#43126b",c2:"#b44dff",ink:"#ffffff",d:"#8a2ad6"},
+ {k:"DEC",name:"Decembar",s:"Zima",c1:"#1a2638",c2:"#a9cdee",ink:"#ffffff",d:"#3f6f9c"}
+];
+const IND=["Auto industrija","Banke i finansije","Investicijski fondovi","Osiguranje","Nekretnine i gradnja","Turizam i hotelijerstvo","Energetika","Telekom i IT","Luksuz","Trgovina i e-commerce","Hrana i agrobiznis","FMCG i proizvodnja","Transport i logistika","Događaji i sajmovi","Sve industrije"];
+
+/* ---------- Calendar slots (as in the 2027 deck) ---------- */
+const SLOTS=[
+ [["carrier","godina-pred-nama"],["extra","za-stolom-odlucivanja"]],
+ [["carrier","sta-pokrece-adriju"],["extra","rane-rezervacije"]],
+ [["carrier","sljedeci-kvadrat"],["extra","zene-koje-odlucuju"]],
+ [["carrier","poslovna-strana-luksuza"],["extra","energija-i-ulaganja"]],
+ [["carrier","vise-od-povezanosti"],["regional","expo-2027-beograd"]],
+ [["carrier","poslovna-strana-ljeta"],["extra","bolji-proizvod"],["regional","expo-2027-beograd"]],
+ [["carrier","hrana-i-agrobiznis"],["regional","expo-2027-beograd"]],
+ [["carrier","povratak-poslu"],["regional","expo-2027-beograd"]],
+ [["carrier","adria-u-pokretu"],["extra","poslovanje-na-sajmovima"]],
+ [["carrier","kiberneticki-otporna-adria"],["extra","od-stednje-do-ulaganja"]],
+ [["carrier","vrhunac-trgovine"]],
+ [["carrier","godina-pred-nama"],["extra","za-stolom-odlucivanja"]]
+];
+const ROLE={carrier:"Nosivi projekat",extra:"Dodatni projekat",regional:"Regionalni događaj"};
+/* ---------- Project briefs ---------- */
+const P={
+
+"sta-pokrece-adriju":{month:1,title:"Šta pokreće Adriju?",tagline:"Automotive 2027.",
+ ind:["Auto industrija","Banke i finansije"],
+ lead:"Predstavite prednosti, funkcionalnosti i dizajn svog novog ili aktuelnog modela publici koja odlučuje o kupovini i poslovnim flotama.",
+ intro:["Novi modeli i tehnologije mijenjaju ponudu na tržištu. Finansiranje, sigurnost i trošak korištenja određuju izbor.","U proljetnoj sezoni predstavljanja modela i novih ponuda, Bloomberg Adria kroz poslovnu i finansijsku računicu kupca daje vašoj automotive ponudi veću vidljivost kod ključne ciljne grupe i pomaže vam da se istaknete na tržištu."],
+ audH:"Publika koja procjenjuje vrijednost",audT:"Menadžeri i poduzetnici koji biraju za sebe i svoje kompanije.",
+ aud:["Obraćamo se poslovnoj publici kojoj su pri izboru automobila važni kvalitet, tehnologija i opravdanost ulaganja."],
+ benH:"Korist za vaš brend",
+ ben:[["Objasnite prednosti ponude","šta vaš model donosi u sigurnosti, performansama i svakodnevnom korištenju."],["Predstavite ekonomiku izbora","finansiranje, trošak korištenja i rješenja za poslovne flote."],["Povežite predstavljanje s ponudom","od video razgovora i native intervjua do newsletter promocije s pozivom na akciju, prema odabranom paketu."]],
+ after:["Svaki partner dobija vlastitu, jasno označenu komercijalnu priču na jeziku odabranog tržišta, objedinjenu na projektnoj stranici **„Šta pokreće Adriju?“**"],
+ key:"Omogućavamo vam posebno označen prostor na našim kanalima da argumentujete zašto vaša ponuda zaslužuje ući u izbor kupca.",
+ pkH:"Paketi partnerstva",pkT:"Jedna produkcija. Distribucija prema vašim komercijalnim ciljevima.",
+ table:{cols:["Starter","Accelerate","Drive"],rows:[
+  ["Video native intervju: 3–4 pitanja, odgovor do jedne minute","1","1","1"],
+  ["Emitovanje kompletnog video native intervjua na Bloomberg Adria TV","1","3","5"],
+  ["Native intervju s integrisanim kompletnim videom na 1 odabranoj podstranici bloombergadria.com portala","1","1","1"],
+  ["Social video isječci: vertikalni format za LinkedIn, IG/FB Story","—","1 aktivacija","2 aktivacije"],
+  ["Newsletter promocija: brand visibility, ponuda i poziv na akciju","—","—","1"]],
+  priceLabel:"Investicija, bez PDV-a",price:["2.500 EUR","4.500 EUR","6.500 EUR"]},
+ notes:["**Svi paketi odnose se na jedno odabrano tržište:** BiH, Hrvatsku, Srbiju, Sloveniju ili Sjevernu Makedoniju."],
+ close:"Odaberite tržište, model ili ponudu koju želite predstaviti. Mi je oblikujemo u komercijalni sadržaj relevantan poslovnoj publici."},
+
+"rane-rezervacije":{month:1,title:"Rane rezervacije",tagline:"Early Booking · sponzorstvo Bloomberg Adria Daily newslettera",
+ ind:["Turizam i hotelijerstvo"],
+ lead:"Predstavite svoju ponudu poslovnoj publici dok planira putovanja i rane rezervacije.",
+ intro:["Za hotele, turističke kompanije i pružaoce usluga putovanja, rana rezervacija znači ranije osiguran prihod i bolju osnovu za planiranje sezone.","Sponzorstvo dnevnog Bloomberg Adria newslettera povezuje vaš brend i early booking ponudu s publikom na odabranom lokalnom tržištu ili u svih **pet tržišta Adria regije**."],
+ key:"Direktan link vodi čitaoca na vašu ponudu ili stranicu za rezervaciju.",
+ audH:"Vaša ponuda u poslovnoj dnevnoj rutini",audT:"Menadžeri, poduzetnici i profesionalci koji planiraju privatna i poslovna putovanja.",
+ aud:["Predstavite im destinaciju, kongresne kapacitete, smještaj, corporate team building ponudu ili pogodnosti koje utiču na izbor: cijenu, uslove rezervacije, način plaćanja i dodatne usluge."],
+ benH:"Korist za partnera",
+ ben:[["Prepoznatljiva pozicija","logo neposredno ispod zaglavlja dnevnog newslettera, uz oznaku sponzorstva."],["Konkretna ponuda","premium display pozicija za early booking cijene, pakete ili pogodnosti."],["Direktan pristup rezervaciji","link na vaš booking sistem, ponudu ili odredišnu stranicu."],["Kontinuitet komunikacije","paket od tri slanja omogućava predstavljanje ponude, dodatne razloge za izbor i podsjetnik na rok rezervacije."]],
+ after:["**Vaš brend uz poslovni sadržaj koji publika prati. Vaša ponuda na jednom kliku.**"],
+ pkH:"Paketi i sadržaj sponzorstva",pkT:"Svako slanje uključuje logo partnera ispod zaglavlja newslettera, jednu premium display poziciju i direktan link na digitalni kanal partnera, uz jasno označeno sponzorstvo.",
+ table:{cols:["Tržišta","Broj slanja","Investicija*"],rowHead:"Paket",rows:[
+  ["**MARKET ENTRY**","1","1","**1.200 EUR**"],
+  ["**EARLY BOOKING FLIGHT**<span class='rec'>PREPORUČENI PAKET</span>","1","3","**2.700 EUR**"],
+  ["**REGIONAL REACH**","5","1 po tržištu","**4.500 EUR**"],
+  ["**REGIONAL BOOKING**","5","3 po tržištu","**9.900 EUR**"]]},
+ steps:{h:"Early Booking Flight: tri flight-a komercijalne kampanje, 900 EUR po slanju",items:[["Predstavite ponudu","hotel, hotelski lanac ili destinaciju, uz early booking uslove."],["Istaknite vrijednost","sadržaji, pogodnosti i razlozi za izbor."],["Podsjetite na rezervaciju","rok važenja ponude i poziv na akciju."]]},
+ notes:["Dostupna tržišta: **BiH, Hrvatska, Srbija, Slovenija i Sjeverna Makedonija.**","~*Cijene bez PDV-a. Format obuhvata sponzorstvo newslettera; produkcija native teksta i intervjua nije uključena."]},
+
+"sljedeci-kvadrat":{month:2,title:"Sljedeći kvadrat",tagline:"Nekretnine, kapital i gradnja",
+ ind:["Nekretnine i gradnja","Banke i finansije"],
+ lead:"Pozicionirajte svoju kompaniju pred publikom koja odlučuje o nekretninama, kapitalu i gradnji.",
+ intro:["Vrijednost nekretnine počinje prije prodaje. Određuju je lokacija, finansiranje, kvalitet gradnje i način upravljanja.","Bloomberg Adria okuplja aktere koji grade, finansiraju i oblikuju tržište nekretnina. Partnerima otvara prostor da predstave svoje projekte, ekspertizu i rješenja kroz pitanja važna za poslovnu odluku."],
+ key:"Jedno snimanje, više kanala. Video, digital, društvene mreže i newsletter, uz dodatnu mogućnost plasmana u Businessweek Adria magazinu.",
+ audH:"Pred ljudima koji procjenjuju sljedeću investiciju",audT:"Investitori, vlasnici kompanija, menadžeri i profesionalci povezani s tržištem nekretnina.",
+ aud:["Serijal donosi perspektive investitora, projektnih menadžera, banaka, građevinskih kompanija, arhitekata, agencija i drugih učesnika tržišta."],
+ benH:"Korist za partnera",
+ ben:[["Predstavite poslovnu vrijednost","objasnite šta vaš projekat ili rješenje donosi kupcu, investitoru ili korisniku prostora."],["Pokažite ekspertizu","odgovorite na konkretna pitanja o finansiranju, gradnji, tržištu ili upravljanju nekretninama."],["Osigurajte kontinuitet prisustva","plasman komercijalnog intervjua na našem TV kanalu, portalu, društvenim mrežama i u newsletteru, uz dodatnu vidljivost kroz digital display kampanju."]],
+ after:["**Vaša ponuda u kontekstu tržišta, upotpunjena argumentima koji će vam pomoći da se istaknete u komunikaciji prema poslovnoj publici.**"],
+ pkH:"Dva paketa. Precizno definisana ponuda.",
+ table:{cols:["Foundation","Skyline"],rows:[
+  ["Video native intervju s predstavnikom kompanije, 3–4 pitanja","1","1"],
+  ["Emitovanje video native intervjua na Bloomberg Adria TV","3 emitovanja","3 emitovanja"],
+  ["Social video isječci, vertikalni format za LinkedIn, IG/FB Story","1 aktivacija","1 aktivacija"],
+  ["Native tekst u formatu komercijalnog intervjua, s integrisanim kompletnim videom","1","1"],
+  ["Newsletter objava","1","1"],
+  ["Logotip partnera u završnom kadru videa","✓","✓"],
+  ["Display kampanja na odabranoj lokalnoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile, jedno odabrano tržište","7 dana, 20% rotacije","7 dana, 20% rotacije"],
+  ["Cijela unutrašnja oglasna stranica u Bloomberg Businessweek Adria magazinu","—","1, u odabranom jezičkom izdanju"]],
+  price:["5.500 EUR","6.500 EUR"]},
+ notes:["**FOUNDATION:** video i digitalno prisustvo za predstavljanje vaše poslovne priče.","**SKYLINE:** sve iz paketa Foundation, uz cijelu oglasnu stranicu u Businessweek Adria magazinu."],
+ close:"Predstavite projekat, ekspertizu ili rješenje koje doprinosi vrijednosti sljedećeg kvadrata."},
+
+"zene-koje-odlucuju":{month:2,title:"Žene koje odlučuju",tagline:"Moć, kapital i poslovne odluke. Invitation only poslovni okrugli stol i večera, mart 2027.",
+ ind:["Sve industrije","Banke i finansije","Telekom i IT","Luksuz","Turizam i hotelijerstvo"],
+ lead:"Povežite svoju kompaniju s lidericama koje odlučuju o kapitalu, tehnologiji i rastu.",
+ intro:["Bloomberg Adria okuplja **24–30 poslovnih liderica**, isključivo uz lični poziv, za moderirani razgovor i privatnu večeru.","U središtu su odluke koje mijenjaju kompanije: gdje investirati, kako primijeniti umjetnu inteligenciju, razvijati talente i upravljati transformacijom i promjenama."],
+ key:"Partnerstvo donosi neposredan kontakt s relevantnim poslovnim krugom i prisustvo kroz komercijalni sadržaj prije i nakon događaja.",
+ audH:"Poslovna odgovornost za istim stolom",audT:"Predsjednice i članice uprava. Vlasnice kompanija. Regionalne direktorice. Liderice finansija, tehnologije i transformacije.",
+ aud:["Pažljivo odabrane učesnice iz različitih industrija povezuje odgovornost za kapital, ljude i poslovne rezultate."],
+ benH:"Format koji otvara prostor za kvalitetan razgovor",
+ ben:[["Uvodni razgovor","2–3 vodeće liderice, 25–30 minuta."],["Okrugli stol","moderirana razmjena iskustava i poslovnih perspektiva."],["Privatna večera","nastavak razgovora i uspostavljanje poslovnih kontakata."]],
+ after:["**Korist za partnera:** direktan kontakt s donositeljicama odluka, prostor za predstavljanje relevantne ekspertize i povezivanje brenda s temama poslovnog liderstva."],
+ pkH:"Nivoi partnerstva",pkT:"Ograničen broj partnera. Kontekstualno brendiranje.",
+ packages:[
+  {name:"Glavni partner",price:"5.500 EUR + PDV",note:"Jedan strateški partner. Najširi paket povezuje native sadržajnu kampanju, prisustvo na događaju i native intervju s predstavnicom partnera.",items:[
+   "#Prije događaja","**Tri native članka uz video** na Bloomberg Adria portalu, u periodu do dva mjeseca prije okupljanja.",
+   "#Tokom događaja","Učešće u pažljivo organizovanom poslovnom povezivanju s lidericama.","Ciljana promocija kroz poklone za učesnice i mogućnost ankete.","**Native intervju u trajanju od 10 minuta**, uz objavu na Bloomberg Adria TV, bloombergadria.com portalu i Bloomberg Adria LinkedIn stranici.",
+   "#Nakon događaja","Prisustvo partnera u native video i pisanom izvještaju s događaja.","Distribucija native izvještaja kroz TV, portal, newsletter i LinkedIn."]},
+  {name:"Sektorski partner",price:"3.500 EUR + PDV",note:"Maksimalno dva partnera iz različitih industrija.",items:[
+   "#Prije događaja","Dva native članka uz video na Bloomberg Adria portalu, u periodu do dva mjeseca prije okupljanja.",
+   "#Tokom događaja","Učešće u organizovanom poslovnom povezivanju i snimanje izjave do tri minute, uz objavu na TV-u, portalu i LinkedInu.",
+   "#Nakon događaja","Prisustvo u native video i pisanom izvještaju, distribuiranom kroz TV, portal, newsletter i LinkedIn."]},
+  {name:"Experiential partner",price:"2.500 EUR + PDV",items:[
+   "#Prije događaja","Jedan native članak uz video na Bloomberg Adria portalu, u periodu do dva mjeseca prije okupljanja.",
+   "#Tokom događaja","Učešće u organizovanom poslovnom povezivanju s lidericama.",
+   "#Nakon događaja","Prisustvo u native video i pisanom izvještaju, distribuiranom kroz TV, portal, newsletter i LinkedIn."]}],
+ close:"Odaberite nivo partnerstva prema ulozi koju vaša kompanija želi imati u ovom poslovnom krugu."},
+
+"poslovna-strana-luksuza":{month:3,title:"Biznis luksuza",tagline:"Vrijednost brenda. Kvalitet. Ekskluzivnost. Bloomberg Adria Prestiž, april 2027.",
+ ind:["Luksuz","Banke i finansije","Auto industrija","Nekretnine i gradnja","Turizam i hotelijerstvo"],
+ segs:[["MONEY","Wealth, investicije, private banking, luxury assets."],["DRIVE","Automobili, jahte, avijacija."],["LIVE","Nekretnine, arhitektura, design."],["EXPERIENCE","Travel, hospitality, gastronomy."],["STYLE","Fashion, watches, jewellery, beauty."],["FUTURE","Longevity, tehnologija, sustainability, novi luxury consumer."]],
+ lead:"Predstavite svoj brend poslovnoj publici kroz vrijednost koja opravdava luksuzni izbor.",
+ intro:["U luksuznom segmentu cijena je samo dio odluke. Važni su porijeklo, izrada, inovacija, usluga i iskustvo.","Bloomberg Adria povezuje poslovnu priču vašeg brenda s predstavljanjem proizvoda i usluga, kroz native objave i komercijalnu kampanju u rubrici Prestiž na bloombergadria.com portalu, Bloomberg Businessweek Adria magazinu, Bloomberg Adria Luxury nedjeljnom newsletteru i na Bloomberg Adria TV kanalu."],
+ key:"Istaknuti prostor u okviru Bloomberg Adria lifestyle vertikale pruža vam izuzetnu mogućnost da predstavite vrijednost svog brenda, uz komercijalnu kampanju kroz cijelu Bloomberg Adria multiplatformu.",
+ audH:"Publika koja bira prema vrijednosti",audT:"Vlasnici kompanija, menadžeri i poduzetnici zainteresovani za luksuzne proizvode, usluge i iskustva.",
+ aud:["Od automobila, satova i nakita do hotela, putovanja, nekretnina i personalizovanih finansijskih usluga, projekat predstavlja ponudu kroz kvalitet i poslovnu filozofiju brenda."],
+ benH:"Korist za partnera",
+ ben:[["Objasnite vrijednost prestiža","predstavite naslijeđe, izradu, inovacije i standard usluge."],["Povežite priču s ponudom","istaknite novu kolekciju, model, destinaciju ili iskustvo."],["Osigurajte kontinuitet prisustva","objedinite digitalni sadržaj, magazin, newsletter i TV kampanju."],["Usmjerite interesovanje","povežite newsletter promociju s digitalnim kanalom svog brenda."]],
+ after:["**Vaša priča u rubrici Prestiž na bloombergadria.com, uz dodatnu vidljivost kroz projektni banner na naslovnoj stranici portala.**"],
+ pkH:"Osnovni i Prošireni Prestiž paket",
+ table:{cols:["Osnovni Prestiž","Prošireni Prestiž"],rows:[
+  ["Native intervju s integrisanim kompletnim native videom u rubrici Prestiž na 1 odabranoj podstranici bloombergadria.com portala, isticanje na home page-u u trajanju od 24 sata","1","2"],
+  ["Sponzorstvo nedjeljnog Bloomberg Adria Luxury newslettera na jednom tržištu (šalje se subotom)","1 slanje","2 slanja tokom dvije sedmice"],
+  ["Native intervju, PR sadržaj ili oglas u Businessweek Adria","1 cijela stranica","2 cijele stranice"],
+  ["Fiksni banner na naslovnoj stranici bloombergadria.com portala i u rubrici Prestiž","1 dan","5 dana"],
+  ["Emitovanja reklamnog spota partnera, do 30 sekundi, na Bloomberg Adria TV kanalu na jednom odabranom tržištu","10","20"]],
+  price:["3.000 EUR","4.500 EUR"]},
+ notes:["Oba paketa uključuju dodatno isticanje komercijalnog sadržaja iz rubrike Prestiž kroz poziciju projektnog bannera na naslovnoj stranici.","**Svako sponzorstvo newslettera uključuje logo brenda, display kreativu i direktan link na web stranicu partnera.**"],
+ packages:[{name:"Platinasti Prestiž",price:"7.000 EUR",note:"Najširi paket, za brendove koji žele duže prisustvo i veći obim native sadržaja i oglašavanja.",items:[
+  "**Dva native intervjua** s integrisanim kompletnim videom na 1 odabranoj podstranici bloombergadria.com portala, u rubrici Prestiž, uz isticanje na homepage-u od 12 sati.",
+  "**Projektni banner sa logotipom partnera** na homepage-u 1 odabrane podstranice bloombergadria.com portala, koji vodi ka native sadržaju u rubrici Prestiž.",
+  "**Četiri sponzorstva nedjeljnog Bloomberg Adria Luxury newslettera** na jednom tržištu, tokom četiri sedmice.",
+  "**Četiri cijele stranice u Bloomberg Businessweek Adria magazinu:** komercijalni intervju, PR sadržaj ili oglas.",
+  "**Fiksni banner na homepage-u** 1 odabrane podstranice bloombergadria.com portala i u rubrici Prestiž: 10 dana.",
+  "**30 emitovanja reklamnog spota partnera** do 30 sekundi na Bloomberg Adria TV.",
+  "**Jedan dodatni native video intervju:** 3–4 pitanja, odgovori do jedne minute, **35 TV emitovanja tokom 10 dana**."]}],
+ close:"Predstavite poslovnu priču brenda i podržite je kontinuiranom promocijom proizvoda, usluga i iskustava."},
+
+"energija-i-ulaganja":{month:3,title:"Energija i ulaganja",tagline:"Prednost, sigurnost i konkurentnost. Bloomberg Adria Green, april 2027.",
+ ind:["Energetika","FMCG i proizvodnja","Banke i finansije"],
+ lead:"Predstavite poslovnu vrijednost svojih energetskih ulaganja publici koja odlučuje o kapitalu i razvoju kompanija.",
+ intro:["Energetske investicije utiču na troškove poslovanja, sigurnost snabdijevanja i dugoročnu konkurentnost.","Bloomberg Adria otvara prostor da predstavite konkretan projekat: **zašto ulažete, kako ga finansirate i koje rezultate donosi.**","Vaša investicija dobija posebnu vidljivost kroz native objavu u okviru Green rubrike, uz digitalnu promociju i mogućnost oglašavanja u štampanom izdanju."],
+ audH:"Istaknite se pred publikom koja procjenjuje ulaganja",audT:"Vlasnici kompanija, članovi uprava, finansijski direktori i profesionalci odgovorni za investicije i energetsku transformaciju.",
+ aud:["Publika kojoj su važni trošak energije, pouzdanost snabdijevanja, finansiranje i efikasnost poslovanja."],
+ benH:"Korist za partnera",
+ ben:[["Objasnite investiciju","predstavite projekat, model finansiranja i poslovni razlog ulaganja."],["Pokažite rezultate","istaknite ostvarene uštede, kapacitete ili unapređenja, uz konkretne podatke."],["Predstavite ekspertizu","objasnite kako vaša tehnologija ili usluga odgovara potrebama kompanija."],["Proširite vidljivost","povežite sadržaj s display oglašavanjem, newsletterom i LinkedIn objavom."]],
+ key:"Native intervju s čelnikom kompanije ili predstavljanje projekta: jasno označen komercijalni sadržaj u relevantnom energetskom i investicijskom kontekstu.",
+ pkH:"Dva paketa. Sadržaj i promocija.",
+ table:{cols:["Osnovni digitalni paket","Digitalni paket + štampano izdanje"],rows:[
+  ["Native članak ili intervju u Green rubrici","1","1"],
+  ["Direktan link na native članak u dnevnom newsletteru","1","1"],
+  ["Share native članka na zvaničnom Bloomberg Adria LinkedIn profilu","1","1"],
+  ["Display kampanja na 1 odabranoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile, rotacija 50%","5 dana","5 dana"],
+  ["Cijela oglasna stranica u štampanom izdanju Bloomberg Businessweek Adria","—","1"]],
+  price:["2.400 EUR + PDV","3.200 EUR + PDV"]},
+ notes:["**OSNOVNI DIGITALNI PAKET:** predstavite investiciju i podržite native sadržaj promocijom na digitalnim kanalima. Trajanje mjesec dana.","**DIGITALNI PAKET + ŠTAMPANO IZDANJE:** kompletna digitalna ponuda uz dodatno prisustvo kroz cijelu oglasnu stranicu. Trajanje tri mjeseca."],
+ close:"Predstavite ulaganje kroz njegov značaj za poslovanje, od razloga za investiciju do ostvarenog rezultata."},
+
+"vise-od-povezanosti":{month:4,title:"Više od povezanosti",tagline:"Telecom Next Level. Gdje infrastruktura i funkcionalna povezanost postaju poslovna vrijednost. Maj 2027.",
+ ind:["Telekom i IT"],
+ lead:"Pozicionirajte svoju kompaniju kao partnera digitalne transformacije poslovnih korisnika.",
+ intro:["Ulaganja u 5G, optiku, cloud i podatkovne centre otvaraju prostor za nove usluge i izvore prihoda.","Bloomberg Adria povezuje strategiju vaše kompanije s primjenom tehnologije: kako infrastruktura unapređuje poslovanje korisnika i podržava razvoj drugih industrija."],
+ key:"Razgovor u native TV video formatu objašnjava smjer ulaganja. Native sadržaj na digitalnom kanalu približava njegovu vrijednost poslovnoj publici.",
+ audH:"Istaknite se pred donosiocima odluka koji biraju tehnološke partnere",audT:"Članovi uprava, vlasnici kompanija i rukovodioci odgovorni za tehnologiju, sigurnost i poslovni razvoj.",
+ aud:["Publika koja procjenjuje ulaganja u digitalizaciju prema njihovom uticaju na troškove, produktivnost i kontinuitet poslovanja."],
+ benH:"Korist za partnera",
+ ben:[["Predstavite strateški smjer","gdje ulažete i kako razvijate prihode izvan klasičnih telekom usluga."],["Objasnite primjenu","kako vaše rješenje odgovara potrebama banaka, trgovine, industrije ili energetike."],["Pokažite pouzdanost","kako štitite podatke i osiguravate dostupnost poslovnih sistema."],["Povežite ekspertizu s ponudom","približite svoje usluge ljudima koji odlučuju o tehnološkim ulaganjima."]],
+ after:["**Poslovni razgovor o tome šta vaša tehnologija omogućava korisnicima i zašto je relevantna za njihovo poslovanje.**"],
+ pkH:"Paketi partnerstva",
+ table:{cols:["Osnovni TV i digitalni paket","Prošireni TV i digitalni paket"],rows:[
+  ["Profesionalna produkcija TV razgovora u native video formatu","1","1"],
+  ["Emitovanja pripremljenog native video sadržaja na Bloomberg Adria TV","3 emitovanja","3 emitovanja"],
+  ["Native članak s integrisanim native videom na Bloomberg Adria portalu","1 objava","1 objava"],
+  ["Projektni banner na portalu","1 postavljanje","1 postavljanje"],
+  ["Distribucija native videa na Bloomberg Adria LinkedIn profilu","—","1 objava"],
+  ["Model partnerstva","Najmanje 3 partnera u razgovoru","Jedan partner, do 3 učesnika"]],
+  price:["2.200 EUR + PDV po partneru","4.650 EUR + PDV"]},
+ notes:["**OSNOVNI PAKET:** učešće u zajedničkom razgovoru s više partnera u native video formatu, uz TV i digitalnu distribuciju.","**PROŠIRENI PAKET:** razgovor u native video formatu s jednim partnerom i do tri učesnika, uz dodatnu distribuciju na LinkedInu."],
+ close:"Predstavite svoje investicije kroz poslovne mogućnosti koje otvaraju korisnicima."},
+
+"expo-2027-beograd":{month:4,months:[4,5,6,7],regional:true,title:"EXPO 2027 Beograd",tagline:"Investicije, tržišta i poslovne prilike za Adria regiju. Kampanja na pet tržišta, mart – august 2027.",
+ ind:["Nekretnine i gradnja","Telekom i IT","Turizam i hotelijerstvo","Banke i finansije","Trgovina i e-commerce","Transport i logistika"],
+ lead:"Povežite svoju kompaniju s poslovnim prilikama EXPO-a kroz komercijalnu kampanju na pet tržišta.",
+ intro:["Bloomberg Adria predstavlja poslovnu dimenziju EXPO-a: ulaganja u infrastrukturu, primjenu tehnologije, razvoj turizma i prilike za kompanije iz regije.","Partnerima nudimo prostor da predstave svoju ulogu i projekte te podrže ponudu regionalnom komercijalnom kampanjom."],
+ key:"Prisustvo prije događaja, tokom EXPO-a i kroz priču o rezultatima nakon zatvaranja.",
+ audH:"Istaknite se pred publikom koja procjenjuje regionalne prilike",audT:"Vlasnici kompanija, članovi uprava, investitori i rukovodioci odgovorni za poslovni razvoj.",
+ aud:["Publika koja prati gdje nastaju nova potražnja, investicije i mogućnosti za saradnju."],
+ benH:"Korist za partnera",
+ ben:[["Predstavite svoju ulogu","objasnite kako vaš projekat, proizvod ili usluga odgovara potrebama koje EXPO otvara."],["Povežite lokalnu priču s regionalnim tržištem","distribucija native sadržaja u Srbiji, Hrvatskoj, Sloveniji, BiH i Sjevernoj Makedoniji."],["Uskladite kampanju s poslovnim ciljem","pripreme, otvaranje, aktivnosti tokom događaja ili predstavljanje rezultata."],["Objedinite native sadržaj i promociju","poslovna priča uz TV, digital, newsletter i LinkedIn, prema odabranom paketu."]],
+ after:["**Tematski fokus:** mobilnost i infrastruktura, tehnologija, turizam i potrošnja te finansiranje investicija."],
+ pkH:"Paketi prije i tokom EXPO-a",
+ table:{cols:["EXPO u najavi","EXPO u fokusu"],rows:[
+  ["**Period kampanje**","**15. mart – 15. maj 2027.**","**15. maj – 15. august 2027.**"],
+  ["Native intervju, analiza ili poslovna priča","1 tekst na svih 5 podstranica portala","1 tekst na svih 5 podstranica portala"],
+  ["PR tekst","1 tekst na svih 5 podstranica","1 tekst na svih 5 podstranica portala"],
+  ["LinkedIn objava","1 na krovnom regionalnom profilu","1 na krovnom regionalnom profilu"],
+  ["Sponzorstvo newslettera","1 slanje na svakom od 5 tržišta","1 slanje na svakom od 5 tržišta"],
+  ["Reklamni TV spot do 15 sekundi","Ukupno 30 emitovanja na svih 5 tržišta (6 po tržištu)","—"],
+  ["Produkcija komercijalnog TV izvještaja do 2,5 minute","—","1"],
+  ["Emitovanje komercijalnog TV izvještaja","—","Ukupno 5 emitovanja na svih 5 tržišta (1 po tržištu)"]],
+  price:["8.700 EUR + PDV","12.900 EUR + PDV"]},
+ notes:["**EXPO U NAJAVI:** predstavite investicije, pripreme i ponudu prije početka događaja.","**EXPO U FOKUSU:** povežite svoju poslovnu priču s otvaranjem i aktivnostima tokom EXPO-a."],
+ packages:[{name:"EXPO: Poslovno naslijeđe",price:"25.000 EUR + PDV",note:"Partnerstvo kroz cijeli projektni ciklus, u četiri faze: od priprema do predstavljanja rezultata.",items:[
+  "#Prije EXPO-a","Jedan native tekst na svih pet podstranica bloombergadria.com portala.","Jedna objava na Bloomberg Adria LinkedIn stranici.","Jedno sponzorstvo Bloomberg Adria newslettera na svih pet tržišta.","Ukupno 30 emitovanja reklamnog TV spota do 15 sekundi na svih pet tržišta (6 emitovanja po tržištu).",
+  "#Otvaranje","Produkcija jednog komercijalnog TV izvještaja do 2,5 minute i pet emitovanja.","Jedan PR tekst na svih pet podstranica bloombergadria.com portala.",
+  "#Tokom EXPO-a","Produkcija jednog komercijalnog TV izvještaja do 2,5 minute i ukupno pet emitovanja na svih pet tržišta (1 emitovanje po tržištu).","Jedan native tekst na svih pet podstranica bloombergadria.com portala.","Jedna objava na Bloomberg Adria LinkedIn stranici.",
+  "#Nakon EXPO-a","Jedan native tekst o rezultatima, investicijama ili narednim koracima na svih pet lokalnih portala.","Jedno sponzorstvo newslettera na svakom tržištu."]}],
+ notes2:["Mogućnost upgradea ponude i predstavljanja države izlagača kroz širi komercijalni kontekst, na upit."],
+ close:"Kontinuitet regionalne komunikacije: šta pripremate, kako učestvujete i kakvu poslovnu vrijednost ostvarujete."},
+
+"poslovna-strana-ljeta":{month:5,title:"Poslovna strana ljeta",tagline:"Turizam nakon ljeta: jesenske rezervacije i poslovna putovanja. Prodaja od juna, kampanja za jesen 2027.",
+ ind:["Turizam i hotelijerstvo","Događaji i sajmovi"],
+ lead:"Predstavite svoju ponudu publici koja planira jesenski odmor, poslovni boravak ili događaj.",
+ intro:["Za hotele i destinacije, postsezona otvara pitanje kako održati potražnju i iskoristiti kapacitete nakon glavnih ljetnih mjeseci.","Bloomberg Adria povezuje vašu ponudu s poslovnom publikom kroz native sadržaj na digitalnom kanalu i newsletter promociju, uz direktan pristup informacijama i rezervaciji."],
+ key:"Od produženog odmora do konferencijskih paketa: konkretni razlozi za dolazak nakon ljeta.",
+ audH:"Dvije potrebe. Jasna ponuda.",audT:"Menadžeri, poduzetnici i profesionalci koji planiraju putovanja, te osobe odgovorne za organizaciju poslovnih okupljanja.",
+ cols:[["Odmor u postsezoni","Smještaj, sadržaji destinacije i posebni paketi za goste koji biraju putovanje nakon ljetne sezone."],["Poslovni boravci i događaji","Hotelska i konferencijska ponuda za sastanke, kongrese, poslovne skupove i timska okupljanja."]],
+ benH:"Korist za partnera",
+ ben:[["Podržite potražnju za jesenske termine","predstavite dostupne kapacitete i uslove rezervacije."],["Objasnite vrijednost ponude","povežite smještaj s dostupnošću destinacije, sadržajima i uslugama."],["Usmjerite interesovanje prema rezervaciji","uključite jasnu poruku i direktan link u newsletter promociju."],["Istaknite novitet","novi objekat, nova ponuda ili nova konferencijska dvorana, uz jasnu poruku i direktan link u newsletter promociji."]],
+ after:["**Dva newsletter izdanja omogućavaju predstavljanje destinacije i potom konkretne ponude za boravak.**"],
+ pkH:"Paketi promocije",
+ table:{cols:["Osnovni paket","Proširena ponuda"],rows:[
+  ["Native tekst na 1 odabranoj podstranici Bloomberg Adria portala","PR tekst ili native intervju","Sve iz osnovnog paketa"],
+  ["Projektni banner koji vodi na native sadržaj","Uključeno","Uključeno"],
+  ["Dnevni newsletter, promocija","2 slanja, s porukom partnera i linkom","2 slanja, s porukom partnera i linkom"],
+  ["Dodatna promocija","—","2/1 oglas (unutrašnja duplerica) u Bloomberg Businessweek Adria magazinu, u jednom odabranom jezičkom izdanju; dodatna display kampanja: billboard banner na portalu 2 dana, 970 × 250 desktop i 300 × 250 mobile, rotacija 50%, na jednoj odabranoj stranici portala; 1 ekstenzija PR teksta s portala u dnevni newsletter, 3 slanja na jedno odabrano tržište; LinkedIn podjela PR članka na jednom odabranom tržištu"]],
+  price:["2.500 EUR","4.000 EUR"]},
+ notes:["Aktivacija na 1 odabranom tržištu, uz mogućnost dogovora za više tržišta ili regionalnu kampanju."],
+ close:"Predstavite ponudu koja daje poslovni razlog za rezervaciju nakon ljeta."},
+
+"bolji-proizvod":{month:5,title:"Bolji proizvod",tagline:"Održiviji proizvod: poslovna računica. Kako promjene u ambalaži i proizvodnji utiču na troškove, cijenu i izbor kupca. Juni 2027.",
+ ind:["FMCG i proizvodnja","Trgovina i e-commerce","Hrana i agrobiznis"],
+ lead:"Predstavite poslovnu vrijednost svojih ulaganja u održiviji proizvod.",
+ intro:["Promjena ambalaže, efikasnija proizvodnja ili manja potrošnja resursa otvaraju konkretna pitanja: koliko promjena košta, šta donosi i kako utiče na konkurentnost proizvoda?","Bloomberg Adria predstavlja vaša unapređenja kroz podatke i poslovne odluke koje stoje iza njih."],
+ key:"Šta ste promijenili, kakav rezultat ostvarujete i šta to znači za kupca.",
+ audH:"Pred donosiocima odluka o proizvodu i njegovom plasmanu",audT:"Članovi uprava i rukovodioci u proizvodnji, nabavci, trgovini i razvoju brendova.",
+ aud:["Publika koja procjenjuje kako održivija rješenja utiču na troškove, kvalitet, dostupnost i potražnju za proizvodima široke potrošnje."],
+ benH:"Korist za partnera",
+ ben:[["Objasnite ulaganje","zašto ste promijenili ambalažu, materijal ili proizvodni proces."],["Pokažite mjerljiv rezultat","smanjenje plastike, potrošnje vode ili energije, uz podatke koji potkrepljuju promjenu."],["Predstavite tržišnu vrijednost","kako unapređenje odgovara potrebama kupaca i zahtjevima trgovaca."]],
+ colsH:"Odaberite jedan od dva formata",
+ cols:[["Primjer unapređenja proizvoda","Konkretna promjena i njen rezultat."],["Poslovni native intervju","Uticaj promjene na troškove, cijenu i poslovanje kompanije."]],
+ after:["Native sadržaj objavljujemo u **Bloomberg Adria Green rubrici**, uz jasno označavanje komercijalne saradnje."],
+ pkH:"Dva digitalna paketa",
+ table:{cols:["Osnovni paket","Prošireni paket"],rows:[
+  ["Native tekst na 1 odabranoj podstranici Bloomberg Adria portala","1","1"],
+  ["Izbor formata","Primjer unapređenja proizvoda **ili** poslovni intervju","Primjer unapređenja proizvoda **ili** poslovni intervju"],
+  ["Native članak u Green rubrici","✓","✓"],
+  ["Promocija native teksta u dnevnom newsletteru na 1 odabranom tržištu","—","1"],
+  ["Podjela native teksta na lokalnoj Bloomberg Adria LinkedIn stranici","—","1"]],
+  price:["900 EUR","1.200 EUR"]},
+ notes:["**Svaki paket obuhvata jedan native sadržajni format na jednom odabranom tržištu.**","**OSNOVNI PAKET:** predstavite konkretno unapređenje proizvoda i njegovu poslovnu opravdanost.","**PROŠIRENI PAKET:** podržite istu priču dodatnom distribucijom kroz newsletter i LinkedIn."],
+ close:"Pokažite kako održiviji proizvod funkcioniše i kao poslovna odluka."},
+
+"hrana-i-agrobiznis":{month:6,title:"Iza proizvoda",tagline:"Biznis iza hrane: šta određuje cijenu, kvalitet i dostupnost proizvoda. Regionalni LinkedIn serijal, juli 2027.",
+ ind:["Hrana i agrobiznis","FMCG i proizvodnja","Banke i finansije","Osiguranje","Transport i logistika","Trgovina i e-commerce"],
+ lead:"Predstavite vrijednost svoje kompanije u lancu koji svakodnevno snabdijeva tržište hranom.",
+ intro:["Iza svakog proizvoda na polici stoje sirovine, ulaganja, tehnologija i distribucija. Svaki učesnik utiče na njegovu cijenu, kvalitet i dostupnost.","Bloomberg Adria kroz kratke poslovne odgovore predstavlja kompanije koje taj sistem pokreću: od poljoprivrede i proizvodnje do finansiranja, ambalaže, logistike i trgovine."],
+ key:"Vaša ekspertiza kroz konkretno pitanje o ekonomiji hrane.",
+ audH:"Vaša uloga u lancu vrijednosti",audT:"Vlasnici kompanija, menadžeri i profesionalci u proizvodnji, nabavci, finansiranju i trgovini.",
+ aud:["Serijal se obraća poslovnoj publici na LinkedInu kroz pitanja važna za njihove odluke: šta utiče na troškove, gdje tehnologija donosi uštedu i kako proizvod sigurno stiže do kupca."],
+ benH:"Korist za partnera",
+ ben:[["Objasnite svoj doprinos","pokažite koji problem rješavate i gdje stvarate vrijednost."],["Predstavite ekspertizu","povežite odgovor s konkretnim ulaganjem, procesom ili rezultatom."],["Povežite kompaniju s regionalnom poslovnom temom","objava na Bloomberg Adria LinkedIn profilu, uz označavanje partnera i mogućnost dijeljenja."]],
+ colsH:"Četiri sedmice, četiri lanca vrijednosti",
+ cols:[["Sedmica 1","Hljeb"],["Sedmica 2","Čokolada i keks"],["Sedmica 3","Sok"],["Sedmica 4","Jogurt i sladoled"]],
+ after:["Pitanje prilagođavamo stvarnoj ulozi partnera: proizvođača, dobavljača, banke, osiguravatelja ili pružaoca tehnološkog i logističkog rješenja."],
+ pkH:"Dva paketa učešća",
+ table:{cols:["Pojedinačna objava","Serijal objava"],rows:[
+  ["Poslovno pitanje prilagođeno partneru","1","3"],
+  ["Kratak odgovor predstavnika kompanije","1","3"],
+  ["Vizual u identitetu projekta","1","3"],
+  ["Objava na Bloomberg Adria LinkedIn profilu","1","3"],
+  ["Označavanje kompanije u objavi","✓","✓"],
+  ["Raspored aktivnosti tokom jula","Jedna sedmica","Tri sedmice"]],
+  price:["500 EUR + PDV","1.300 EUR + PDV"]},
+ notes:["Svaki odgovor ima **do 600 znakova**. Vizual uključuje fotografiju sagovornika, proizvoda ili proizvodnje. **Prvih 200 znakova presudno je za glavnu poruku.**","**POJEDINAČNA OBJAVA:** jedna jasna poruka o vašoj ulozi u lancu hrane.","**SERIJAL OBJAVA:** tri poslovna pitanja za predstavljanje različitih aspekata vaše ekspertize.","~Sve objave na Bloomberg Adria LinkedIn stranici su sponzorski označeni formati."],
+ close:"Pokažite šta vaša kompanija omogućava prije nego što proizvod stigne na policu."},
+
+"povratak-poslu":{month:7,title:"Povratak poslu",tagline:"Back to Business. Vaši poslovni prioriteti za jesen pred relevantnom publikom. August 2027.",
+ ind:["Sve industrije"],
+ lead:"Predstavite svoju ponudu, projekte i poslovne planove uoči završnog dijela godine.",
+ intro:["Povratak nakon ljeta otvara prostor za najavu novih proizvoda, investicija i događaja te predstavljanje prioriteta kompanije za jesen.","Bloomberg Adria povezuje vašu poruku s poslovnom publikom kroz tri paketa, prilagođena cilju kampanje."],
+ key:"Vidljivost brenda, promocija ponude ili predstavljanje rukovodstva, s jasno definisanim sadržajem i distribucijom.",
+ audH:"Istaknite se pred publikom koja planira naredne poslovne korake",audT:"Vlasnici kompanija, članovi uprava i rukovodioci koji odlučuju o ulaganjima, dobavljačima i poslovnoj saradnji.",
+ aud:["Predstavite im šta vaša kompanija donosi na tržište i zašto je to relevantno za njihove jesenske planove."],
+ benH:"Korist za partnera",
+ ben:[["Istaknite prisustvo brenda","podržite svoju poruku digitalnom kampanjom i PR objavom."],["Učinite ponudu vidljivijom","povežite sponzorstvo relevantne kategorije s display oglašavanjem i newsletterom."],["Predstavite poslovni smjer","kroz native intervju s čelnikom kompanije objasnite investicije, planove ili značaj predstojećeg događaja."]],
+ after:["**Format biramo prema vašem komunikacijskom cilju i sadržaju koji želite predstaviti.**"],
+ pkH:"Tri paketa. Tri komunikacijska cilja.",
+ table:{cols:["Back to Visibility","Back to Market","Back to Business Community"],rows:[
+  ["Display kampanja na 1 odabranoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile, 20% rotacije","10 dana","5 dana","—"],
+  ["PR tekst na 1 odabranoj podstranici bloombergadria.com portala","1","—","—"],
+  ["Sponzorstvo kategorije na 1 odabranoj podstranici bloombergadria.com portala","—","10 dana","—"],
+  ["Sponzorstvo newslettera na 1 odabranom tržištu","—","1","—"],
+  ["Promocija PR teksta u newsletteru","1","—","—"],
+  ["Komercijalni intervju s čelnikom kompanije na 1 odabranoj podstranici bloombergadria.com portala","—","—","1"],
+  ["Podjela intervjua na LinkedIn stranici 1 odabranog tržišta","—","—","1"],
+  ["Promocija komercijalnog intervjua u newsletteru","—","—","2"],
+  ["Unutrašnja dupla stranica u Bloomberg Businessweek Adria magazinu","—","—","1, u odabranom jezičkom izdanju"]],
+  price:["3.500 EUR + PDV","3.500 EUR + PDV","3.500 EUR + PDV"]},
+ notes:["**Svaki paket obuhvata jedno odabrano tržište i jednu podstranicu Bloomberg Adria portala.**","**BACK TO VISIBILITY:** digitalna kampanja uz PR poruku i newsletter distribuciju.","**BACK TO MARKET:** prisustvo kroz native sadržaj u relevantnoj kategoriji, uz display kampanju i sponzorstvo newslettera.","**BACK TO BUSINESS COMMUNITY:** komercijalni intervju s čelnikom kompanije, distribucija na poslovnim kanalima i dupla unutrašnja stranica u magazinu."],
+ close:"Odaberite paket prema poruci koju želite prenijeti poslovnoj publici ove jeseni."},
+
+"adria-u-pokretu":{month:8,title:"Adria u pokretu",tagline:"Transport i logistika koji povezuju tržišta. Septembar 2027.",
+ ind:["Transport i logistika","Nekretnine i gradnja"],
+ lead:"Predstavite svoju kompaniju kao poslovnog partnera koji omogućava pouzdan transport i efikasno snabdijevanje.",
+ intro:["Iza kretanja robe i ljudi stoje infrastruktura, tehnologija i svakodnevne operativne odluke.","Bloomberg Adria predstavlja kako vaša kompanija povezuje tržišta, unapređuje procese i ulaže u kapacitete važne za klijente i regionalnu ekonomiju."],
+ key:"Vaša poslovna vrijednost kroz konkretan proces, investiciju ili rješenje.",
+ audH:"Istaknite se pred ljudima koji odlučuju o logistici i ulaganjima",audT:"Vlasnici kompanija, članovi uprava i rukovodioci nabavke, logistike i operacija.",
+ aud:["Publika koja bira partnere prema pouzdanosti, troškovima i sposobnosti da podrže razvoj poslovanja."],
+ benH:"Korist za partnera",
+ ben:[["Pokažite operativne kapacitete","predstavite rute, flotu, terminale ili skladišta kroz njihovu funkciju za klijenta."],["Objasnite investiciju","šta novi kapacitet omogućava i kako unapređuje uslugu."],["Predstavite konkretno rješenje","kako tehnologija ili promjena procesa povećava efikasnost i pouzdanost."]],
+ colsH:"Tri moguća ugla priče",
+ cols:[["Put kroz sistem","Pratimo robu, pošiljku ili putnika od početka do odredišta."],["Investicija","Predstavljamo novi terminal, skladište, flotu ili rutu."],["Poslovno rješenje","Pokazujemo problem korisnika i način na koji ga vaša kompanija rješava."]],
+ pkH:"Dva paketa za predstavljanje poslovanja",
+ table:{cols:["Digitalna priča","Video priča"],rows:[
+  ["Komercijalni intervju na 1 odabranoj podstranici bloombergadria.com portala","1","—"],
+  ["Produkcija native video sadržaja","—","1"],
+  ["Native članak s integrisanim native video klipom","—","1"],
+  ["Emitovanje native video sadržaja na Bloomberg Adria TV na 1 odabranom tržištu","—","Uključeno, obim za potvrdu"],
+  ["Promocija sadržaja u dnevnom newsletteru","1 link","—"],
+  ["LinkedIn distribucija: 1 objava na 1 odabranom tržištu","1 podjela članka","1 podjela videa"],
+  ["Projektni banner na portalu","1","1"],
+  ["Display kampanja na 1 odabranoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile","5 dana","—"]],
+  price:["2.800 EUR + PDV","4.700 EUR + PDV"]},
+ notes:["**DIGITALNA PRIČA:** komercijalni intervju o vašoj ekspertizi, investiciji ili usluzi, uz newsletter, LinkedIn i display promociju.","**VIDEO PRIČA:** prikaz poslovanja kroz native video i prateći native članak, uz TV emitovanje i digitalnu distribuciju."],
+ close:"Pokažite šta vaša kompanija omogućava poslovanju svojih klijenata."},
+
+"poslovanje-na-sajmovima":{month:8,title:"Poslovanje na sajmovima",tagline:"Vaš biznis pred publikom. Vidljivost uz sajmove i poslovne događaje. Septembar 2027.",
+ ind:["Događaji i sajmovi","Sve industrije"],
+ lead:"Proširite vidljivost svog sajamskog nastupa prema poslovnoj publici na odabranom tržištu.",
+ intro:["Učešće na sajmu ili konferenciji ima jasan poslovni cilj: predstaviti rješenje, privući klijente ili otvoriti saradnju.","Bloomberg Adria podržava vaš nastup sadržajem i promocijom na digitalnom kanalu prije događaja, uz mogućnost predstavljanja rezultata nakon završetka."],
+ key:"Objasnite šta predstavljate, kome je namijenjeno i zašto vrijedi razgovarati s vašom kompanijom.",
+ audH:"Pred potencijalnim klijentima i partnerima",audT:"Vlasnici kompanija, menadžeri i profesionalci koji odlučuju o nabavci, ulaganjima i poslovnoj saradnji.",
+ aud:["Ponuda je namijenjena izlagačima, sponzorima i organizatorima, kao i kompanijama koje na događaju predstavljaju proizvod ili poslovnu inicijativu."],
+ benH:"Korist za partnera",
+ ben:[["Najavite konkretnu ponudu","predstavite novitet, uslugu ili razlog za posjetu štandu."],["Istaknite tržišnu ulogu","objasnite svoju ekspertizu i značaj učešća na događaju."],["Produžite komunikaciju","nakon događaja predstavite zaključke, rezultate i naredne korake."]],
+ after:["**Lokalni portal, newsletter i LinkedIn povezuju vaš nastup s poslovnom publikom izvan samog događaja.**"],
+ pkH:"Tri paketa digitalne promocije",
+ table:{cols:["Osnovni","Vidljivost","Kompletni"],rows:[
+  ["PR tekst na 1 odabranoj podstranici bloombergadria.com portala","1","1","2: prije i poslije događaja"],
+  ["Komercijalni intervju s predstavnikom kompanije nakon događaja na 1 odabranoj podstranici bloombergadria.com portala","—","—","1"],
+  ["Promocija komercijalnog sadržaja u newsletteru","1","1","3"],
+  ["Podjela komercijalnog sadržaja na LinkedIn stranici na 1 odabranom tržištu","1","1","3"],
+  ["Display kampanja prije događaja na 1 odabranoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile, 20% rotacije","—","10 dana","10 dana"]],
+  price:["960 / 1.200 EUR","3.500 EUR","5.500 EUR"]},
+ notes:["**Svaki paket obuhvata jedno odabrano tržište.**","**OSNOVNI:** predstavite svoj nastup kroz PR tekst, newsletter i LinkedIn.","**VIDLJIVOST:** podržite najavu dodatnom display kampanjom tokom deset dana prije događaja.","**KOMPLETNI:** povežite najavu nastupa s izvještajem i komercijalnim intervjuom nakon događaja, uz distribuciju sva tri native sadržaja."],
+ close:"Vaš nastup dobija komunikaciju prije događaja i prostor za poslovne rezultate nakon njega."},
+
+"kiberneticki-otporna-adria":{month:9,title:"Kibernetički otporna Adria",tagline:"Cyber sigurnost i otpornost poslovanja. Oktobar 2027.",
+ ind:["Telekom i IT","Banke i finansije","Osiguranje","Energetika","Trgovina i e-commerce"],
+ lead:"Pozicionirajte svoju stručnost pred liderima koji odlučuju o zaštiti i kontinuitetu poslovanja.",
+ intro:["Cyber incident može zaustaviti ključne sisteme, ugroziti podatke i narušiti povjerenje klijenata. Za poslovne lidere, sigurnost zato postaje pitanje odgovornosti, investicija i brzine oporavka.","Bloomberg Adria u oktobru 2027. povezuje poslovne lidere i stručnjake kroz zatvorenu diskusiju i komercijalne medijske sadržaje o otpornosti kompanija."],
+ key:"Prilika za partnera: pokazati kako njegova rješenja odgovaraju na konkretne poslovne rizike.",
+ audH:"Razgovor s ljudima koji donose odluke",audT:"12–15 odabranih učesnika. Jedno ključno pitanje: može li kompanija nastaviti poslovanje nakon cyber incidenta?",
+ aud:["Invitation only poslovni okrugli stol okuplja direktore kompanija, IT direktore i direktore informacijske sigurnosti iz bankarstva, osiguranja, telekoma, IT-a, energetike, infrastrukture, trgovine i industrije."],
+ benH:"Diskusija se fokusira na četiri poslovne odluke",
+ ben:[["","Ko preuzima odgovornost u prvom satu incidenta?"],["","Koji sistemi moraju ostati aktivni?"],["","Kako sačuvati povjerenje klijenata?"],["","Koliko brzo kompanija može obnoviti poslovanje?"]],
+ after:["**Korist za partnera:** direktan razgovor s relevantnim donosiocima odluka i prostor da stručnost predstavi kroz konkretne scenarije zaštite i oporavka poslovanja."],
+ pkH:"Paketi partnerstva",
+ packages:[
+  {name:"Glavni partner okruglog stola",price:"4.500 EUR + PDV",note:"Stručna uloga u diskusiji. Vidljivost kroz digitalne i TV sadržaje.",items:[
+   "Status glavnog partnera i brendiranje okruglog stola.","Učešće predstavnika partnera u moderiranoj diskusiji.","Native izvještaj s glavnim zaključcima diskusije, spominjanjem partnera i izjavom predstavnika partnera, na podstranici tržišta na kojem se održava okrugli stol. Objavljuje se ispred paywall-a i vidljiv je svim posjetiocima portala.","Dijeljenje native izvještaja na regionalnim LinkedIn i Facebook profilima Bloomberg Adrije.","Komercijalni TV prilog s izjavom predstavnika partnera: **15 emitovanja tokom sedam dana** na Bloomberg Adria TV-u na tržištu na kojem se održava okrugli stol.","Logo partnera u uvodnoj i završnoj grafici TV priloga, u formatu „Powered by [logo partnera]“.","**Dva PR teksta.**","Display kampanja, **970 × 250 desktop i 300 × 250 mobile**, u trajanju **sedam dana**."]},
+  {name:"Native intervju o cyber otpornosti",price:"2.600 EUR + PDV",note:"Native intervju s predstavnikom kompanije o temi poput prvih 60 minuta nakon napada, sigurnosti dobavljača, zaštite podataka ili oporavka ključnih sistema.",items:[
+   "**Jedan native intervju.**","Jedna ekstenzija native intervjua u dnevnom e-newsletteru na 1 odabranom tržištu.","Jedna objava na LinkedIn stranici na 1 odabranom tržištu.","Display kampanja na 1 odabranoj podstranici bloombergadria.com portala, 970 × 250 desktop i 300 × 250 mobile: dvije pozicije po 5 dana.","Jedan projektni baner."]},
+  {name:"Jedno pitanje, jedan stručnjak",price:"500 EUR + PDV",note:"Native video dodatak uz odabrani paket.",items:[
+   "Produkcija jednog kratkog native video odgovora ili izjave predstavnika kompanije, u trajanju od **60–90 sekundi**, u produkciji Bloomberg Adria TV-a.","Jedno dijeljenje videa na LinkedInu na 1 odabranom tržištu."]}]},
+
+"od-stednje-do-ulaganja":{month:9,title:"Od štednje do ulaganja",tagline:"Od štednje do investiranja. Oktobar 2027.",
+ ind:["Investicijski fondovi","Banke i finansije"],
+ lead:"Približite svoj fond budućim investitorima kroz jasne odgovore o ulaganju.",
+ intro:["Kako početi investirati? Kako razumjeti rizik? Zašto je važan dugoročan plan?","Bloomberg Adria u oktobru 2027. otvara ova pitanja kroz komercijalne intervjue i stručne sadržaje, uz digitalnu distribuciju."],
+ key:"Prilika za partnera: izgraditi povjerenje u svoju stručnost kod publike koja tek razmatra ulaganje.",
+ audH:"Publika koja razmatra sljedeći finansijski korak",audT:"Od razumijevanja fondova do informisanije odluke o investiranju.",
+ aud:["Projekat je namijenjen individualnim štedišama i potencijalnim investitorima koji žele razumjeti mogućnosti ulaganja, ali ih zaustavljaju složenost proizvoda, nepoznavanje rizika i nesigurnost oko prvog koraka."],
+ benH:"Partner kroz konkretna pitanja objašnjava",
+ ben:[["","Šta je potrebno za početak ulaganja?"],["","Kako vremenski horizont utiče na investicijske odluke?"],["","Kako razumjeti odnos rizika i potencijalnog prinosa?"],["","Koju ulogu imaju diversifikacija i redovno ulaganje?"]],
+ after:["**Korist za partnera:** prostor da približi fondove novoj publici, odgovori na ključne nedoumice i gradi povjerenje kroz stručne, razumljive sadržaje."],
+ pkH:"Start, Boost i Highlight",pkT:"Paketi za predstavljanje fonda na jednom odabranom tržištu.",
+ packages:[
+  {name:"Start",price:"1.900 EUR + PDV",note:"Osnovna vidljivost.",items:["**Jedan komercijalni intervju s predstavnikom kompanije**, objavljen na 1 podstranici odabranog tržišta.","Isticanje intervjua na naslovnici **šest sati**.","**Tri dana display kampanje:** 970 × 250 desktop i 300 × 250 mobile, uz rotaciju od **25%**.","Standardna pozicija logotipa na zajedničkom promotivnom baneru projekta, koji se prikazuje širom portala odabranog tržišta."]},
+  {name:"Boost",price:"2.850 EUR + PDV",note:"Pojačana vidljivost.",items:["**Jedan komercijalni intervju s predstavnikom kompanije**, objavljen na portalu odabranog tržišta.","Isticanje intervjua na naslovnici **12 sati**.","**Sedam dana display kampanje:** 970 × 250 desktop i 300 × 250 mobile, uz rotaciju od **25%**.","Istaknuta pozicija logotipa na zajedničkom promotivnom baneru projekta, koji se prikazuje širom portala odabranog tržišta."]},
+  {name:"Highlight",price:"5.100 EUR + PDV",note:"Perspektiva lidera kompanije i stručna objašnjenja, uz 15 dana oglasne prisutnosti.",items:["**Jedan komercijalni intervju s predstavnikom ili liderom kompanije.**","**Jedan stručni native tekst s finansijskim ekspertom** koji objašnjava odabrano investicijsko pitanje.","Objavljivanje oba komercijalna sadržaja na portalu odabranog tržišta.","Isticanje intervjua na naslovnici **24 sata**, stručnog native teksta **12 sati**.","**Jedno dijeljenje intervjua na LinkedInu** odabranog tržišta.","**Po jedno dijeljenje stručnog native teksta na Instagramu i Facebooku** odabranog tržišta.","**15 dana display kampanje:** 970 × 250 desktop i 300 × 250 mobile, uz rotaciju od **25%**.","Premium pozicija logotipa na zajedničkom promotivnom baneru projekta, uz status vodećeg partnera."]}],
+ notes2:["Svi paketi važe za **jedno odabrano tržište**. Prisustvo na više tržišta ili u svih pet zemalja Bloomberg Adria regije ugovara se na upit."]},
+
+"vrhunac-trgovine":{month:10,title:"Vrhunac trgovine",tagline:"Vrhunac prodajne sezone. Black Friday, Cyber Monday i praznična kupovina. Novembar 2027.",
+ ind:["Trgovina i e-commerce","Banke i finansije","Luksuz","Turizam i hotelijerstvo"],
+ lead:"Predstavite ponudu, pojačajte kampanju i istaknite razlog zašto kupac treba izabrati vaš brend.",
+ intro:["Black Friday, Cyber Monday i praznična kupovina stavljaju u fokus tri poslovna pitanja: kako privući kupca, olakšati plaćanje i podstaći ponovnu kupovinu.","Bloomberg Adria u novembru 2027. povezuje trgovinu, e-commerce i platna rješenja kroz komercijalne sadržaje, video i oglasne kampanje."],
+ key:"Prilika za partnera: dodatna vidljivost u poslovnom medijskom okruženju u periodu intenzivne prodajne konkurencije.",
+ audH:"Od izbora proizvoda do ponovne kupovine",audT:"Jasna vrijednost za kupca. Konkretan prostor za partnera.",
+ aud:["Projekat se obraća poslovnoj publici Bloomberg Adrije kao kupcima proizvoda i usluga, ali i donosiocima odluka o prodaji, plaćanju, korisničkom iskustvu i poslovnim poklonima."],
+ benH:"Partner bira temu koja odgovara njegovoj ponudi",
+ ben:[["Privlačenje kupca","proizvod, pogodnost i iskustvo kupovine u prodavnici ili online."],["Jednostavnije plaćanje","kartice, digitalni novčanici, rate, cashback i sigurnost transakcija."],["Zadržavanje kupca","programi lojalnosti, personalizacija i vrijednost nakon završetka popusta."],["Praznična ponuda","premium proizvodi, poslovni pokloni, putovanja i iskustva."]],
+ after:["**Korist za partnera:** objasniti vrijednost svoje ponude, proširiti distribuciju postojeće kampanje ili predstaviti konkretan proizvod kroz novi sadržaj."],
+ pkH:"Sadržaj, kampanja i kratki video",pkT:"Odaberite format prema prodajnom cilju.",
+ packages:[
+  {name:"Poslovna priča",price:"1.500 EUR",items:["Jedan PR tekst na portalu odabranog tržišta.","Jedno dijeljenje na Instagram story sa linkom ka tekstu.","Baner u zaglavlju newslettera: 970 × 250 desktop i 320 × 250 mobile.","Deset dana display kampanje: 970 × 250 desktop i 300 × 250 mobile, uz 20% rotacije, na jednom odabranom tržištu."]},
+  {name:"Nadogradnja TV",price:"2.000 EUR",items:["Emitovanje postojeće TV reklame klijenta, u trajanju do 3 minute: deset emitovanja na Bloomberg Adria TV-u na jednom odabranom tržištu.","Deset dana display kampanje: 970 × 250 desktop i 300 × 250 mobile, uz 20% rotacije, na jednom odabranom tržištu.","Jedno dijeljenje na Facebook i Instagram kanalima odabranog tržišta."]},
+  {name:"Praznični izbor",price:"3.000 EUR",items:["Produkcija jednog native video formata do dvije minute.","Deset emitovanja native video formata na Bloomberg Adria TV-u na jednom odabranom tržištu.","Jedno dijeljenje na Facebook i Instagram kanalima odabranog tržišta.","Deset dana display kampanje: 970 × 250 desktop i 300 × 250 mobile, uz 20% rotacije, na jednom odabranom tržištu."]}]}
+};
+
+
+/* ---------- January: The Year Ahead and Boardroom ---------- */
+Object.assign(P,{
+"godina-pred-nama":{month:0,months:[0,11],title:"The Year Ahead",tagline:"Business leaders’ perspectives. Regionalni native projekat za 2027.",
+ ind:["Sve industrije"],
+ lead:"Vizije lidera. Smjer poslovanja za 2027.",
+ intro:["Regionalni projekat Bloomberg Adrije koji okuplja vodeće poslovne lidere i donosi njihove prognoze, prioritete i planove za godinu pred nama.","The Year Ahead realizuje se jednom godišnje, u trenutku kada se definišu ključne poslovne teme i agenda za narednih 12 mjeseci."],
+ key:"Jedna priča. Pet tržišta. Regionalna vidljivost.",
+ audH:"Jedna priča, pet tržišta",audT:"Pozicionirajte lidera i kompaniju kroz viziju, prioritete i pogled na trendove koji će oblikovati 2027. godinu.",
+ cols:[["Pet tržišta","Bosna i Hercegovina, Hrvatska, Srbija, Slovenija i Sjeverna Makedonija."],["Multiplatforma","Bloomberg Adria digitalna platforma, newsletter i društvene mreže."],["Doseg","Više od 4 miliona korisnika i 300.000 newsletter pretplatnika."],["Kontekst","Premium poslovni kontekst uz vodeće donosioce odluka u regiji."]],
+ colsH2:"Odaberite format",
+ cols2:[["Native intervju","Lider kompanije kroz pitanja Bloomberg Adrije predstavlja poslovna očekivanja, strateške prioritete i ključne planove za 2027. godinu."],["Autorski tekst","Ekspertski pogled lidera na trendove, promjene i prilike koje će oblikovati industriju i tržište u narednoj godini."]],
+ pkH:"Spotlight paket",
+ packages:[{name:"Spotlight",price:"3.000 EUR bez PDV-a",note:"Pozicionirajte lidera i kompaniju kroz viziju, prioritete i pogled na trendove koji će oblikovati 2027. godinu.",items:[
+  "**Native intervju ili autorski tekst na engleskom jeziku:** predstavljanje poslovne vizije, ključnih prioriteta i očekivanja lidera za 2027. godinu.",
+  "**Regionalna digitalna objava** u okviru specijalnog izdanja The Year Ahead 2027 na svih pet Bloomberg Adria tržišta: BiH, Hrvatska, Srbija, Slovenija i Sjeverna Makedonija.",
+  "**Newsletter distribucija:** dodatna promocija sadržaja kroz Bloomberg Adria newsletter izdanja na svih pet tržišta.",
+  "**LinkedIn objava:** pozicioniranje sadržaja pred regionalnom poslovnom zajednicom i publikom donosilaca odluka.",
+  "**Instagram i Facebook objave:** prilagođeni vizuelni formati sa ključnom porukom i direktnim pozivom na čitanje sadržaja."]}],
+ facts:[["Trajanje projekta","15.11.2026 – 15.3.2027."],["Rok za materijale","5.11.2026."],["Tržišta","5"]],
+ notes:["**Specifikacija materijala:** partner dostavlja tekst intervjua ili autorski tekst na engleskom jeziku, opremljen naslovom i jednim međunaslovom, jednu portretnu fotografiju sagovornika i jednu do dvije prateće fotografije u JPG formatu.","~Sve objave na Bloomberg Adria multiplatformi jasno su označene kao sponzorisani sadržaj."]},
+
+"za-stolom-odlucivanja":{month:0,months:[0,11],title:"Boardroom",tagline:"Godišnji program komunikacije namijenjen C-level donosiocima poslovnih odluka.",
+ ind:["Sve industrije","Banke i finansije"],
+ lead:"Jačamo liderske pozicije. Gradimo kredibilitet. Oblikujemo poslovne razgovore.",
+ intro:["Pomažemo kompanijama da komuniciraju svoju strategiju, poslovne rezultate, ključne investicije i stavove o najvažnijim ekonomskim temama kroz kredibilitet i doseg Bloomberg Adria."],
+ key:"Vaša priča, naša publika na 5 tržišta: Bloomberg Adria kontekst i distribucija.",
+ audH:"Program koji traje cijelu godinu",audT:"Godišnji program komunikacije namijenjen C-level donosiocima poslovnih odluka.",
+ cols:[["Godina pred nama","Započnite godinu sa strateškom perspektivom: ekskluzivni intervju s predsjednikom uprave, CEO-om ili drugim C-level donosiocem odluka u izdanju The Year Ahead 2027."],["Intervjui sa C-level","Intervjui s CEO, CFO, COO, CIO, CRO, CMO i drugim C-level donosiocima poslovnih odluka tokom cijele godine."],["Prioritetna saopštenja","Objava najvažnijih korporativnih vijesti tokom cijele godine."],["Potpuna digitalna distribucija","Bloomberg Adria portal, Daily Newsletter i LinkedIn."]],
+ pkH:"Komunikacijski paketi",pkT:"Odaberite paket koji najbolje odgovara komunikacijskim prioritetima vaše kompanije.",
+ table:{cols:["Essential","Executive","Signature"],badges:{2:"NAJPOPULARNIJE"},rows:[
+  ["The Year Ahead (CEO)","✓","✓","✓"],
+  ["Intervju sa C-level donosiocima poslovnih odluka","1 intervju","do 3 intervjua","do 5 intervjua"],
+  ["Korporativna saopštenja","3","5","10"],
+  ["Bloomberg Businessweek Adria (print izdanje)","—","1/1 strana","2/1 strane (duplerica)"],
+  ["Promocija u Daily Newsletteru","✓","✓","✓"],
+  ["LinkedIn promocija","✓","✓","✓"]],
+  price:["4.500 EUR","9.500 EUR","15.500 EUR"]},
+ notes:["**Fleksibilan program** prilagođen komunikacijskim ciljevima vaše kompanije.","~Sav sadržaj objavljen u okviru Bloomberg Adria Boardroom programa jasno je označen kao sponzorisani sadržaj."]}
+});
+P["rane-rezervacije"].prices=["1.200","2.700","4.500","9.900"];
+P["kiberneticki-otporna-adria"].packages[2].addon=true;
+P["kiberneticki-otporna-adria"].packages[2].tag="Dodatak";
+P["rane-rezervacije"].table.rows[1][0]="**EARLY BOOKING FLIGHT**<span class='rec'>PREPORUČENI PAKET</span>";
+
+const TAG={"godina-pred-nama":"Liderstvo","za-stolom-odlucivanja":"Liderstvo","sta-pokrece-adriju":"Auto industrija","rane-rezervacije":"Turizam","sljedeci-kvadrat":"Nekretnine","zene-koje-odlucuju":"Liderstvo","poslovna-strana-luksuza":"Luksuz","energija-i-ulaganja":"Energetika","vise-od-povezanosti":"Telekomunikacije","expo-2027-beograd":"Regionalne investicije","poslovna-strana-ljeta":"Turizam","bolji-proizvod":"Proizvodnja","hrana-i-agrobiznis":"Hrana i agrobiznis","povratak-poslu":"Sve industrije","adria-u-pokretu":"Transport i logistika","poslovanje-na-sajmovima":"Sajmovi i događaji","kiberneticki-otporna-adria":"Cyber sigurnost","od-stednje-do-ulaganja":"Investicijski fondovi","vrhunac-trgovine":"Trgovina"};
+Object.keys(P).forEach(k=>{if(!TAG[k])throw new Error("tag "+k);P[k].tag=TAG[k]});
+
+/* ---------- Project motifs: fine line art per theme, drawn in the month's ink colour ---------- */
+const MOTIF=(function(){
+  const r=n=>Math.round(n*10)/10;
+  const L=(c,x1,y1,x2,y2,w=1,o=1,cl="d")=>`<line class="${cl}" x1="${r(x1)}" y1="${r(y1)}" x2="${r(x2)}" y2="${r(y2)}" stroke="${c}" stroke-width="${w}" stroke-opacity="${o}" stroke-linecap="round"/>`;
+  const Ci=(c,x,y,rad,w=1,o=1,fill="none",cl="d")=>`<circle class="${cl}" cx="${r(x)}" cy="${r(y)}" r="${r(rad)}" stroke="${c}" stroke-width="${w}" stroke-opacity="${o}" fill="${fill}"/>`;
+  const P=(c,d,w=1,o=1,ex="")=>`<path class="d" d="${d}" stroke="${c}" stroke-width="${w}" stroke-opacity="${o}" fill="none" stroke-linecap="round" stroke-linejoin="round" ${ex}/>`;
+  const Dot=(c,x,y,rad,o=1)=>`<circle cx="${r(x)}" cy="${r(y)}" r="${rad}" fill="${c}" fill-opacity="${o}"/>`;
+  const R=(c,x,y,w,h,rx,fill,o)=>`<rect x="${r(x)}" y="${r(y)}" width="${r(w)}" height="${r(h)}" rx="${rx}" fill="${fill||c}" fill-opacity="${o}"/>`;
+  const wave=(x0,x1,y,a,k,ph)=>{let d="";for(let x=x0;x<=x1;x+=6){const yy=y+a*Math.sin(x/k+ph);d+=(x===x0?"M":"L")+r(x)+" "+r(yy)}return d};
+  const arc=(cx,cy,rad,a0,a1)=>{const p=a=>[cx+rad*Math.cos(a*Math.PI/180),cy+rad*Math.sin(a*Math.PI/180)];const [x0,y0]=p(a0),[x1,y1]=p(a1);return `M${r(x0)} ${r(y0)} A${rad} ${rad} 0 ${Math.abs(a1-a0)>180?1:0} 1 ${r(x1)} ${r(y1)}`};
+  const star=(c,x,y,s,o=.8)=>L(c,x-s,y,x+s,y,1,o)+L(c,x,y-s,x,y+s,1,o)+L(c,x-s*.4,y-s*.4,x+s*.4,y+s*.4,.6,o*.6)+L(c,x-s*.4,y+s*.4,x+s*.4,y-s*.4,.6,o*.6);
+
+  return {
+  /* Auto industrija: a fine instrument dial with redline and needle */
+  auto(c){let s="";const cx=440,cy=214,R=158,A0=135,SW=270,val=v=>A0+SW*v/8;
+    s+=P(c,arc(cx,cy,R,A0,A0+SW),1.6,.95)+P(c,arc(cx,cy,R-26,A0,A0+SW),.7,.35)+P(c,arc(cx,cy,R+14,A0,A0+SW),.6,.2);
+    s+=`<path d="${arc(cx,cy,R-8,val(6.5),val(8))}" stroke="#ff3b30" stroke-width="7" stroke-opacity=".9" fill="none" stroke-linecap="round"/>`;
+    for(let i=0;i<=80;i++){const a=(A0+SW*i/80)*Math.PI/180,maj=i%10===0,mid=i%5===0,l=maj?20:mid?12:6;
+      s+=L(c,cx+R*Math.cos(a),cy+R*Math.sin(a),cx+(R-l)*Math.cos(a),cy+(R-l)*Math.sin(a),maj?1.8:mid?1.1:.6,maj?.95:.6);
+      if(maj){const t=R-40;s+=`<text x="${r(cx+t*Math.cos(a))}" y="${r(cy+t*Math.sin(a)+5)}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="15" font-weight="600" fill="${i>=70?"#ff5a4f":c}" fill-opacity=".95">${i/10}</text>`}}
+    const na=val(5.4)*Math.PI/180;
+    s+=`<line x1="${r(cx-24*Math.cos(na))}" y1="${r(cy-24*Math.sin(na))}" x2="${r(cx+(R-12)*Math.cos(na))}" y2="${r(cy+(R-12)*Math.sin(na))}" stroke="#ff3b30" stroke-width="3" stroke-linecap="round"/>`;
+    s+=Ci(c,cx,cy,14,1.6,.95)+Dot(c,cx,cy,5);
+    s+=`<text x="${cx}" y="${cy+62}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="3" fill="${c}" fill-opacity=".7">×1000 RPM</text>`;
+    s+=`<text x="${cx}" y="${cy+104}" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-size="34" font-weight="800" fill="${c}" fill-opacity=".95">2027</text>`;
+    return s},
+  /* Rane rezervacije: a booking calendar with a selected stay and a key card */
+  travel(c){let s=`<rect class="d" x="300" y="56" width="284" height="280" rx="14" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="none"/>`;
+    s+=L(c,300,104,584,104,1,.5)+L(c,330,46,330,68,2,.9)+L(c,554,46,554,68,2,.9);
+    s+=`<text x="318" y="88" font-family="Archivo,Arial,sans-serif" font-size="17" font-weight="800" letter-spacing="1" fill="${c}">JUNI 2027</text>`;
+    s+=`<text x="566" y="88" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="${c}" fill-opacity=".7">‹ ›</text>`;
+    const days=["P","U","S","Č","P","S","N"],x0=322,cw=38,y0=124,rh=36;
+    days.forEach((d,i)=>s+=`<text x="${x0+i*cw+10}" y="${y0}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="${c}" fill-opacity=".55">${d}</text>`);
+    const first=1,inn=9,out=13;
+    s+=`<rect x="${x0+((first+inn-1)%7)*cw-6}" y="${y0+12+Math.floor((first+inn-1)/7)*rh}" width="${(out-inn)*cw+32}" height="30" rx="15" fill="${c}" fill-opacity=".16"/>`;
+    for(let d=1;d<=30;d++){const k=first+d-1,col=k%7,row=Math.floor(k/7),x=x0+col*cw+10,y=y0+32+row*rh;
+      if(d===inn||d===out)s+=Ci(c,x,y-5,15,1.8,1,"none","")+Dot(c,x,y-5,15,.22);
+      s+=`<text x="${x}" y="${y}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="${d>=inn&&d<=out?600:400}" fill="${c}" fill-opacity="${d>=inn&&d<=out?1:.6}">${d}</text>`}
+    s+=Dot(c,322,322,4)+`<text x="332" y="326" font-family="IBM Plex Mono,monospace" font-size="10" letter-spacing="1" fill="${c}" fill-opacity=".85">CHECK-IN 9.6.  →  CHECK-OUT 13.6.</text>`;
+    s+=`<g transform="rotate(-14 200 300)"><rect class="d" x="140" y="262" width="124" height="78" rx="9" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="none"/>`+L(c,140,284,264,284,4,.5)+Ci(c,162,316,8,1.2,.8,"none","")+L(c,178,312,240,312,1,.5)+L(c,178,322,220,322,1,.4)+`</g>`;
+    s+=star(c,596,40,12,.8)+star(c,262,120,8,.5);
+    return s},
+  /* Nekretnine: skyline in elevation with a dimension line */
+  realestate(c){let s="";const B=[[250,46,130],[300,38,190],[342,58,250],[404,40,170],[448,64,290],[516,34,150],[554,46,210]];
+    B.forEach(([x,w,h],i)=>{s+=P(c,`M${x} 360 L${x} ${360-h} L${x+w} ${360-h} L${x+w} 360`,1.2,.85);
+      for(let yy=360-h+14;yy<350;yy+=16)s+=L(c,x+6,yy,x+w-6,yy,.6,.22);
+      for(let xx=x+w/3;xx<x+w-2;xx+=w/3)s+=L(c,xx,360-h+8,xx,356,.5,.14)});
+    s+=L(c,220,360,600,360,1.4,.9);
+    s+=L(c,448,52,512,52,1,.8)+L(c,448,46,448,58,1,.8)+L(c,512,46,512,58,1,.8)+L(c,448,58,448,66,.6,.4)+L(c,512,58,512,66,.6,.4);
+    s+=`<text x="480" y="44" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="${c}" fill-opacity=".9">m²</text>`;
+    return s},
+  /* Godina pred nama: lens rings and a sighting scale */
+  lens(c){let s="";[30,62,98,138,178].forEach((rad,i)=>s+=Ci(c,430,200,rad,i===3?1.6:1,.85-i*.13));
+    s+=L(c,230,200,630,200,.8,.35)+L(c,430,0,430,400,.8,.35);
+    for(let i=0;i<72;i++){const a=i*5*Math.PI/180,l=i%6?6:16;s+=L(c,430+178*Math.cos(a),200+178*Math.sin(a),430+(178+l)*Math.cos(a),200+(178+l)*Math.sin(a),i%6?.6:1,.6)}
+    s+=Dot(c,430,200,4);return s},
+  /* Za stolom odlučivanja: boardroom table from above */
+  boardroom(c){let s=`<rect class="d" x="290" y="150" width="270" height="100" rx="50" stroke="${c}" stroke-width="1.4" stroke-opacity=".9" fill="none"/>`;
+    s+=`<rect class="d" x="306" y="164" width="238" height="72" rx="36" stroke="${c}" stroke-width=".7" stroke-opacity=".35" fill="none"/>`;
+    for(let i=0;i<5;i++){const x=330+i*48;s+=Ci(c,x,124,11,1.1,.8)+Ci(c,x,276,11,1.1,.8)+L(c,x,135,425,200,.5,.15)+L(c,x,265,425,200,.5,.15)}
+    s+=Ci(c,262,200,12,1.4,.95)+Ci(c,588,200,11,1.1,.8);
+    for(let i=0;i<5;i++){const x=322+i*48;s+=`<rect x="${x}" y="176" width="16" height="11" rx="1" stroke="${c}" stroke-opacity=".5" stroke-width=".7" fill="none"/>`}
+    return s},
+  /* Žene koje odlučuju: a closed circle of 26 seats with connections */
+  circle(c){let s=Ci(c,440,200,92,1.2,.8)+Ci(c,440,200,60,.7,.3);const N=26,pts=[];
+    for(let i=0;i<N;i++){const a=i/N*Math.PI*2;pts.push([440+148*Math.cos(a),200+148*Math.sin(a)])}
+    pts.forEach(([x,y],i)=>{const [x2,y2]=pts[(i*7+3)%N];s+=L(c,x,y,x2,y2,.5,.16)});
+    pts.forEach(([x,y],i)=>s+=Dot(c,x,y,i%5?3.2:5,i%5?.75:1));
+    s+=Ci(c,440,200,148,.6,.25);return s},
+  /* Biznis luksuza: brilliant-cut diamond with sparkles */
+  diamond(c){let s=P(c,"M300 196 L360 132 L520 132 L580 196 L440 362 Z",1.5,.95);
+    s+=L(c,300,196,580,196,1,.8);
+    [["360 132","400 196"],["400 196","440 132"],["440 132","480 196"],["480 196","520 132"],["360 132","330 196"],["520 132","550 196"]].forEach(([a,b])=>{const [x1,y1]=a.split(" "),[x2,y2]=b.split(" ");s+=L(c,+x1,+y1,+x2,+y2,.8,.6)});
+    [330,400,480,550].forEach(x=>s+=L(c,x,196,440,362,.7,.45));
+    s+=L(c,360,196,440,362,.5,.25)+L(c,520,196,440,362,.5,.25);
+    s+=star(c,592,104,16)+star(c,268,150,10,.6)+star(c,560,318,8,.5);return s},
+  /* Energija: phase-shifted power waves and a turbine */
+  energy(c){let s="";for(let i=0;i<6;i++)s+=P(c,wave(200,600,300+i*6,26-i*2,34,i*.6),i===0?1.6:.8,.85-i*.12);
+    s+=L(c,500,392,500,140,1.4,.9)+Ci(c,500,134,7,1.4,.95);
+    [0,120,240].forEach(a=>{const t=(a-90)*Math.PI/180,ex=500+112*Math.cos(t),ey=134+112*Math.sin(t),nx=Math.cos(t+Math.PI/2)*9,ny=Math.sin(t+Math.PI/2)*9;s+=P(c,`M${r(500+nx)} ${r(134+ny)} Q ${r((500+ex)/2+nx*1.6)} ${r((134+ey)/2+ny*1.6)} ${r(ex)} ${r(ey)} L ${r(500-nx*.3)} ${r(134-ny*.3)}`,1.1,.85)});
+    return s},
+  /* Telekomunikacije: signal arcs and a node network */
+  telecom(c){let s="";for(let i=1;i<=6;i++)s+=P(c,arc(520,330,i*40,200,300),i===3?1.6:1,.95-i*.12);
+    s+=Dot(c,520,330,6);
+    const N=[[300,120],[360,80],[420,140],[300,230],[250,170],[470,60],[560,110],[380,210]];
+    [[0,1],[1,2],[0,3],[0,4],[1,5],[5,6],[2,7],[3,7],[2,5]].forEach(([a,b])=>s+=L(c,N[a][0],N[a][1],N[b][0],N[b][1],.7,.35));
+    N.forEach(([x,y],i)=>s+=Ci(c,x,y,i%3?4:7,1,.8,"none","")+Dot(c,x,y,2));return s},
+  /* EXPO: globe with five market points */
+  globe(c){let s=Ci(c,440,200,160,1.5,.9);
+    [0.25,0.55,0.82].forEach(k=>s+=`<ellipse class="d" cx="440" cy="200" rx="${r(160*k)}" ry="160" stroke="${c}" stroke-width=".8" stroke-opacity=".45" fill="none"/>`);
+    s+=L(c,440,40,440,360,.8,.45);
+    [-110,-60,0,60,110].forEach(dy=>{const w=Math.sqrt(160*160-dy*dy);s+=`<ellipse class="d" cx="440" cy="${200+dy}" rx="${r(w)}" ry="${r(w*.12)}" stroke="${c}" stroke-width=".7" stroke-opacity=".35" fill="none"/>`});
+    const M=[[400,150],[430,175],[470,160],[455,205],[490,230]];
+    s+=`<path d="M${M.map(p=>p.join(" ")).join(" L")}" stroke="${c}" stroke-width="1" stroke-opacity=".8" fill="none" stroke-dasharray="2 5" stroke-linecap="round"/>`;
+    M.forEach(([x,y])=>s+=Dot(c,x,y,4.5)+Ci(c,x,y,10,1,.35,"none",""));return s},
+  /* Poslovna strana ljeta: low sun over the sea */
+  summer(c){let s=Ci(c,450,190,52,1.6,.95);
+    for(let i=0;i<28;i++){const a=i/28*Math.PI*2;s+=L(c,450+66*Math.cos(a),190+66*Math.sin(a),450+(i%2?78:90)*Math.cos(a),190+(i%2?78:90)*Math.sin(a),.8,.55)}
+    s+=L(c,200,290,600,290,1.2,.8);for(let i=0;i<6;i++)s+=P(c,wave(220+i*20,600,306+i*14,4-i*.3,16+i*2,i),.9,.65-i*.09);
+    return s},
+  /* Bolji proizvod: closed loop around a leaf */
+  loop(c){let s=P(c,arc(450,200,132,200,340),1.5,.9)+P(c,arc(450,200,132,20,160),1.5,.9);
+    const head=(a)=>{const t=a*Math.PI/180,x=450+132*Math.cos(t),y=200+132*Math.sin(t),tx=-Math.sin(t),ty=Math.cos(t);return P(c,`M${r(x-tx*12+Math.cos(t)*8)} ${r(y-ty*12+Math.sin(t)*8)} L${r(x)} ${r(y)} L${r(x-tx*12-Math.cos(t)*8)} ${r(y-ty*12-Math.sin(t)*8)}`,1.5,.9)};
+    s+=head(340)+head(160);
+    s+=P(c,"M450 300 C 380 260 370 160 450 100 C 530 160 520 260 450 300 Z",1.3,.9)+L(c,450,300,450,112,1,.7);
+    for(let i=0;i<5;i++){const y=270-i*34;s+=P(c,`M450 ${y} Q ${430-i} ${y-12} ${410+i*3} ${y-26}`,.7,.5)+P(c,`M450 ${y} Q ${470+i} ${y-12} ${490-i*3} ${y-26}`,.7,.5)}
+    return s},
+  /* Iza proizvoda: field rows to the horizon and an ear of wheat */
+  field(c){let s=L(c,180,170,600,170,1.2,.8)+P(c,arc(420,170,40,180,360),1.4,.9);
+    for(let x=-300;x<=1200;x+=60)s+=L(c,420,170,x,400,.7,.35);
+    s+=P(c,"M556 380 C 552 300 548 220 540 120",1.2,.9);
+    for(let i=0;i<9;i++){const y=140+i*18,x=541+i*1.6;s+=`<ellipse class="d" cx="${r(x-9)}" cy="${y}" rx="5" ry="10" transform="rotate(-28 ${r(x-9)} ${y})" stroke="${c}" stroke-width="1" stroke-opacity=".85" fill="none"/>`+`<ellipse class="d" cx="${r(x+9)}" cy="${y+6}" rx="5" ry="10" transform="rotate(28 ${r(x+9)} ${y+6})" stroke="${c}" stroke-width="1" stroke-opacity=".85" fill="none"/>`}
+    s+=L(c,540,120,532,82,.7,.6)+L(c,540,120,548,80,.7,.6);return s},
+  /* Povratak poslu: an autumn growth line */
+  growth(c){let s=L(c,260,340,600,340,1.2,.8);for(let x=290;x<=590;x+=50)s+=L(c,x,90,x,340,.5,.18);
+    const p=[[270,300],[320,288],[370,296],[420,250],[470,236],[520,180],[570,120]];
+    s+=P(c,"M"+p.map(q=>q.join(" ")).join(" L"),1.8,.95);
+    s+=P(c,"M"+p.map(q=>q.join(" ")).join(" L")+" L570 340 L270 340 Z",.1,0,`fill="${c}" fill-opacity=".08"`);
+    p.forEach(([x,y],i)=>s+=Dot(c,x,y,i===p.length-1?6:3.5));
+    s+=P(c,"M548 112 L572 118 L566 142",1.6,.95);return s},
+  /* Adria u pokretu: transit-map routes between hubs */
+  routes(c){let s="";const R1="M200 320 L320 320 L380 260 L520 260 L580 200",R2="M300 90 L300 200 L380 260 L380 360",R3="M600 110 L470 110 L420 160 L420 210 L380 260";
+    [[R1,2.4,.95],[R2,2.4,.7],[R3,2.4,.5]].forEach(([d,w,o])=>s+=P(c,d,w,o));
+    [[200,320],[320,320],[520,260],[580,200],[300,90],[300,200],[380,360],[600,110],[470,110],[420,210]].forEach(([x,y])=>s+=Ci(c,x,y,6,2,.95,"none",""));
+    s+=Ci(c,380,260,13,2.4,1,"none","")+Dot(c,380,260,5);return s},
+  /* Poslovanje na sajmovima: isometric booths under spotlights */
+  fair(c){let s="";const iso=(x,y)=>[440+(x-y)*34,190+(x+y)*17];
+    for(let i=0;i<4;i++)for(let j=0;j<4;j++){const a=iso(i,j),b=iso(i+1,j),d=iso(i+1,j+1),e=iso(i,j+1);s+=P(c,`M${r(a[0])} ${r(a[1])} L${r(b[0])} ${r(b[1])} L${r(d[0])} ${r(d[1])} L${r(e[0])} ${r(e[1])} Z`,(i+j)%3?.7:1.2,(i+j)%3?.35:.85)}
+    [[1,1],[2,0],[3,2]].forEach(([i,j])=>{const [x,y]=iso(i+.5,j+.5);s+=`<path d="M${r(x-6)} 0 L${r(x+6)} 0 L${r(x+34)} ${r(y)} L${r(x-34)} ${r(y)} Z" fill="${c}" fill-opacity=".07"/>`+L(c,x,0,x,y,.6,.3)+Dot(c,x,y,3)});
+    return s},
+  /* Kibernetička otpornost: shield over a hex grid with circuit traces */
+  cyber(c){let s="";const hx=(cx,cy,R)=>{let d="";for(let k=0;k<6;k++){const a=(60*k-30)*Math.PI/180;d+=(k?"L":"M")+r(cx+R*Math.cos(a))+" "+r(cy+R*Math.sin(a))}return d+"Z"};
+    for(let row=0;row<7;row++)for(let col=0;col<8;col++){const cx=250+col*48+(row%2)*24,cy=40+row*42;s+=`<path d="${hx(cx,cy,24)}" stroke="${c}" stroke-width=".6" stroke-opacity=".14" fill="none"/>`}
+    s+=P(c,"M450 70 L540 104 L540 200 C 540 268 494 314 450 336 C 406 314 360 268 360 200 L360 104 Z",1.8,.95);
+    s+=P(c,"M450 96 L518 122 L518 200 C 518 254 484 292 450 310 C 416 292 382 254 382 200 L382 122 Z",.8,.4);
+    s+=Ci(c,450,190,16,1.6,.95)+P(c,"M444 204 L440 240 L460 240 L456 204",1.6,.95);
+    [["M360 160 L300 160 L280 140 L230 140",230,140],["M360 230 L310 230 L290 250 L250 250",250,250],["M540 150 L590 150 L600 140",600,140],["M540 240 L580 240 L600 260",600,260]].forEach(([d,x,y])=>s+=P(c,d,1,.6)+Ci(c,x,y,4,1,.8,"none",""));
+    return s},
+  /* Od štednje do ulaganja: coin stacks under a compounding curve */
+  savings(c){let s="";const xs=[300,356,412,468,524,580],hs=[2,3,5,7,10,14];
+    xs.forEach((x,i)=>{const n=hs[i];for(let k=0;k<n;k++){const y=350-k*9;s+=`<ellipse class="d" cx="${x}" cy="${y}" rx="22" ry="6" stroke="${c}" stroke-width=".9" stroke-opacity="${k===n-1?.95:.5}" fill="none"/>`}
+      s+=L(c,x-22,350,x-22,350-(n-1)*9,.9,.6)+L(c,x+22,350,x+22,350-(n-1)*9,.9,.6)});
+    s+=P(c,"M270 300 C 380 296 470 250 600 110",1.6,.95);
+    xs.forEach((x,i)=>{const t=(x-270)/330;const y=300-190*Math.pow(t,2.2);s+=Dot(c,x,y,3)});
+    return s},
+  /* Vrhunac trgovine: a wrapped gift and price tag */
+  retail(c){let s=`<rect class="d" x="370" y="196" width="170" height="140" rx="4" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="none"/>`+`<rect class="d" x="358" y="164" width="194" height="34" rx="4" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="none"/>`;
+    s+=L(c,455,164,455,336,1.4,.9)+L(c,445,164,445,336,.6,.4)+L(c,465,164,465,336,.6,.4);
+    s+=P(c,"M455 164 C 420 120 380 130 400 150 C 412 162 440 164 455 164",1.4,.95)+P(c,"M455 164 C 490 120 530 130 510 150 C 498 162 470 164 455 164",1.4,.95);
+    s+=P(c,"M250 120 L320 120 L344 144 L320 168 L250 168 Z",1.2,.8)+Ci(c,322,144,5,1,.8)+L(c,260,136,300,136,.8,.5)+L(c,260,152,290,152,.8,.5);
+    s+=star(c,586,128,16)+star(c,580,300,9,.6)+star(c,330,240,7,.5);return s}
+  };
+})();
+const MOTIF_OF={"godina-pred-nama":"lens","za-stolom-odlucivanja":"boardroom","sta-pokrece-adriju":"auto","rane-rezervacije":"travel","sljedeci-kvadrat":"realestate","zene-koje-odlucuju":"circle","poslovna-strana-luksuza":"diamond","energija-i-ulaganja":"energy","vise-od-povezanosti":"telecom","expo-2027-beograd":"globe","poslovna-strana-ljeta":"summer","bolji-proizvod":"loop","hrana-i-agrobiznis":"field","povratak-poslu":"growth","adria-u-pokretu":"routes","poslovanje-na-sajmovima":"fair","kiberneticki-otporna-adria":"cyber","od-stednje-do-ulaganja":"savings","vrhunac-trgovine":"retail"};
+function motifSVG(id,ink,pdf){const f=MOTIF[MOTIF_OF[id]];if(!f)return "";const inner=f(ink);
+  let n=0;const body=inner.replace(/class="d"/g,()=>`class="d" style="animation-delay:${(n++%24)*45}ms"`);
+  return `<svg class="motif" viewBox="0 0 600 400" ${pdf?'width="430" height="287"':""} preserveAspectRatio="xMaxYMid meet" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">${body}</svg>`}
+
+const LOGO_W="data:image/png;base64,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";
+const LOGO_B="data:image/png;base64,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";
+const logoFor=m=>m.ink==="#ffffff"?LOGO_W:LOGO_B;
+document.querySelectorAll("img[data-logo]").forEach(i=>i.src=i.dataset.logo==="b"?LOGO_B:LOGO_W);
+/* ---------- helpers ---------- */
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const md=s=>String(s).split(/(<span class='rec'>.*?<\/span>)/).map(p=>p.startsWith("<span class='rec'>")?p:esc(p).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")).join("");
+const $=id=>document.getElementById(id);
+const num=s=>{const m=String(s).match(/\d{1,3}(?:\.\d{3})+|\d+/);return m?+m[0].replace(/\./g,""):0};
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,".");
+const roleOf=id=>{for(const m of SLOTS)for(const [r,i] of m)if(i===id)return r;return "extra"};
+function priceInfo(p){
+  let a=[];
+  if(p.table&&p.table.price)a=a.concat(p.table.price);
+  if(p.packages)a=a.concat(p.packages.filter(k=>!k.addon).map(k=>k.price));
+  if(p.prices)a=a.concat(p.prices);
+  const v=a.map(num).filter(Boolean);
+  return v.length?{n:v.length,min:Math.min(...v),max:Math.max(...v)}:null;
+}
+const ORDER=[];SLOTS.forEach((m,mi)=>m.forEach(([r,id])=>{if(!ORDER.some(o=>o.id===id))ORDER.push({id,mi})}));
+function setVars(el,m){el.style.setProperty("--c1",m.c1);el.style.setProperty("--c2",m.c2);el.style.setProperty("--ink",m.ink);el.style.setProperty("--d",m.d);
+  const dark=m.ink!=="#ffffff";
+  el.style.setProperty("--glass",dark?"rgba(0,0,0,.08)":"rgba(255,255,255,.12)");
+  el.style.setProperty("--glass-hi",dark?"rgba(0,0,0,.16)":"rgba(255,255,255,.22)");
+  el.style.setProperty("--glass-line",dark?"rgba(0,0,0,.18)":"rgba(255,255,255,.22)");}
+function varStr(m){const dark=m.ink!=="#ffffff";return `--c1:${m.c1};--c2:${m.c2};--ink:${m.ink};--d:${m.d};--glass:${dark?"rgba(0,0,0,.08)":"rgba(255,255,255,.12)"};--glass-line:${dark?"rgba(0,0,0,.18)":"rgba(255,255,255,.28)"}`}
+
+/* ---------- stats ---------- */
+(function(){
+  const all=Object.values(P).filter(p=>!p.pending);
+  let lo=Infinity,hi=0,n=0;all.forEach(p=>{const i=priceInfo(p);if(i){lo=Math.min(lo,i.min);hi=Math.max(hi,i.max);n+=i.n}});
+  $("stats").innerHTML=`<div class="stat"><b>${Object.keys(P).length}</b><span>Projekata</span></div><div class="stat"><b>${n}</b><span>Paketa</span></div><div class="stat"><b>5</b><span>Tržišta</span></div>`;
+})();
+
+/* ---------- strip + grid ---------- */
+function renderStrip(){
+  $("strip").innerHTML=MONTHS.map((m,i)=>`<button type="button" class="seg" data-m="${i}" style="${varStr(m)}" aria-label="${m.name}"><span>${m.k}</span><span class="dots">${SLOTS[i].map(([r,id])=>`<i class="${P[id].pending?"p":""}"></i>`).join("")}</span></button>`).join("");
+  $("strip").onclick=e=>{const b=e.target.closest(".seg");if(!b)return;const t=$("m"+b.dataset.m);t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"});t.classList.remove("flash");void t.offsetWidth;t.classList.add("flash")};
+}
+function renderGrid(){
+  const g=$("grid");
+  g.innerHTML=MONTHS.map((m,i)=>{
+    let h=`<section class="month" id="m${i}" style="${varStr(m)};--glass-hi:${m.ink!=="#ffffff"?"rgba(0,0,0,.16)":"rgba(255,255,255,.22)"}" aria-label="${m.name}">
+      <span class="mnum" aria-hidden="true">${String(i+1).padStart(2,"0")}</span>
+      <div class="mhead"><span class="mk">${m.k}</span><span class="mname">${m.name}</span></div>
+      <div class="season">${m.s}</div><div class="plist">`;
+    SLOTS[i].forEach(([r,id])=>{
+      const p=P[id];
+      if(p.pending){h+=`<div class="proj ${r} pending" data-id="${id}"><span class="role">${ROLE[r]}</span><span class="pt">${esc(p.title)}</span><span class="meta">Razrada u pripremi</span></div>`;return}
+      const pi=priceInfo(p);
+      const meta=pi?`od ${fmt(pi.min)} EUR · ${pi.n} ${pi.n===1?"paket":"paketa"}`:"";
+      h+=`<button type="button" class="proj ${r}" data-id="${id}" data-m="${i}"><span class="role">${esc(p.tag)}</span><span class="pt">${esc(p.title)}</span><span class="meta">${meta}</span><span class="go" aria-hidden="true">→</span></button>`;
+    });
+    return h+`</div></section>`;
+  }).join("");
+  g.onclick=e=>{const b=e.target.closest("button.proj");if(b)openBrief(b.dataset.id,+b.dataset.m,b)};
+}
+
+/* ---------- industry filter ---------- */
+let activeInd=null;
+function renderFilter(){
+  const f=$("filter");f.querySelectorAll(".chip").forEach(c=>c.remove());
+  const counts={};Object.values(P).forEach(p=>(p.ind||[]).forEach(i=>counts[i]=(counts[i]||0)+1));
+  const mk=(label,val,n)=>{const b=document.createElement("button");b.type="button";b.className="chip";b.setAttribute("aria-pressed",String(val===activeInd));b.innerHTML=esc(label)+(n?`<span class="n">${n}</span>`:"");b.onclick=()=>{activeInd=val===activeInd?null:val;applyFilter()};return b};
+  f.appendChild(mk("Sve",null,0));
+  IND.filter(i=>counts[i]).forEach(i=>f.appendChild(mk(i,i,counts[i])));
+}
+function applyFilter(){
+  document.querySelectorAll(".month").forEach((sec,i)=>{
+    let any=false;
+    sec.querySelectorAll(".proj").forEach(b=>{const p=P[b.dataset.id];const hit=!!activeInd&&(p.ind||[]).includes(activeInd);if(hit)any=true;b.classList.toggle("dim",!!activeInd&&!hit);b.classList.toggle("hit",hit)});
+    sec.classList.toggle("off",!!activeInd&&!any);
+    const seg=document.querySelector(`.seg[data-m="${i}"]`);if(seg)seg.classList.toggle("off",!!activeInd&&!any);
+  });
+  renderFilter();
+  try{localStorage.setItem("bba-ind",activeInd||"")}catch(e){}
+}
+
+/* ---------- brief ---------- */
+function colsHTML(cols,nc){return `<div class="cols" style="--nc:${nc||Math.min(cols.length,4)}">${cols.map(([a,b])=>`<div class="col avoid"><h4>${esc(a)}</h4><p>${md(b)}</p></div>`).join("")}</div>`}
+function notesHTML(n){return `<div class="notes">${n.map(t=>t.startsWith("~")?`<p class="small"><em>${md(t.slice(1))}</em></p>`:`<p>${md(t)}</p>`).join("")}</div>`}
+function tableHTML(t){
+  const b=t.badges||{};
+  let h=`<div class="tscroll"><table class="pk"><thead><tr><th>${esc(t.rowHead||"Šta nudimo")}</th>${t.cols.map((c,i)=>`<th>${esc(c)}${b[i]?`<br><span class="badge">${esc(b[i])}</span>`:""}</th>`).join("")}</tr></thead><tbody>`;
+  t.rows.forEach(r=>h+=`<tr>${r.map(c=>`<td>${md(c)}</td>`).join("")}</tr>`);
+  if(t.price)h+=`<tr class="price"><td>${esc(t.priceLabel||"Investicija")}</td>${t.price.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`;
+  return h+`</tbody></table></div>`;
+}
+function pkgHTML(k){
+  let h=`<div class="pkg avoid"><div class="pkg-top">${k.tag?`<span class="pkg-tag">${esc(k.tag)}</span>`:""}<span class="pkg-name">${esc(k.name)}</span><span class="pkg-price">${esc(k.price)}</span></div><div class="pkg-body">`;
+  if(k.note)h+=`<p class="pkg-note">${md(k.note)}</p>`;
+  h+=`<ul class="list">`;
+  k.items.forEach(it=>h+=it.startsWith("#")?`<li class="phase">${esc(it.slice(1))}</li>`:`<li>${md(it)}</li>`);
+  return h+`</ul></div></div>`;
+}
+function bodyHTML(p,pdf){
+  let h="",toc=[];
+  h+=`<section class="sec" id="s-uvod" style="margin-top:0"><p class="lead">${md(p.lead)}</p>`;
+  (p.intro||[]).forEach(t=>h+=`<p class="p">${md(t)}</p>`);
+  if(p.key)h+=`<p class="callout avoid">${md(p.key)}</p>`;
+  h+=`</section>`;toc.push(["s-uvod","Uvod"]);
+
+  h+=`<section class="sec" id="s-publika"><p class="h">Publika</p><h3 class="h2">${esc(p.audH)}</h3><p class="p"><strong>${md(p.audT)}</strong></p>`;
+  (p.aud||[]).forEach(t=>h+=`<p class="p">${md(t)}</p>`);
+  if(p.cols&&!p.colsH)h+=colsHTML(p.cols);
+  h+=`</section>`;toc.push(["s-publika","Publika"]);
+
+  if(p.segs){h+=`<section class="sec" id="s-segmenti"><p class="h">Segmenti</p><h3 class="h2">Šest segmenata luksuza</h3>${colsHTML(p.segs,3)}</section>`;toc.push(["s-segmenti","Segmenti"])}
+  if(p.ben){
+    const isQ=p.ben.every(([b])=>!b);
+    h+=`<section class="sec" id="s-korist"><p class="h">${esc(isQ?"Teme":"Korist za partnera")}</p><h3 class="h2">${esc(p.benH||"Korist za partnera")}</h3>`;
+    if(isQ)h+=`<div class="qs">${p.ben.map(([,t],i)=>`<div class="q avoid"><b>${String(i+1).padStart(2,"0")}</b><span>${md(t)}</span></div>`).join("")}</div>`;
+    else h+=`<div class="bens">${p.ben.map(([b,t],i)=>`<div class="ben avoid"><span class="n">${String(i+1).padStart(2,"0")}</span><h4>${esc(b)}</h4><p>${md(t)}</p></div>`).join("")}</div>`;
+    (p.after||[]).forEach(t=>h+=`<p class="p after">${md(t)}</p>`);
+    h+=`</section>`;toc.push(["s-korist",isQ?"Teme":"Korist"]);
+  }
+  if(p.cols&&p.colsH){h+=`<section class="sec" id="s-format"><p class="h">Format</p><h3 class="h2">${esc(p.colsH)}</h3>${colsHTML(p.cols)}</section>`;toc.push(["s-format","Format"])}
+  if(p.cols2){h+=`<section class="sec" id="s-format"><p class="h">Format</p><h3 class="h2">${esc(p.colsH2)}</h3>${colsHTML(p.cols2,2)}</section>`;toc.push(["s-format","Format"])}
+
+  h+=`<section class="sec" id="s-paketi"><p class="h">Paketi</p><h3 class="h2">${esc(p.pkH)}</h3>`;
+  if(p.pkT)h+=`<p class="p">${md(p.pkT)}</p>`;
+  if(p.table)h+=tableHTML(p.table);
+  if(p.steps)h+=`<div class="avoid" style="margin-top:22px"><p class="p"><strong>${esc(p.steps.h)}</strong></p><div class="qs">${p.steps.items.map(([b,t],i)=>`<div class="q"><b>${i+1}</b><span><strong>${esc(b)}:</strong> ${md(t)}</span></div>`).join("")}</div></div>`;
+  if(p.notes&&!p.packages)h+=notesHTML(p.notes);
+  if(p.packages){if(p.notes&&p.table)h+=notesHTML(p.notes);h+=`<div class="pkgs">${p.packages.map(pkgHTML).join("")}</div>`;if(p.notes&&!p.table)h+=notesHTML(p.notes)}
+  if(p.facts)h+=colsHTML(p.facts,3);
+  if(p.notes2)h+=notesHTML(p.notes2);
+  h+=`</section>`;toc.push(["s-paketi","Paketi"]);
+  return {h,toc};
+}
+function kpiHTML(p){
+  const pi=priceInfo(p);if(!pi)return "";
+  return `<div class="kpi"><b>${pi.n}</b><span>${pi.n===1?"Paket":"Paketa"}</span></div><div class="kpi"><b>${fmt(pi.min)} €</b><span>Investicija od</span></div>${pi.n>1?`<div class="kpi"><b>${fmt(pi.max)} €</b><span>Do</span></div>`:""}`;
+}
+function monthLabel(p,mi){const ms=p.months;if(!ms)return MONTHS[mi].name;const cons=ms.every((v,i)=>!i||v===ms[i-1]+1);return cons?MONTHS[ms[0]].name+" – "+MONTHS[ms[ms.length-1]].name:ms.map(i=>MONTHS[i].name).join(" i ")}
+
+let current=null,lastFocus=null;
+function openBrief(id,mi,from){
+  const p=P[id];if(!p||p.pending)return;
+  if(mi==null)mi=p.month;
+  current={id,mi};if(from)lastFocus=from;
+  const m=MONTHS[mi],ov=$("ov");setVars(ov,m);
+  const role=roleOf(id);
+  $("crumb").innerHTML=`<i></i>${m.k} 2027 · ${esc(p.tag)}`;
+  const {h,toc}=bodyHTML(p,false);
+  const idx=ORDER.findIndex(o=>o.id===id);
+  const nav=(d)=>{let j=idx;do{j=(j+d+ORDER.length)%ORDER.length}while(P[ORDER[j].id].pending);return ORDER[j]};
+  const pv=nav(-1),nx=nav(1);
+  $("ovBody").innerHTML=`
+   <header class="bhero">${motifSVG(id,m.ink,false)}<div class="bhero-in">
+     <img class="blogo" src="${logoFor(m)}" alt="Bloomberg Adria"><div class="eyebrow"><span>${esc(p.tag)}</span><span>${esc(monthLabel(p,mi))} 2027</span></div>
+     <h2 class="bt" id="bTitle">${esc(p.title)}</h2>
+     ${p.tagline?`<p class="btag">${esc(p.tagline)}</p>`:""}
+     <div class="kpis">${kpiHTML(p)}</div>
+     ${p.ind?`<div class="inds">${p.ind.map(i=>`<span>${esc(i)}</span>`).join("")}</div>`:""}
+   </div></header>
+   <div class="bbody"><nav class="toc" aria-label="Sadržaj">${toc.map(([a,l])=>`<a href="#${a}" data-a="${a}">${l}</a>`).join("")}</nav><div class="content">${h}</div></div>
+   <div class="nextnav">
+     <button class="nn" type="button" data-id="${pv.id}" data-m="${pv.mi}" style="${varStr(MONTHS[pv.mi])}"><small>← ${MONTHS[pv.mi].k} · Prethodni</small><b>${esc(P[pv.id].title)}</b></button>
+     <button class="nn r" type="button" data-id="${nx.id}" data-m="${nx.mi}" style="${varStr(MONTHS[nx.mi])}"><small>Sljedeći · ${MONTHS[nx.mi].k} →</small><b>${esc(P[nx.id].title)}</b></button>
+   </div>`;
+  $("prevBtn").onclick=()=>openBrief(pv.id,pv.mi);
+  $("nextBtn").onclick=()=>openBrief(nx.id,nx.mi);
+  $("ovBody").querySelectorAll(".nn").forEach(b=>b.onclick=()=>openBrief(b.dataset.id,+b.dataset.m));
+  $("ovBody").querySelectorAll(".toc a").forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.getElementById(a.dataset.a);if(t)ov.scrollTo({top:t.getBoundingClientRect().top+ov.scrollTop-70,behavior:"smooth"})});
+  ov.hidden=false;ov.scrollTop=0;
+  requestAnimationFrame(()=>ov.classList.add("on"));
+  document.body.style.overflow="hidden";
+  $("closeBtn").focus({preventScroll:true});
+  try{history.replaceState(null,"","#"+id)}catch(e){}
+}
+function closeBrief(){
+  const ov=$("ov");ov.classList.remove("on");
+  setTimeout(()=>{ov.hidden=true},220);
+  document.body.style.overflow="";current=null;
+  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});
+}
+$("closeBtn").onclick=closeBrief;
+$("ov").addEventListener("scroll",()=>{
+  const links=$("ovBody").querySelectorAll(".toc a");let on=null;
+  links.forEach(a=>{const t=document.getElementById(a.dataset.a);if(t&&t.getBoundingClientRect().top<160)on=a});
+  links.forEach(a=>a.classList.toggle("on",a===on));
+},{passive:true});
+document.addEventListener("keydown",e=>{
+  if(!current)return;
+  if(e.key==="Escape")closeBrief();
+  else if(e.key==="ArrowRight"&&!e.target.closest("input,textarea"))$("nextBtn").click();
+  else if(e.key==="ArrowLeft"&&!e.target.closest("input,textarea"))$("prevBtn").click();
+  else if(e.key==="Tab"){const f=[...$("ov").querySelectorAll("button,a[href]")].filter(x=>x.offsetParent!==null);if(!f.length)return;const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}
+});
+
+/* ---------- toast ---------- */
+let tt;function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("on"),3400)}
+
+/* ---------- PDF ---------- */
+let dl=null;
+(async()=>{try{dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){dl=null}})();
+const slugFile=t=>"Bloomberg-Adria-2027-"+t.replace(/đ/g,"dj").replace(/Đ/g,"Dj").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"")+".pdf";
+function pdfHTML(id,mi){
+  const p=P[id],m=MONTHS[mi];const pi=priceInfo(p);
+  const {h}=bodyHTML(p,true);
+  return `<div class="pdf" style="${varStr(m)}">
+   <div class="phero">${motifSVG(id,m.ink,true)}<div class="ptop"><img class="plogo" src="${logoFor(m)}" alt="Bloomberg Adria"><span>KOMERCIJALNI PROJEKTI 2027</span></div>
+    <div class="pey">${esc(p.tag)} · ${esc(monthLabel(p,mi))} 2027</div>
+    <div class="pt">${esc(p.title)}</div>${p.tagline?`<p class="ptag">${esc(p.tagline)}</p>`:""}
+    ${pi?`<div class="pk2"><div><b>${pi.n}</b><span>${pi.n===1?"Paket":"Paketa"}</span></div><div><b>${fmt(pi.min)} EUR</b><span>Investicija od</span></div>${pi.n>1?`<div><b>${fmt(pi.max)} EUR</b><span>Do</span></div>`:""}</div>`:""}
+   </div>
+   <div class="pbody">${p.ind?`<div class="pinds">${p.ind.map(i=>`<span>${esc(i)}</span>`).join("")}</div>`:""}${h}</div>
+   <div class="pfoot"><span class="fbrand"><img class="plogo sm" src="${LOGO_B}" alt="Bloomberg Adria"><span>KOMERCIJALNA STRATEGIJA 2027</span></span><span>${esc(m.name.toUpperCase())} 2027</span></div></div>`;
+}
+async function makePdfBlob(id,mi){
+  await document.fonts.ready;
+  const host=$("pdfhost");host.innerHTML=pdfHTML(id,mi);
+  const sv=host.querySelector("svg.motif");
+  if(sv){try{
+    const src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(new XMLSerializer().serializeToString(sv));
+    const im=new Image();await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src=src});
+    const cv=document.createElement("canvas");cv.width=860;cv.height=574;cv.getContext("2d").drawImage(im,0,0,860,574);
+    const img=document.createElement("img");img.className="motif";img.width=430;img.height=287;img.alt="";img.src=cv.toDataURL("image/png");sv.replaceWith(img);
+  }catch(e){sv.remove()}}
+  try{
+    return await html2pdf().set({
+      margin:[0,0,10,0],
+      image:{type:"jpeg",quality:0.95},
+      html2canvas:{scale:2,backgroundColor:"#ffffff",useCORS:true,logging:false},
+      jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
+      pagebreak:{mode:["css","legacy"],avoid:[".avoid","tr",".list li",".h2",".lead",".pkg-top"]}
+    }).from(host.firstElementChild).outputPdf("blob");
+  }finally{host.innerHTML=""}
+}
+$("pdfBtn").onclick=async()=>{
+  if(!current)return;
+  const {id,mi}=current;
+  if(!dl){toast("Preuzimanje nije dostupno u ovom prikazu. Otvorite stranicu na claude.ai.");return}
+  const btn=$("pdfBtn");btn.disabled=true;const old=btn.innerHTML;btn.innerHTML="Pripremam PDF…";
+  try{
+    if(typeof html2pdf==="undefined")throw new Error("lib");
+    const blob=await makePdfBlob(id,mi);
+    await dl.save({filename:slugFile(P[id].title),data:blob});
+    toast("PDF je preuzet.");
+  }catch(e){
+    const c=e&&e.code;
+    if(c==="declined")toast("Preuzimanje otkazano.");
+    else if(c==="rate_limited")toast("Prozor za preuzimanje je već otvoren.");
+    else if(c==="unavailable"||c==="not_granted")toast("Preuzimanje nije dostupno u ovom prikazu.");
+    else toast("PDF nije napravljen. Pokušajte ponovo.");
+  }finally{btn.disabled=false;btn.innerHTML=old}
+};
+
+/* ---------- boot ---------- */
+renderStrip();renderGrid();
+try{const s=localStorage.getItem("bba-ind");if(s&&IND.includes(s))activeInd=s}catch(e){}
+applyFilter();
+const hh=(location.hash||"").slice(1);if(hh&&P[hh]&&!P[hh].pending)openBrief(hh);
+</script>
+
+</body>
+</html>
