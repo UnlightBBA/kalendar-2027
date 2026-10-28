@@ -99,7 +99,7 @@ button{font:inherit;color:inherit}
 .proj.pending{cursor:default;background:transparent;border-style:dashed;opacity:.62}
 .proj.pending:hover{transform:none}
 .proj.dim{opacity:.18}
-.proj.hit{background:var(--glass-hi);box-shadow:0 0 0 2px var(--ink) inset}
+.proj.hit{background:var(--glass-hi);box-shadow:0 0 0 2px #fff inset,0 6px 18px -6px rgba(0,0,0,.45)}
 .month.off{opacity:.35}
 .foot{border-top:1px solid var(--line);margin-top:20px;padding-block:18px 40px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--f-display);font-weight:700;font-stretch:115%;letter-spacing:.06em;color:var(--muted);font-size:12px}
 .foot .hint{font-family:var(--f-body);font-weight:400;font-stretch:100%;letter-spacing:0;font-size:13px}
@@ -478,7 +478,7 @@ const P={
   ["Display kampanja na odabranoj lokalnoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile, jedno odabrano tržište","7 dana, 20% rotacije","7 dana, 20% rotacije"],
   ["Cijela unutrašnja oglasna stranica u Bloomberg Businessweek Adria magazinu","—","1, u odabranom jezičkom izdanju"]],
   price:["5.500 EUR","6.500 EUR"]},
- notes:["**FOUNDATION:** video i digitalno prisustvo za predstavljanje vaše poslovne priče.","**SKYLINE:** sve iz paketa Foundation, uz cijelu oglasnu stranicu u Businessweek Adria magazinu."],
+ notes:[],
  close:"Predstavite projekat, ekspertizu ili rješenje koje doprinosi vrijednosti sljedećeg kvadrata."},
 
 "zene-koje-odlucuju":{month:2,title:"Žene koje odlučuju",tagline:"Moć, kapital i poslovne odluke. Invitation only poslovni okrugli stol i večera, mart 2027.",
@@ -554,7 +554,7 @@ const P={
   ["Display kampanja na 1 odabranoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile, rotacija 50%","5 dana","5 dana"],
   ["Cijela oglasna stranica u štampanom izdanju Bloomberg Businessweek Adria","—","1"]],
   price:["2.400 EUR + PDV","3.200 EUR + PDV"]},
- notes:["**OSNOVNI DIGITALNI PAKET:** predstavite investiciju i podržite native sadržaj promocijom na digitalnim kanalima. Trajanje mjesec dana.","**DIGITALNI PAKET + ŠTAMPANO IZDANJE:** kompletna digitalna ponuda uz dodatno prisustvo kroz cijelu oglasnu stranicu. Trajanje tri mjeseca."],
+ notes:[],
  close:"Predstavite ulaganje kroz njegov značaj za poslovanje, od razloga za investiciju do ostvarenog rezultata."},
 
 "vise-od-povezanosti":{month:4,title:"Više od povezanosti",tagline:"Telecom Next Level. Gdje infrastruktura i funkcionalna povezanost postaju poslovna vrijednost. Maj 2027.",
@@ -649,7 +649,7 @@ const P={
   ["Promocija native teksta u dnevnom newsletteru na 1 odabranom tržištu","—","1"],
   ["Podjela native teksta na lokalnoj Bloomberg Adria LinkedIn stranici","—","1"]],
   price:["900 EUR","1.200 EUR"]},
- notes:["**Svaki paket obuhvata jedan native sadržajni format na jednom odabranom tržištu.**","**OSNOVNI PAKET:** predstavite konkretno unapređenje proizvoda i njegovu poslovnu opravdanost.","**PROŠIRENI PAKET:** podržite istu priču dodatnom distribucijom kroz newsletter i LinkedIn."],
+ notes:["**Svaki paket obuhvata jedan native sadržajni format na jednom odabranom tržištu.**"],
  close:"Pokažite kako održiviji proizvod funkcioniše i kao poslovna odluka."},
 
 "hrana-i-agrobiznis":{month:6,title:"Iza proizvoda",tagline:"Biznis iza hrane: šta određuje cijenu, kvalitet i dostupnost proizvoda. Regionalni LinkedIn serijal, juli 2027.",
@@ -723,7 +723,7 @@ const P={
   ["Projektni banner na portalu","1","1"],
   ["Display kampanja na 1 odabranoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile","5 dana","—"]],
   price:["2.800 EUR + PDV","4.700 EUR + PDV"]},
- notes:["**DIGITALNA PRIČA:** komercijalni intervju o vašoj ekspertizi, investiciji ili usluzi, uz newsletter, LinkedIn i display promociju.","**VIDEO PRIČA:** prikaz poslovanja kroz native video i prateći native članak, uz TV emitovanje i digitalnu distribuciju."],
+ notes:[],
  close:"Pokažite šta vaša kompanija omogućava poslovanju svojih klijenata."},
 
 "poslovanje-na-sajmovima":{month:8,title:"Poslovanje na sajmovima",tagline:"Vaš biznis pred publikom. Vidljivost uz sajmove i poslovne događaje. Septembar 2027.",
@@ -744,7 +744,7 @@ const P={
   ["Podjela komercijalnog sadržaja na LinkedIn stranici na 1 odabranom tržištu","1","1","3"],
   ["Display kampanja prije događaja na 1 odabranoj podstranici portala, 970 × 250 desktop i 300 × 250 mobile, 20% rotacije","—","10 dana","10 dana"]],
   price:["960 / 1.200 EUR","3.500 EUR","5.500 EUR"]},
- notes:["**Svaki paket obuhvata jedno odabrano tržište.**","**OSNOVNI:** predstavite svoj nastup kroz PR tekst, newsletter i LinkedIn.","**VIDLJIVOST:** podržite najavu dodatnom display kampanjom tokom deset dana prije događaja.","**KOMPLETNI:** povežite najavu nastupa s izvještajem i komercijalnim intervjuom nakon događaja, uz distribuciju sva tri native sadržaja."],
+ notes:["**Svaki paket obuhvata jedno odabrano tržište.**"],
  close:"Vaš nastup dobija komunikaciju prije događaja i prostor za poslovne rezultate nakon njega."},
 
 "kiberneticki-otporna-adria":{month:9,title:"Kibernetički otporna Adria",tagline:"Cyber sigurnost i otpornost poslovanja. Oktobar 2027.",
