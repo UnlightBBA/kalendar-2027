@@ -1284,9 +1284,10 @@ function kpiHTML(p){
 function monthLabel(p,mi){const ms=p.months;if(!ms)return MONTHS[mi].name;const cons=ms.every((v,i)=>!i||v===ms[i-1]+1);return cons?MONTHS[ms[0]].name+" – "+MONTHS[ms[ms.length-1]].name:ms.map(i=>MONTHS[i].name).join(` ${T("and")} `)}
 
 let current=null,lastFocus=null;
-function openBrief(id,mi,from){
+function openBrief(id,mi,from,fromPop){
   const p=P[id];if(!p||p.pending)return;
   if(mi==null)mi=p.month;
+  const wasOpen=!!current;
   current={id,mi};if(from)lastFocus=from;
   const m=MONTHS[mi],ov=$("ov");setVars(ov,m);
   const role=roleOf(id);
@@ -1316,16 +1317,23 @@ function openBrief(id,mi,from){
   requestAnimationFrame(()=>ov.classList.add("on"));
   document.body.style.overflow="hidden";
   $("closeBtn").focus({preventScroll:true});
-  try{history.replaceState(null,"","#"+id)}catch(e){}
+  if(!fromPop){try{const st={b:id,mi:mi};if(wasOpen&&history.state&&history.state.b)history.replaceState(st,"","#"+id);else history.pushState(st,"","#"+id)}catch(e){}}
 }
-function closeBrief(){
+function closeBrief(fromPop){
+  if(!current)return;
+  if(fromPop!==true){try{if(history.state&&history.state.b){history.back();return}}catch(e){}}
   const ov=$("ov");ov.classList.remove("on");
-  setTimeout(()=>{ov.hidden=true},220);
+  setTimeout(()=>{if(!current)ov.hidden=true},220);
   document.body.style.overflow="";current=null;
-  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  if(fromPop!==true){try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
   if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});
 }
-$("closeBtn").onclick=closeBrief;
+window.addEventListener("popstate",e=>{
+  const st=e.state;
+  if(st&&st.b&&P[st.b])openBrief(st.b,st.mi,null,true);
+  else if(current)closeBrief(true);
+});
+$("closeBtn").onclick=()=>closeBrief();
 $("ov").addEventListener("scroll",()=>{
   const links=$("ovBody").querySelectorAll(".toc a");let on=null;
   links.forEach(a=>{const t=document.getElementById(a.dataset.a);if(t&&t.getBoundingClientRect().top<160)on=a});
@@ -1413,7 +1421,7 @@ try{const s=localStorage.getItem("bba-ind");if(s&&IND.includes(s))activeInd=s}ca
   else if(ok(st))applyMarket(st,false);
   else{applyMarket("ba",false);openGate()}
 })();
-const hh=(location.hash||"").slice(1);if(hh&&P[hh]&&!P[hh].pending)openBrief(hh);
+const hh=(location.hash||"").slice(1);if(hh&&P[hh]&&!P[hh].pending){try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}openBrief(hh)}
 </script>
 
 </body>
