@@ -316,6 +316,12 @@ table.pk .rec{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spa
 .gbtn:hover{transform:none;box-shadow:none;border-color:var(--fg);background:var(--fg);color:var(--bg)}
 @media (max-width:640px){.gate-list{flex-direction:column;align-items:stretch;max-width:280px}.gbtn{padding:13px 18px}.gate-title{margin:28px 0 30px}}
 
+/* Cyrillic Д/Ц/Щ descend below the baseline: give Macedonian headings more line room */
+html[lang="mk"] .hero h1{line-height:1.02}
+html[lang="mk"] .hero h1 .yr{margin-top:.06em}
+html[lang="mk"] .bt{line-height:1.06}
+html[lang="mk"] .close,html[lang="mk"] .nn b,html[lang="mk"] .proj .pt,html[lang="mk"] .pkg-name,html[lang="mk"] .pkm-name{line-height:1.2}
+
 /* ---------- phone layout (desktop untouched) ---------- */
 .pkm{display:none}
 @media (max-width:640px){
