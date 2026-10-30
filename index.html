@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#050812">
 <meta name="description" content="Bloomberg Adria · Kalendar komercijalnih projekata 2027">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}</style>
 <title>Kalendar projekata 2027</title>
@@ -272,7 +273,7 @@ table.pk .rec{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spa
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes mfade{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
 @media (max-width:760px){.bhero .motif{width:100%;opacity:.38}}
-@media (prefers-reduced-motion:reduce){.bhero .motif .d{stroke-dasharray:none!important;stroke-dashoffset:0!important}}
+
 .pdf .phero{position:relative;overflow:hidden}
 .pdf .phero .motif{position:absolute;right:-6px;top:4px;opacity:.55}
 .pdf .phero>*:not(.motif){position:relative}
@@ -382,7 +383,7 @@ html[lang="mk"] .close,html[lang="mk"] .nn b,html[lang="mk"] .proj .pt,html[lang
   .nn b{font-size:16px}
 }
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+
 
 /* =====================================================================
    Premium layer — deep ink-blue night, glass surfaces, glossy month tiles.
@@ -540,7 +541,7 @@ table.pk tr.price td:first-child{font-family:var(--f-body);font-size:13px;font-w
 }
 html[lang="mk"] .hero h1{line-height:1}
 html[lang="mk"] .bt{line-height:1.04}
-@media (prefers-reduced-motion:reduce){.aurora::before,.aurora::after{animation:none}.hero h1 .yr,.gate-title span{animation:none}}
+
 .ov-bar .crumb{text-transform:none;letter-spacing:0;font-family:var(--f-body);font-size:13.5px;font-weight:500;color:var(--muted)}
 :focus-visible{outline:2px solid rgba(255,255,255,.55);outline-offset:3px}
 .btn:focus-visible{outline-offset:2px}
@@ -558,6 +559,42 @@ html.gated .gate-in{min-height:100vh;min-height:100svh}
 /* project view owns the screen (iOS Safari otherwise shows the page through its bars) */
 html.briefing,html.briefing body{background:var(--bg)}
 html.briefing body>*:not(#ov):not(#toast):not(#pdfhost):not(script){display:none!important}
+/* ---------- living motifs ---------- */
+.bhero .motif .art{filter:drop-shadow(0 0 7px rgba(255,255,255,.35))}
+.m-spin{animation:mSpin 14s linear infinite}
+.m-spin-slow{animation:mSpin 70s linear infinite}
+.m-sway{animation:mSway 5s ease-in-out infinite alternate}
+.m-float{animation:mFloat 6s ease-in-out infinite alternate}
+.m-pulse{animation:mPulse 2.6s ease-in-out infinite}
+.m-ring{animation:mRing 3s ease-out infinite}
+.m-twinkle{animation:mTw 2.8s ease-in-out infinite}
+.m-flow{stroke-dasharray:5 10;animation:mFlow 2.5s linear infinite}
+.m-flow.m-fast{stroke-dasharray:1 30;stroke-width:4}
+.m-scan{animation:mScan 3.4s ease-in-out infinite alternate}
+.m-glint{animation:mGlint 4.2s ease-in-out infinite}
+@keyframes mSpin{to{transform:rotate(360deg)}}
+@keyframes mSway{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+@keyframes mFloat{from{transform:translate(-4px,-6px)}to{transform:translate(4px,6px)}}
+@keyframes mPulse{0%,100%{opacity:.55;transform:scale(.92)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes mRing{from{opacity:.9;transform:scale(.55)}to{opacity:0;transform:scale(1.9)}}
+@keyframes mTw{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes mFlow{to{stroke-dashoffset:-90}}
+@keyframes mScan{from{transform:translateY(0)}to{transform:translateY(250px)}}
+@keyframes mGlint{0%{transform:translateX(-80px) rotate(18deg)}60%,100%{transform:translateX(420px) rotate(18deg)}}
+.m-glint{transform-box:view-box;transform-origin:440px 240px}
+.strip.stuck::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:240px;background:var(--bg);pointer-events:none}
+@media (max-width:640px){
+  .hero h1{font-size:clamp(46px,15vw,62px)}
+  .bhero .motif{height:200px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  @keyframes rise{from{opacity:0}}
+  @keyframes tileIn{from{opacity:0}}
+  @keyframes mfade{from{opacity:0}}
+  .aurora::before,.aurora::after,.m-spin,.m-spin-slow,.m-sway,.m-float,.m-scan,.m-ring,.m-glint{animation:none!important}
+  .month:hover{transform:none}
+}
 </style>
 
 </head>
@@ -574,6 +611,7 @@ html.briefing body>*:not(#ov):not(#toast):not(#pdfhost):not(script){display:none
   </header>
 </div>
 
+<div id="stripSentinel" aria-hidden="true" style="height:1px"></div>
 <nav class="strip" id="stripNav" aria-label="Mjeseci">
   <div class="wrap"><div class="strip-inner" id="strip"></div></div>
 </nav>
@@ -1081,158 +1119,192 @@ const MOTIF=(function(){
   const r=n=>Math.round(n*10)/10;
   const L=(c,x1,y1,x2,y2,w=1,o=1,cl="d")=>`<line class="${cl}" x1="${r(x1)}" y1="${r(y1)}" x2="${r(x2)}" y2="${r(y2)}" stroke="${c}" stroke-width="${w}" stroke-opacity="${o}" stroke-linecap="round"/>`;
   const Ci=(c,x,y,rad,w=1,o=1,fill="none",cl="d")=>`<circle class="${cl}" cx="${r(x)}" cy="${r(y)}" r="${r(rad)}" stroke="${c}" stroke-width="${w}" stroke-opacity="${o}" fill="${fill}"/>`;
-  const P=(c,d,w=1,o=1,ex="")=>`<path class="d" d="${d}" stroke="${c}" stroke-width="${w}" stroke-opacity="${o}" fill="none" stroke-linecap="round" stroke-linejoin="round" ${ex}/>`;
-  const Dot=(c,x,y,rad,o=1)=>`<circle cx="${r(x)}" cy="${r(y)}" r="${rad}" fill="${c}" fill-opacity="${o}"/>`;
-  const R=(c,x,y,w,h,rx,fill,o)=>`<rect x="${r(x)}" y="${r(y)}" width="${r(w)}" height="${r(h)}" rx="${rx}" fill="${fill||c}" fill-opacity="${o}"/>`;
+  const P=(c,d,w=1,o=1,ex="",cl="d")=>`<path class="${cl}" d="${d}" stroke="${c}" stroke-width="${w}" stroke-opacity="${o}" fill="none" stroke-linecap="round" stroke-linejoin="round" ${ex}/>`;
+  const Dot=(c,x,y,rad,o=1,cl="")=>`<circle class="${cl}" cx="${r(x)}" cy="${r(y)}" r="${rad}" fill="${c}" fill-opacity="${o}"/>`;
+  const R=(c,x,y,w,h,rx,fill,o,cl="")=>`<rect class="${cl}" x="${r(x)}" y="${r(y)}" width="${r(w)}" height="${r(h)}" rx="${rx}" fill="${fill||c}" fill-opacity="${o}"/>`;
+  const G=(cls,ox,oy,inner,delay=0)=>`<g class="${cls}" style="transform-box:view-box;transform-origin:${ox}px ${oy}px;animation-delay:${delay}s">${inner}</g>`;
   const wave=(x0,x1,y,a,k,ph)=>{let d="";for(let x=x0;x<=x1;x+=6){const yy=y+a*Math.sin(x/k+ph);d+=(x===x0?"M":"L")+r(x)+" "+r(yy)}return d};
   const arc=(cx,cy,rad,a0,a1)=>{const p=a=>[cx+rad*Math.cos(a*Math.PI/180),cy+rad*Math.sin(a*Math.PI/180)];const [x0,y0]=p(a0),[x1,y1]=p(a1);return `M${r(x0)} ${r(y0)} A${rad} ${rad} 0 ${Math.abs(a1-a0)>180?1:0} 1 ${r(x1)} ${r(y1)}`};
-  const star=(c,x,y,s,o=.8)=>L(c,x-s,y,x+s,y,1,o)+L(c,x,y-s,x,y+s,1,o)+L(c,x-s*.4,y-s*.4,x+s*.4,y+s*.4,.6,o*.6)+L(c,x-s*.4,y+s*.4,x+s*.4,y-s*.4,.6,o*.6);
+  const star=(c,x,y,s,o=.9,dl=0)=>G("m-twinkle",x,y,L(c,x-s,y,x+s,y,1.2,o,"")+L(c,x,y-s,x,y+s,1.2,o,"")+L(c,x-s*.35,y-s*.35,x+s*.35,y+s*.35,.7,o*.7,"")+L(c,x-s*.35,y+s*.35,x+s*.35,y-s*.35,.7,o*.7,"")+Dot(c,x,y,1.6,o),dl);
+  const glow=(u,x,y,rx,ry,o=1)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="url(#${u}g)" opacity="${o}"/>`;
 
   return {
-  /* Auto industrija: a fine instrument dial with redline and needle */
-  auto(c){let s="";const cx=440,cy=214,R=158,A0=135,SW=270,val=v=>A0+SW*v/8;
-    s+=P(c,arc(cx,cy,R,A0,A0+SW),1.6,.95)+P(c,arc(cx,cy,R-26,A0,A0+SW),.7,.35)+P(c,arc(cx,cy,R+14,A0,A0+SW),.6,.2);
-    s+=`<path d="${arc(cx,cy,R-8,val(6.5),val(8))}" stroke="#ff3b30" stroke-width="7" stroke-opacity=".9" fill="none" stroke-linecap="round"/>`;
+  /* Auto industrija: precision instrument dial, live needle, light streaks */
+  auto(c,u){const cx=440,cy=214,R0=158,A0=135,SW=270,val=v=>A0+SW*v/8;let s=glow(u,cx,cy,230,200,.9);
+    for(let i=0;i<7;i++){const y=300+i*11;s+=`<path class="m-flow" d="M${120+i*14} ${y} L${300-i*6} ${y}" stroke="${c}" stroke-width="${i%3?0.8:1.4}" stroke-opacity="${.35-i*.03}" fill="none" stroke-linecap="round" style="animation-duration:${1.6+i*.3}s"/>`}
+    s+=Ci(c,cx,cy,R0+26,.6,.18)+P(c,arc(cx,cy,R0+14,A0,A0+SW),1,.35)+P(c,arc(cx,cy,R0,A0,A0+SW),2,.95,`stroke="url(#${u}s)"`)+P(c,arc(cx,cy,R0-26,A0,A0+SW),.7,.3);
+    s+=`<path d="${arc(cx,cy,R0-8,val(6.5),val(8))}" stroke="#ff3b30" stroke-width="8" stroke-opacity=".95" fill="none" stroke-linecap="round" filter="url(#${u}b)"/>`;
     for(let i=0;i<=80;i++){const a=(A0+SW*i/80)*Math.PI/180,maj=i%10===0,mid=i%5===0,l=maj?20:mid?12:6;
-      s+=L(c,cx+R*Math.cos(a),cy+R*Math.sin(a),cx+(R-l)*Math.cos(a),cy+(R-l)*Math.sin(a),maj?1.8:mid?1.1:.6,maj?.95:.6);
-      if(maj){const t=R-40;s+=`<text x="${r(cx+t*Math.cos(a))}" y="${r(cy+t*Math.sin(a)+5)}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="15" font-weight="600" fill="${i>=70?"#ff5a4f":c}" fill-opacity=".95">${i/10}</text>`}}
-    const na=val(5.4)*Math.PI/180;
-    s+=`<line x1="${r(cx-24*Math.cos(na))}" y1="${r(cy-24*Math.sin(na))}" x2="${r(cx+(R-12)*Math.cos(na))}" y2="${r(cy+(R-12)*Math.sin(na))}" stroke="#ff3b30" stroke-width="3" stroke-linecap="round"/>`;
-    s+=Ci(c,cx,cy,14,1.6,.95)+Dot(c,cx,cy,5);
-    s+=`<text x="${cx}" y="${cy+62}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="3" fill="${c}" fill-opacity=".7">×1000 RPM</text>`;
-    s+=`<text x="${cx}" y="${cy+104}" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-size="34" font-weight="800" fill="${c}" fill-opacity=".95">2027</text>`;
+      s+=L(c,cx+R0*Math.cos(a),cy+R0*Math.sin(a),cx+(R0-l)*Math.cos(a),cy+(R0-l)*Math.sin(a),maj?1.8:mid?1.1:.6,maj?.95:.55);
+      if(maj){const t=R0-42;s+=`<text x="${r(cx+t*Math.cos(a))}" y="${r(cy+t*Math.sin(a)+5)}" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="16" font-weight="700" fill="${i>=70?"#ff6a5f":c}" fill-opacity=".95">${i/10}</text>`}}
+    const na=val(5.2);
+    s+=G("m-sway",cx,cy,`<g transform="rotate(${r(na-90)} ${cx} ${cy})"><path d="M${cx-3} ${cy+22} L${cx} ${cy-R0+14} L${cx+3} ${cy+22} Z" fill="#ff3b30" filter="url(#${u}b)"/><path d="M${cx-1.2} ${cy+20} L${cx} ${cy-R0+16} L${cx+1.2} ${cy+20} Z" fill="#ffd2cc"/></g>`);
+    s+=Ci(c,cx,cy,16,1.6,.95,`rgba(0,0,0,.25)`)+Dot(c,cx,cy,5);
+    s+=`<text x="${cx}" y="${cy+62}" text-anchor="middle" font-family="Onest,Arial,sans-serif" font-size="12" letter-spacing="2" fill="${c}" fill-opacity=".7">×1000 rpm</text>`;
+    s+=`<text x="${cx}" y="${cy+106}" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="36" font-weight="800" fill="${c}" fill-opacity=".95">2027</text>`;
     return s},
-  /* Rane rezervacije: a booking calendar with a selected stay and a key card */
-  travel(c){let s=`<rect class="d" x="300" y="56" width="284" height="280" rx="14" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="none"/>`;
-    s+=L(c,300,104,584,104,1,.5)+L(c,330,46,330,68,2,.9)+L(c,554,46,554,68,2,.9);
-    s+=`<text x="318" y="88" font-family="Archivo,Arial,sans-serif" font-size="17" font-weight="800" letter-spacing="1" fill="${c}">JUNI 2027</text>`;
-    s+=`<text x="566" y="88" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="${c}" fill-opacity=".7">‹ ›</text>`;
-    const days=["P","U","S","Č","P","S","N"],x0=322,cw=38,y0=124,rh=36;
-    days.forEach((d,i)=>s+=`<text x="${x0+i*cw+10}" y="${y0}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="${c}" fill-opacity=".55">${d}</text>`);
-    const first=1,inn=9,out=13;
-    s+=`<rect x="${x0+((first+inn-1)%7)*cw-6}" y="${y0+12+Math.floor((first+inn-1)/7)*rh}" width="${(out-inn)*cw+32}" height="30" rx="15" fill="${c}" fill-opacity=".16"/>`;
-    for(let d=1;d<=30;d++){const k=first+d-1,col=k%7,row=Math.floor(k/7),x=x0+col*cw+10,y=y0+32+row*rh;
-      if(d===inn||d===out)s+=Ci(c,x,y-5,15,1.8,1,"none","")+Dot(c,x,y-5,15,.22);
-      s+=`<text x="${x}" y="${y}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="${d>=inn&&d<=out?600:400}" fill="${c}" fill-opacity="${d>=inn&&d<=out?1:.6}">${d}</text>`}
-    s+=Dot(c,322,322,4)+`<text x="332" y="326" font-family="IBM Plex Mono,monospace" font-size="10" letter-spacing="1" fill="${c}" fill-opacity=".85">CHECK-IN 9.6.  →  CHECK-OUT 13.6.</text>`;
-    s+=`<g transform="rotate(-14 200 300)"><rect class="d" x="140" y="262" width="124" height="78" rx="9" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="none"/>`+L(c,140,284,264,284,4,.5)+Ci(c,162,316,8,1.2,.8,"none","")+L(c,178,312,240,312,1,.5)+L(c,178,322,220,322,1,.4)+`</g>`;
-    s+=star(c,596,40,12,.8)+star(c,262,120,8,.5);
+  /* Rane rezervacije: booking calendar with a glowing stay, key card and a plane on a flight path */
+  travel(c,u){let s=glow(u,440,200,240,190,.85);
+    s+=`<path class="m-flow" d="M80 310 Q 170 150 250 66" stroke="${c}" stroke-width="1.4" stroke-opacity=".7" fill="none" stroke-linecap="round"/>`;
+    s+=G("m-float",250,66,`<path d="M240 72 l22 -12 l-5 10 l7 8 z" fill="${c}"/>`);
+    s+=`<rect class="d" x="300" y="56" width="284" height="280" rx="18" stroke="url(#${u}s)" stroke-width="1.6" fill="rgba(255,255,255,.05)"/>`;
+    s+=L(c,300,104,584,104,1,.4)+L(c,330,44,330,70,2.2,.9)+L(c,554,44,554,70,2.2,.9);
+    s+=`<text x="320" y="88" font-family="Manrope,Arial,sans-serif" font-size="18" font-weight="800" fill="${c}">06/2027</text>`;
+    const x0=322,cw=38,y0=124,rh=36,first=1,inn=9,out=13;
+    ["P","U","S","Č","P","S","N"].forEach((d,i)=>s+=`<text x="${x0+i*cw+10}" y="${y0}" text-anchor="middle" font-family="Onest,Arial,sans-serif" font-size="10" fill="${c}" fill-opacity=".55">${d}</text>`);
+    const ry=y0+12+Math.floor((first+inn-1)/7)*rh;
+    s+=`<rect x="${x0+((first+inn-1)%7)*cw-6}" y="${ry}" width="${(out-inn)*cw+32}" height="30" rx="15" fill="${c}" fill-opacity=".2" filter="url(#${u}b)"/>`;
+    for(let d=1;d<=30;d++){const k=first+d-1,col=k%7,row=Math.floor(k/7),x=x0+col*cw+10,y=y0+32+row*rh,on=d>=inn&&d<=out;
+      if(d===inn||d===out)s+=G("m-pulse",x,y-5,Ci(c,x,y-5,15,1.8,1,`rgba(255,255,255,.18)`,""),d===out?.6:0);
+      s+=`<text x="${x}" y="${y}" text-anchor="middle" font-family="Onest,Arial,sans-serif" font-size="12" font-weight="${on?700:400}" fill="${c}" fill-opacity="${on?1:.55}">${d}</text>`}
+    s+=G("m-float",200,300,`<g transform="rotate(-14 200 300)"><rect x="140" y="262" width="124" height="78" rx="10" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="rgba(255,255,255,.08)"/>${L(c,140,284,264,284,5,.45,"")}${Ci(c,162,316,8,1.2,.8,"none","")}${L(c,178,312,240,312,1,.5,"")}${L(c,178,322,220,322,1,.4,"")}</g>`,.8);
+    s+=star(c,598,40,12,.9,0)+star(c,262,120,8,.6,1.2);return s},
+  /* Nekretnine: skyline at dusk, lit windows, a tower crane */
+  realestate(c,u){let s=glow(u,440,260,260,160,.9);const B=[[250,46,130],[300,38,190],[342,58,250],[404,40,170],[448,64,290],[516,34,150],[554,46,210]];
+    B.forEach(([x,w,h],i)=>{s+=`<path class="d" d="M${x} 360 L${x} ${360-h} L${x+w} ${360-h} L${x+w} 360" stroke="url(#${u}s)" stroke-width="1.3" fill="rgba(255,255,255,${.03+i%3*.02})"/>`;
+      for(let yy=360-h+12;yy<350;yy+=16)for(let xx=x+6;xx<x+w-8;xx+=10){const k=(xx*7+yy*13+i*31)%23;if(k<4)s+=R(c,xx,yy,5,7,1,c,.85,k<2?"m-twinkle":"")+"";else if(k<9)s+=R(c,xx,yy,5,7,1,c,.18)}});
+    s+=L(c,200,360,600,360,1.6,.95);
+    const cx=470;s+=L(c,cx,70,cx,72,1,1)+P(c,`M${cx} 70 L${cx} 30 M${cx-90} 40 L${cx+60} 40 M${cx} 30 L${cx-90} 40 M${cx} 30 L${cx+60} 40`,1.2,.85);
+    for(let x=cx-84;x<cx+56;x+=12)s+=L(c,x,40,x+6,46,.5,.4);
+    s+=G("m-sway",cx-60,40,L(c,cx-60,40,cx-60,96,.8,.8,"")+P(c,`M${cx-66} 96 L${cx-54} 96 L${cx-58} 104 L${cx-62} 104 Z`,1,.9,"",""));
+    s+=L(c,448,52-6,512,52-6,1,.8)+`<text x="480" y="38" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="13" font-weight="700" fill="${c}" fill-opacity=".9">m²</text>`;
     return s},
-  /* Nekretnine: skyline in elevation with a dimension line */
-  realestate(c){let s="";const B=[[250,46,130],[300,38,190],[342,58,250],[404,40,170],[448,64,290],[516,34,150],[554,46,210]];
-    B.forEach(([x,w,h],i)=>{s+=P(c,`M${x} 360 L${x} ${360-h} L${x+w} ${360-h} L${x+w} 360`,1.2,.85);
-      for(let yy=360-h+14;yy<350;yy+=16)s+=L(c,x+6,yy,x+w-6,yy,.6,.22);
-      for(let xx=x+w/3;xx<x+w-2;xx+=w/3)s+=L(c,xx,360-h+8,xx,356,.5,.14)});
-    s+=L(c,220,360,600,360,1.4,.9);
-    s+=L(c,448,52,512,52,1,.8)+L(c,448,46,448,58,1,.8)+L(c,512,46,512,58,1,.8)+L(c,448,58,448,66,.6,.4)+L(c,512,58,512,66,.6,.4);
-    s+=`<text x="480" y="44" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="${c}" fill-opacity=".9">m²</text>`;
-    return s},
-  /* Godina pred nama: lens rings and a sighting scale */
-  lens(c){let s="";[30,62,98,138,178].forEach((rad,i)=>s+=Ci(c,430,200,rad,i===3?1.6:1,.85-i*.13));
+  /* The Year Ahead: telescope lens with a rotating scale and orbiting marker */
+  lens(c,u){let s=glow(u,430,200,230,200,1);[30,62,98,138].forEach((rad,i)=>s+=Ci(c,430,200,rad,i===3?1.8:1,.85-i*.13,i===0?"rgba(255,255,255,.08)":"none"));
+    s+=`<circle class="d" cx="430" cy="200" r="178" stroke="url(#${u}s)" stroke-width="2" fill="none"/>`;
+    let ticks="";for(let i=0;i<72;i++){const a=i*5*Math.PI/180,l=i%6?6:16;ticks+=L(c,430+178*Math.cos(a),200+178*Math.sin(a),430+(178+l)*Math.cos(a),200+(178+l)*Math.sin(a),i%6?.6:1.2,.65,"")}
+    s+=G("m-spin-slow",430,200,ticks);
+    s+=G("m-spin",430,200,Dot(c,430,62,5)+Ci(c,430,62,11,1,.4,"none",""));
     s+=L(c,230,200,630,200,.8,.35)+L(c,430,0,430,400,.8,.35);
-    for(let i=0;i<72;i++){const a=i*5*Math.PI/180,l=i%6?6:16;s+=L(c,430+178*Math.cos(a),200+178*Math.sin(a),430+(178+l)*Math.cos(a),200+(178+l)*Math.sin(a),i%6?.6:1,.6)}
-    s+=Dot(c,430,200,4);return s},
-  /* Za stolom odlučivanja: boardroom table from above */
-  boardroom(c){let s=`<rect class="d" x="290" y="150" width="270" height="100" rx="50" stroke="${c}" stroke-width="1.4" stroke-opacity=".9" fill="none"/>`;
-    s+=`<rect class="d" x="306" y="164" width="238" height="72" rx="36" stroke="${c}" stroke-width=".7" stroke-opacity=".35" fill="none"/>`;
-    for(let i=0;i<5;i++){const x=330+i*48;s+=Ci(c,x,124,11,1.1,.8)+Ci(c,x,276,11,1.1,.8)+L(c,x,135,425,200,.5,.15)+L(c,x,265,425,200,.5,.15)}
-    s+=Ci(c,262,200,12,1.4,.95)+Ci(c,588,200,11,1.1,.8);
-    for(let i=0;i<5;i++){const x=322+i*48;s+=`<rect x="${x}" y="176" width="16" height="11" rx="1" stroke="${c}" stroke-opacity=".5" stroke-width=".7" fill="none"/>`}
+    s+=G("m-pulse",430,200,Dot(c,430,200,7,.95));
+    s+=`<text x="430" y="248" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="26" font-weight="800" fill="${c}" fill-opacity=".9">2027</text>`;
     return s},
-  /* Žene koje odlučuju: a closed circle of 26 seats with connections */
-  circle(c){let s=Ci(c,440,200,92,1.2,.8)+Ci(c,440,200,60,.7,.3);const N=26,pts=[];
-    for(let i=0;i<N;i++){const a=i/N*Math.PI*2;pts.push([440+148*Math.cos(a),200+148*Math.sin(a)])}
-    pts.forEach(([x,y],i)=>{const [x2,y2]=pts[(i*7+3)%N];s+=L(c,x,y,x2,y2,.5,.16)});
-    pts.forEach(([x,y],i)=>s+=Dot(c,x,y,i%5?3.2:5,i%5?.75:1));
-    s+=Ci(c,440,200,148,.6,.25);return s},
-  /* Biznis luksuza: brilliant-cut diamond with sparkles */
-  diamond(c){let s=P(c,"M300 196 L360 132 L520 132 L580 196 L440 362 Z",1.5,.95);
+  /* Boardroom: lit table from above, seats lighting up in turn */
+  boardroom(c,u){let s=glow(u,425,200,240,150,1);
+    s+=`<rect class="d" x="290" y="150" width="270" height="100" rx="50" stroke="url(#${u}s)" stroke-width="1.8" fill="rgba(255,255,255,.06)"/>`;
+    s+=`<rect x="306" y="164" width="238" height="72" rx="36" stroke="${c}" stroke-width=".7" stroke-opacity=".35" fill="none"/>`;
+    for(let i=0;i<5;i++){const x=330+i*48;s+=L(c,x,135,425,200,.5,.15)+L(c,x,265,425,200,.5,.15);
+      s+=G("m-pulse",x,124,Ci(c,x,124,11,1.2,.9,"rgba(255,255,255,.08)",""),i*.35)+G("m-pulse",x,276,Ci(c,x,276,11,1.2,.9,"rgba(255,255,255,.08)",""),1.75+i*.35);
+      s+=`<rect x="${322+i*48}" y="176" width="16" height="11" rx="1.5" stroke="${c}" stroke-opacity=".55" stroke-width=".8" fill="none"/>`}
+    s+=G("m-pulse",262,200,Ci(c,262,200,13,1.6,1,"rgba(255,255,255,.15)",""),.2)+Ci(c,588,200,11,1.2,.85);
+    s+=Dot(c,425,200,4,.9);return s},
+  /* Žene koje odlučuju: a closed circle of 26 seats, slowly turning */
+  circle(c,u){let s=glow(u,440,200,220,200,1)+`<circle class="d" cx="440" cy="200" r="92" stroke="url(#${u}s)" stroke-width="1.6" fill="rgba(255,255,255,.05)"/>`+Ci(c,440,200,60,.7,.3);
+    const N=26,pts=[];for(let i=0;i<N;i++){const a=i/N*Math.PI*2;pts.push([440+148*Math.cos(a),200+148*Math.sin(a)])}
+    let ring="";pts.forEach(([x,y],i)=>{const [x2,y2]=pts[(i*7+3)%N];ring+=L(c,x,y,x2,y2,.5,.16,"")});
+    pts.forEach(([x,y],i)=>ring+=Dot(c,x,y,i%5?3.2:5.5,i%5?.75:1,i%5?"":"m-twinkle"));
+    s+=G("m-spin-slow",440,200,ring+Ci(c,440,200,148,.6,.25,"none",""));
+    s+=G("m-pulse",440,200,Dot(c,440,200,6,.9));return s},
+  /* Biznis luksuza: brilliant-cut diamond with a travelling glint */
+  diamond(c,u){let s=glow(u,440,240,220,190,1);
+    s+=`<path class="d" d="M300 196 L360 132 L520 132 L580 196 L440 362 Z" stroke="url(#${u}s)" stroke-width="1.8" fill="rgba(255,255,255,.07)" stroke-linejoin="round"/>`;
+    s+=`<path d="M360 132 L400 196 L440 132 Z" fill="rgba(255,255,255,.16)"/><path d="M480 196 L520 132 L550 196 Z" fill="rgba(255,255,255,.10)"/><path d="M400 196 L440 362 L330 196 Z" fill="rgba(255,255,255,.06)"/>`;
     s+=L(c,300,196,580,196,1,.8);
-    [["360 132","400 196"],["400 196","440 132"],["440 132","480 196"],["480 196","520 132"],["360 132","330 196"],["520 132","550 196"]].forEach(([a,b])=>{const [x1,y1]=a.split(" "),[x2,y2]=b.split(" ");s+=L(c,+x1,+y1,+x2,+y2,.8,.6)});
+    [["360 132","400 196"],["400 196","440 132"],["440 132","480 196"],["480 196","520 132"],["360 132","330 196"],["520 132","550 196"]].forEach(([a,b])=>{const [x1,y1]=a.split(" "),[x2,y2]=b.split(" ");s+=L(c,+x1,+y1,+x2,+y2,.9,.65)});
     [330,400,480,550].forEach(x=>s+=L(c,x,196,440,362,.7,.45));
-    s+=L(c,360,196,440,362,.5,.25)+L(c,520,196,440,362,.5,.25);
-    s+=star(c,592,104,16)+star(c,268,150,10,.6)+star(c,560,318,8,.5);return s},
-  /* Energija: phase-shifted power waves and a turbine */
-  energy(c){let s="";for(let i=0;i<6;i++)s+=P(c,wave(200,600,300+i*6,26-i*2,34,i*.6),i===0?1.6:.8,.85-i*.12);
-    s+=L(c,500,392,500,140,1.4,.9)+Ci(c,500,134,7,1.4,.95);
-    [0,120,240].forEach(a=>{const t=(a-90)*Math.PI/180,ex=500+112*Math.cos(t),ey=134+112*Math.sin(t),nx=Math.cos(t+Math.PI/2)*9,ny=Math.sin(t+Math.PI/2)*9;s+=P(c,`M${r(500+nx)} ${r(134+ny)} Q ${r((500+ex)/2+nx*1.6)} ${r((134+ey)/2+ny*1.6)} ${r(ex)} ${r(ey)} L ${r(500-nx*.3)} ${r(134-ny*.3)}`,1.1,.85)});
-    return s},
-  /* Telekomunikacije: signal arcs and a node network */
-  telecom(c){let s="";for(let i=1;i<=6;i++)s+=P(c,arc(520,330,i*40,200,300),i===3?1.6:1,.95-i*.12);
-    s+=Dot(c,520,330,6);
+    s+=`<clipPath id="${u}d"><path d="M300 196 L360 132 L520 132 L580 196 L440 362 Z"/></clipPath><g clip-path="url(#${u}d)"><rect class="m-glint" x="250" y="100" width="40" height="300" fill="url(#${u}w)" transform="rotate(18 440 240)"/></g>`;
+    s+=star(c,592,104,18,1,0)+star(c,268,150,11,.7,.9)+star(c,560,318,9,.6,1.7)+star(c,350,90,7,.5,2.3);return s},
+  /* Energija i ulaganja: turbines turning over power waves */
+  energy(c,u){let s=glow(u,470,230,230,190,1);
+    let wv="";for(let i=0;i<6;i++)wv+=P(c,wave(160,640,300+i*6,26-i*2,34,i*.6),i===0?1.8:.8,.85-i*.12,i===0?`stroke="url(#${u}s)"`:"","");
+    s+=G("m-float",400,320,wv);
+    const tur=(x,y,len,sc)=>{let b="";[0,120,240].forEach(a=>{const t=(a-90)*Math.PI/180,ex=x+len*Math.cos(t),ey=y+len*Math.sin(t),nx=Math.cos(t+Math.PI/2)*9*sc,ny=Math.sin(t+Math.PI/2)*9*sc;b+=`<path d="M${r(x+nx)} ${r(y+ny)} Q ${r((x+ex)/2+nx*1.6)} ${r((y+ey)/2+ny*1.6)} ${r(ex)} ${r(ey)} L ${r(x-nx*.3)} ${r(y-ny*.3)}" stroke="${c}" stroke-width="1.2" stroke-opacity=".9" fill="rgba(255,255,255,.1)" stroke-linejoin="round"/>`});return b};
+    s+=L(c,500,392,500,140,1.6,.95)+L(c,360,392,360,210,1.1,.6);
+    s+=G("m-spin",500,134,tur(500,134,112,1))+Ci(c,500,134,8,1.6,1,"rgba(255,255,255,.3)");
+    s+=G("m-spin",360,206,tur(360,206,66,.6),-3)+Ci(c,360,206,5,1.2,.8,"rgba(255,255,255,.3)");
+    s+=star(c,250,110,9,.6,1);return s},
+  /* Više od povezanosti: signal rings radiating over a node network */
+  telecom(c,u){let s=glow(u,500,300,240,190,1);
+    for(let i=0;i<4;i++)s+=G("m-ring",520,330,P(c,arc(520,330,70,200,300),1.6,.9,"",""),i*.75);
+    for(let i=1;i<=6;i++)s+=P(c,arc(520,330,i*40,200,300),i===3?1.6:.9,.8-i*.11,i===3?`stroke="url(#${u}s)"`:"");
+    s+=G("m-pulse",520,330,Dot(c,520,330,7));
     const N=[[300,120],[360,80],[420,140],[300,230],[250,170],[470,60],[560,110],[380,210]];
-    [[0,1],[1,2],[0,3],[0,4],[1,5],[5,6],[2,7],[3,7],[2,5]].forEach(([a,b])=>s+=L(c,N[a][0],N[a][1],N[b][0],N[b][1],.7,.35));
-    N.forEach(([x,y],i)=>s+=Ci(c,x,y,i%3?4:7,1,.8,"none","")+Dot(c,x,y,2));return s},
-  /* EXPO: globe with five market points */
-  globe(c){let s=Ci(c,440,200,160,1.5,.9);
+    [[0,1],[1,2],[0,3],[0,4],[1,5],[5,6],[2,7],[3,7],[2,5]].forEach(([a,b],k)=>s+=`<line class="m-flow" x1="${N[a][0]}" y1="${N[a][1]}" x2="${N[b][0]}" y2="${N[b][1]}" stroke="${c}" stroke-width=".9" stroke-opacity=".45" style="animation-duration:${2+k%3}s"/>`);
+    N.forEach(([x,y],i)=>s+=G("m-pulse",x,y,Ci(c,x,y,i%3?4:7,1,.8,"rgba(255,255,255,.1)","")+Dot(c,x,y,2),i*.3));return s},
+  /* EXPO: globe with an orbiting satellite and five market beacons */
+  globe(c,u){let s=glow(u,440,200,230,210,1)+`<circle class="d" cx="440" cy="200" r="160" stroke="url(#${u}s)" stroke-width="1.8" fill="rgba(255,255,255,.05)"/>`;
     [0.25,0.55,0.82].forEach(k=>s+=`<ellipse class="d" cx="440" cy="200" rx="${r(160*k)}" ry="160" stroke="${c}" stroke-width=".8" stroke-opacity=".45" fill="none"/>`);
     s+=L(c,440,40,440,360,.8,.45);
     [-110,-60,0,60,110].forEach(dy=>{const w=Math.sqrt(160*160-dy*dy);s+=`<ellipse class="d" cx="440" cy="${200+dy}" rx="${r(w)}" ry="${r(w*.12)}" stroke="${c}" stroke-width=".7" stroke-opacity=".35" fill="none"/>`});
+    s+=`<g transform="rotate(-18 440 200)"><ellipse cx="440" cy="200" rx="220" ry="58" stroke="${c}" stroke-width=".8" stroke-opacity=".4" fill="none" stroke-dasharray="3 6"/><circle r="5" fill="${c}"><animateMotion dur="16s" repeatCount="indefinite" path="M660 200 A220 58 0 1 1 220 200 A220 58 0 1 1 660 200"/></circle></g>`;
     const M=[[400,150],[430,175],[470,160],[455,205],[490,230]];
-    s+=`<path d="M${M.map(p=>p.join(" ")).join(" L")}" stroke="${c}" stroke-width="1" stroke-opacity=".8" fill="none" stroke-dasharray="2 5" stroke-linecap="round"/>`;
-    M.forEach(([x,y])=>s+=Dot(c,x,y,4.5)+Ci(c,x,y,10,1,.35,"none",""));return s},
-  /* Poslovna strana ljeta: low sun over the sea */
-  summer(c){let s=Ci(c,450,190,52,1.6,.95);
-    for(let i=0;i<28;i++){const a=i/28*Math.PI*2;s+=L(c,450+66*Math.cos(a),190+66*Math.sin(a),450+(i%2?78:90)*Math.cos(a),190+(i%2?78:90)*Math.sin(a),.8,.55)}
-    s+=L(c,200,290,600,290,1.2,.8);for(let i=0;i<6;i++)s+=P(c,wave(220+i*20,600,306+i*14,4-i*.3,16+i*2,i),.9,.65-i*.09);
-    return s},
-  /* Bolji proizvod: closed loop around a leaf */
-  loop(c){let s=P(c,arc(450,200,132,200,340),1.5,.9)+P(c,arc(450,200,132,20,160),1.5,.9);
-    const head=(a)=>{const t=a*Math.PI/180,x=450+132*Math.cos(t),y=200+132*Math.sin(t),tx=-Math.sin(t),ty=Math.cos(t);return P(c,`M${r(x-tx*12+Math.cos(t)*8)} ${r(y-ty*12+Math.sin(t)*8)} L${r(x)} ${r(y)} L${r(x-tx*12-Math.cos(t)*8)} ${r(y-ty*12-Math.sin(t)*8)}`,1.5,.9)};
-    s+=head(340)+head(160);
-    s+=P(c,"M450 300 C 380 260 370 160 450 100 C 530 160 520 260 450 300 Z",1.3,.9)+L(c,450,300,450,112,1,.7);
-    for(let i=0;i<5;i++){const y=270-i*34;s+=P(c,`M450 ${y} Q ${430-i} ${y-12} ${410+i*3} ${y-26}`,.7,.5)+P(c,`M450 ${y} Q ${470+i} ${y-12} ${490-i*3} ${y-26}`,.7,.5)}
-    return s},
-  /* Iza proizvoda: field rows to the horizon and an ear of wheat */
-  field(c){let s=L(c,180,170,600,170,1.2,.8)+P(c,arc(420,170,40,180,360),1.4,.9);
+    s+=`<path class="m-flow" d="M${M.map(p=>p.join(" ")).join(" L")}" stroke="${c}" stroke-width="1.2" stroke-opacity=".85" fill="none" stroke-linecap="round"/>`;
+    M.forEach(([x,y],i)=>s+=Dot(c,x,y,4.5)+G("m-ring",x,y,Ci(c,x,y,10,1.2,.6,"none",""),i*.5));return s},
+  /* Poslovna strana ljeta: a slow sun over moving water */
+  summer(c,u){let s=glow(u,450,190,230,170,1)+`<circle cx="450" cy="190" r="52" fill="rgba(255,255,255,.14)" stroke="url(#${u}s)" stroke-width="1.8"/>`;
+    let rays="";for(let i=0;i<28;i++){const a=i/28*Math.PI*2;rays+=L(c,450+66*Math.cos(a),190+66*Math.sin(a),450+(i%2?78:94)*Math.cos(a),190+(i%2?78:94)*Math.sin(a),.9,.6,"")}
+    s+=G("m-spin-slow",450,190,rays);
+    s+=L(c,200,290,620,290,1.2,.8);let wv="";for(let i=0;i<6;i++)wv+=P(c,wave(200+i*20,640,306+i*14,4-i*.3,16+i*2,i),.9,.7-i*.09,"","");
+    s+=G("m-float",420,330,wv);
+    s+=`<path d="M450 292 L450 380" stroke="${c}" stroke-opacity=".22" stroke-width="10" stroke-linecap="round" stroke-dasharray="2 12"/>`;
+    s+=star(c,300,120,8,.6,.5);return s},
+  /* Bolji proizvod: a turning loop around a living leaf */
+  loop(c,u){let s=glow(u,450,200,220,190,1);
+    const head=(a)=>{const t=a*Math.PI/180,x=450+132*Math.cos(t),y=200+132*Math.sin(t),tx=-Math.sin(t),ty=Math.cos(t);return P(c,`M${r(x-tx*12+Math.cos(t)*8)} ${r(y-ty*12+Math.sin(t)*8)} L${r(x)} ${r(y)} L${r(x-tx*12-Math.cos(t)*8)} ${r(y-ty*12-Math.sin(t)*8)}`,1.8,.95,"","")};
+    s+=G("m-spin-slow",450,200,P(c,arc(450,200,132,200,340),1.8,.95,`stroke="url(#${u}s)"`,"")+P(c,arc(450,200,132,20,160),1.8,.95,`stroke="url(#${u}s)"`,"")+head(340)+head(160));
+    let leaf=`<path d="M450 300 C 380 260 370 160 450 100 C 530 160 520 260 450 300 Z" stroke="${c}" stroke-width="1.4" stroke-opacity=".95" fill="rgba(255,255,255,.1)"/>`+L(c,450,300,450,112,1,.7,"");
+    for(let i=0;i<5;i++){const y=270-i*34;leaf+=P(c,`M450 ${y} Q ${430-i} ${y-12} ${410+i*3} ${y-26}`,.7,.55,"","")+P(c,`M450 ${y} Q ${470+i} ${y-12} ${490-i*3} ${y-26}`,.7,.55,"","")}
+    s+=G("m-sway",450,300,leaf);s+=star(c,560,90,9,.6,.8);return s},
+  /* Iza proizvoda: field rows, a rising sun and wheat moving in the wind */
+  field(c,u){let s=glow(u,420,170,240,130,1)+L(c,160,170,620,170,1.2,.8)+`<path d="${arc(420,170,40,180,360)}" stroke="url(#${u}s)" stroke-width="1.8" fill="rgba(255,255,255,.12)"/>`;
     for(let x=-300;x<=1200;x+=60)s+=L(c,420,170,x,400,.7,.35);
-    s+=P(c,"M556 380 C 552 300 548 220 540 120",1.2,.9);
-    for(let i=0;i<9;i++){const y=140+i*18,x=541+i*1.6;s+=`<ellipse class="d" cx="${r(x-9)}" cy="${y}" rx="5" ry="10" transform="rotate(-28 ${r(x-9)} ${y})" stroke="${c}" stroke-width="1" stroke-opacity=".85" fill="none"/>`+`<ellipse class="d" cx="${r(x+9)}" cy="${y+6}" rx="5" ry="10" transform="rotate(28 ${r(x+9)} ${y+6})" stroke="${c}" stroke-width="1" stroke-opacity=".85" fill="none"/>`}
-    s+=L(c,540,120,532,82,.7,.6)+L(c,540,120,548,80,.7,.6);return s},
-  /* Povratak poslu: an autumn growth line */
-  growth(c){let s=L(c,260,340,600,340,1.2,.8);for(let x=290;x<=590;x+=50)s+=L(c,x,90,x,340,.5,.18);
+    let wheat=P(c,"M556 380 C 552 300 548 220 540 120",1.3,.95,"","");
+    for(let i=0;i<9;i++){const y=140+i*18,x=541+i*1.6;wheat+=`<ellipse cx="${r(x-9)}" cy="${y}" rx="5" ry="10" transform="rotate(-28 ${r(x-9)} ${y})" stroke="${c}" stroke-width="1" stroke-opacity=".9" fill="rgba(255,255,255,.12)"/><ellipse cx="${r(x+9)}" cy="${y+6}" rx="5" ry="10" transform="rotate(28 ${r(x+9)} ${y+6})" stroke="${c}" stroke-width="1" stroke-opacity=".9" fill="rgba(255,255,255,.12)"/>`}
+    wheat+=L(c,540,120,532,82,.7,.6,"")+L(c,540,120,548,80,.7,.6,"");
+    s+=G("m-sway",556,380,wheat);
+    s+=G("m-sway",520,380,`<g opacity=".45" transform="translate(-40 30) scale(.9)">${wheat.replace(/m-sway/g,"")}</g>`,-1.5);return s},
+  /* Povratak poslu: a growth line with a pulsing lead point */
+  growth(c,u){let s=glow(u,440,220,240,170,1)+L(c,260,340,600,340,1.2,.8);for(let x=290;x<=590;x+=50)s+=L(c,x,90,x,340,.5,.18);
+    [[285,300],[335,288],[385,296],[435,250],[485,236],[535,180]].forEach(([x,y],i)=>s+=R(c,x-10,y,20,340-y,3,c,.07+i*.02));
     const p=[[270,300],[320,288],[370,296],[420,250],[470,236],[520,180],[570,120]];
-    s+=P(c,"M"+p.map(q=>q.join(" ")).join(" L"),1.8,.95);
-    s+=P(c,"M"+p.map(q=>q.join(" ")).join(" L")+" L570 340 L270 340 Z",.1,0,`fill="${c}" fill-opacity=".08"`);
-    p.forEach(([x,y],i)=>s+=Dot(c,x,y,i===p.length-1?6:3.5));
+    s+=P(c,"M"+p.map(q=>q.join(" ")).join(" L"),2.2,1,`stroke="url(#${u}s)" filter="url(#${u}b)"`);
+    p.forEach(([x,y],i)=>s+=Dot(c,x,y,i===p.length-1?0:3.5));
+    s+=G("m-ring",570,120,Ci(c,570,120,10,1.4,.8,"none",""))+Dot(c,570,120,6);
     s+=P(c,"M548 112 L572 118 L566 142",1.6,.95);return s},
-  /* Adria u pokretu: transit-map routes between hubs */
-  routes(c){let s="";const R1="M200 320 L320 320 L380 260 L520 260 L580 200",R2="M300 90 L300 200 L380 260 L380 360",R3="M600 110 L470 110 L420 160 L420 210 L380 260";
-    [[R1,2.4,.95],[R2,2.4,.7],[R3,2.4,.5]].forEach(([d,w,o])=>s+=P(c,d,w,o));
-    [[200,320],[320,320],[520,260],[580,200],[300,90],[300,200],[380,360],[600,110],[470,110],[420,210]].forEach(([x,y])=>s+=Ci(c,x,y,6,2,.95,"none",""));
-    s+=Ci(c,380,260,13,2.4,1,"none","")+Dot(c,380,260,5);return s},
-  /* Poslovanje na sajmovima: isometric booths under spotlights */
-  fair(c){let s="";const iso=(x,y)=>[440+(x-y)*34,190+(x+y)*17];
-    for(let i=0;i<4;i++)for(let j=0;j<4;j++){const a=iso(i,j),b=iso(i+1,j),d=iso(i+1,j+1),e=iso(i,j+1);s+=P(c,`M${r(a[0])} ${r(a[1])} L${r(b[0])} ${r(b[1])} L${r(d[0])} ${r(d[1])} L${r(e[0])} ${r(e[1])} Z`,(i+j)%3?.7:1.2,(i+j)%3?.35:.85)}
-    [[1,1],[2,0],[3,2]].forEach(([i,j])=>{const [x,y]=iso(i+.5,j+.5);s+=`<path d="M${r(x-6)} 0 L${r(x+6)} 0 L${r(x+34)} ${r(y)} L${r(x-34)} ${r(y)} Z" fill="${c}" fill-opacity=".07"/>`+L(c,x,0,x,y,.6,.3)+Dot(c,x,y,3)});
-    return s},
-  /* Kibernetička otpornost: shield over a hex grid with circuit traces */
-  cyber(c){let s="";const hx=(cx,cy,R)=>{let d="";for(let k=0;k<6;k++){const a=(60*k-30)*Math.PI/180;d+=(k?"L":"M")+r(cx+R*Math.cos(a))+" "+r(cy+R*Math.sin(a))}return d+"Z"};
-    for(let row=0;row<7;row++)for(let col=0;col<8;col++){const cx=250+col*48+(row%2)*24,cy=40+row*42;s+=`<path d="${hx(cx,cy,24)}" stroke="${c}" stroke-width=".6" stroke-opacity=".14" fill="none"/>`}
-    s+=P(c,"M450 70 L540 104 L540 200 C 540 268 494 314 450 336 C 406 314 360 268 360 200 L360 104 Z",1.8,.95);
+  /* Adria u pokretu: transit map with traffic moving along the routes */
+  routes(c,u){let s=glow(u,400,230,250,170,1);const R1="M200 320 L320 320 L380 260 L520 260 L580 200",R2="M300 90 L300 200 L380 260 L380 360",R3="M600 110 L470 110 L420 160 L420 210 L380 260";
+    [[R1,3,.95],[R2,3,.7],[R3,3,.55]].forEach(([d,w,o])=>s+=P(c,d,w,o));
+    [R1,R2,R3].forEach((d,i)=>s+=`<path class="m-flow m-fast" d="${d}" stroke="#fff" stroke-width="3" stroke-opacity=".95" fill="none" stroke-linecap="round" style="animation-duration:${2.4+i*.6}s"/>`);
+    [[200,320],[320,320],[520,260],[580,200],[300,90],[300,200],[380,360],[600,110],[470,110],[420,210]].forEach(([x,y],i)=>s+=Ci(c,x,y,6,2,.95,"rgba(0,0,0,.25)",""));
+    s+=G("m-ring",380,260,Ci(c,380,260,16,1.4,.7,"none",""))+Ci(c,380,260,13,2.4,1,"rgba(0,0,0,.25)","")+Dot(c,380,260,5);return s},
+  /* Poslovanje na sajmovima: isometric hall with sweeping spotlights */
+  fair(c,u){let s=glow(u,440,250,240,160,1);const iso=(x,y)=>[440+(x-y)*34,190+(x+y)*17];
+    for(let i=0;i<4;i++)for(let j=0;j<4;j++){const a=iso(i,j),b=iso(i+1,j),d=iso(i+1,j+1),e=iso(i,j+1),hi=(i+j)%3===0;s+=`<path class="d" d="M${r(a[0])} ${r(a[1])} L${r(b[0])} ${r(b[1])} L${r(d[0])} ${r(d[1])} L${r(e[0])} ${r(e[1])} Z" stroke="${c}" stroke-width="${hi?1.3:.7}" stroke-opacity="${hi?.9:.35}" fill="${hi?"rgba(255,255,255,.08)":"none"}"/>`}
+    [[1,1,0],[2,0,1.2],[3,2,2.1]].forEach(([i,j,dl])=>{const [x,y]=iso(i+.5,j+.5);s+=G("m-sway",x,0,`<path d="M${r(x-6)} 0 L${r(x+6)} 0 L${r(x+38)} ${r(y)} L${r(x-38)} ${r(y)} Z" fill="url(#${u}w)" opacity=".55"/>`+L(c,x,0,x,y,.6,.3,""),dl)+G("m-pulse",x,y,Dot(c,x,y,3.5),dl)});
+    s+=star(c,250,120,9,.6,.6);return s},
+  /* Kibernetička otpornost: shield with a scanning beam over a live hex grid */
+  cyber(c,u){let s=glow(u,450,200,220,190,1);const hx=(cx,cy,Rr)=>{let d="";for(let k=0;k<6;k++){const a=(60*k-30)*Math.PI/180;d+=(k?"L":"M")+r(cx+Rr*Math.cos(a))+" "+r(cy+Rr*Math.sin(a))}return d+"Z"};
+    for(let row=0;row<7;row++)for(let col=0;col<8;col++){const cx=250+col*48+(row%2)*24,cy=40+row*42,k=(row*5+col*3)%11;s+=`<path class="${k===0?"m-twinkle":""}" d="${hx(cx,cy,24)}" stroke="${c}" stroke-width=".6" stroke-opacity="${k===0?.6:.14}" fill="${k===0?"rgba(255,255,255,.1)":"none"}" style="animation-delay:${(row+col)*.2}s"/>`}
+    const SH="M450 70 L540 104 L540 200 C 540 268 494 314 450 336 C 406 314 360 268 360 200 L360 104 Z";
+    s+=`<path class="d" d="${SH}" stroke="url(#${u}s)" stroke-width="2" fill="rgba(255,255,255,.07)" stroke-linejoin="round"/>`;
+    s+=`<clipPath id="${u}c"><path d="${SH}"/></clipPath><g clip-path="url(#${u}c)"><rect class="m-scan" x="350" y="60" width="200" height="34" fill="url(#${u}v)"/></g>`;
     s+=P(c,"M450 96 L518 122 L518 200 C 518 254 484 292 450 310 C 416 292 382 254 382 200 L382 122 Z",.8,.4);
-    s+=Ci(c,450,190,16,1.6,.95)+P(c,"M444 204 L440 240 L460 240 L456 204",1.6,.95);
-    [["M360 160 L300 160 L280 140 L230 140",230,140],["M360 230 L310 230 L290 250 L250 250",250,250],["M540 150 L590 150 L600 140",600,140],["M540 240 L580 240 L600 260",600,260]].forEach(([d,x,y])=>s+=P(c,d,1,.6)+Ci(c,x,y,4,1,.8,"none",""));
+    s+=Ci(c,450,190,16,1.8,1,"rgba(255,255,255,.12)")+P(c,"M444 204 L440 240 L460 240 L456 204",1.8,1);
+    [["M360 160 L300 160 L280 140 L230 140",230,140],["M360 230 L310 230 L290 250 L250 250",250,250],["M540 150 L590 150 L600 140",600,140],["M540 240 L580 240 L600 260",600,260]].forEach(([d,x,y],i)=>s+=`<path class="m-flow" d="${d}" stroke="${c}" stroke-width="1.2" stroke-opacity=".7" fill="none" style="animation-duration:${1.8+i*.4}s"/>`+G("m-pulse",x,y,Ci(c,x,y,4,1.2,.9,"none",""),i*.4));
     return s},
   /* Od štednje do ulaganja: coin stacks under a compounding curve */
-  savings(c){let s="";const xs=[300,356,412,468,524,580],hs=[2,3,5,7,10,14];
-    xs.forEach((x,i)=>{const n=hs[i];for(let k=0;k<n;k++){const y=350-k*9;s+=`<ellipse class="d" cx="${x}" cy="${y}" rx="22" ry="6" stroke="${c}" stroke-width=".9" stroke-opacity="${k===n-1?.95:.5}" fill="none"/>`}
+  savings(c,u){let s=glow(u,440,260,240,160,1);const xs=[300,356,412,468,524,580],hs=[2,3,5,7,10,14];
+    xs.forEach((x,i)=>{const n=hs[i];for(let k=0;k<n;k++){const y=350-k*9;s+=`<ellipse class="d" cx="${x}" cy="${y}" rx="22" ry="6" stroke="${c}" stroke-width=".9" stroke-opacity="${k===n-1?1:.5}" fill="${k===n-1?"rgba(255,255,255,.14)":"none"}"/>`}
       s+=L(c,x-22,350,x-22,350-(n-1)*9,.9,.6)+L(c,x+22,350,x+22,350-(n-1)*9,.9,.6)});
-    s+=P(c,"M270 300 C 380 296 470 250 600 110",1.6,.95);
-    xs.forEach((x,i)=>{const t=(x-270)/330;const y=300-190*Math.pow(t,2.2);s+=Dot(c,x,y,3)});
-    return s},
-  /* Vrhunac trgovine: a wrapped gift and price tag */
-  retail(c){let s=`<rect class="d" x="370" y="196" width="170" height="140" rx="4" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="none"/>`+`<rect class="d" x="358" y="164" width="194" height="34" rx="4" stroke="${c}" stroke-width="1.5" stroke-opacity=".95" fill="none"/>`;
-    s+=L(c,455,164,455,336,1.4,.9)+L(c,445,164,445,336,.6,.4)+L(c,465,164,465,336,.6,.4);
-    s+=P(c,"M455 164 C 420 120 380 130 400 150 C 412 162 440 164 455 164",1.4,.95)+P(c,"M455 164 C 490 120 530 130 510 150 C 498 162 470 164 455 164",1.4,.95);
-    s+=P(c,"M250 120 L320 120 L344 144 L320 168 L250 168 Z",1.2,.8)+Ci(c,322,144,5,1,.8)+L(c,260,136,300,136,.8,.5)+L(c,260,152,290,152,.8,.5);
-    s+=star(c,586,128,16)+star(c,580,300,9,.6)+star(c,330,240,7,.5);return s}
+    s+=P(c,"M270 300 C 380 296 470 250 600 110",2.2,1,`stroke="url(#${u}s)" filter="url(#${u}b)"`);
+    xs.forEach((x,i)=>{const t=(x-270)/330;const y=300-190*Math.pow(t,2.2);s+=G("m-pulse",x,y,Dot(c,x,y,3.5),i*.3)});
+    s+=star(c,590,96,14,.95,0)+star(c,320,150,8,.5,1.3);return s},
+  /* Vrhunac trgovine: a wrapped gift with a moving bow, tag and sparkles */
+  retail(c,u){let s=glow(u,455,250,220,170,1);
+    s+=`<rect class="d" x="370" y="196" width="170" height="140" rx="6" stroke="url(#${u}s)" stroke-width="1.7" fill="rgba(255,255,255,.07)"/><rect class="d" x="358" y="164" width="194" height="34" rx="6" stroke="${c}" stroke-width="1.6" stroke-opacity=".95" fill="rgba(255,255,255,.1)"/>`;
+    s+=R(c,445,164,20,172,0,c,.18)+L(c,455,164,455,336,1.4,.9);
+    s+=G("m-sway",455,164,P(c,"M455 164 C 420 120 380 130 400 150 C 412 162 440 164 455 164",1.6,1,`fill="rgba(255,255,255,.1)"`,"")+P(c,"M455 164 C 490 120 530 130 510 150 C 498 162 470 164 455 164",1.6,1,`fill="rgba(255,255,255,.1)"`,""));
+    s+=G("m-sway",250,144,P(c,"M250 120 L320 120 L344 144 L320 168 L250 168 Z",1.3,.85,`fill="rgba(255,255,255,.08)"`,"")+Ci(c,322,144,5,1,.8,"none","")+L(c,260,136,300,136,.8,.5,"")+L(c,260,152,290,152,.8,.5,"")+`<text x="282" y="190" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="13" font-weight="800" fill="${c}" fill-opacity=".9">−30%</text>`,-.8);
+    s+=star(c,586,128,18,1,0)+star(c,580,300,10,.6,1)+star(c,330,240,8,.5,1.8)+star(c,410,110,7,.5,2.4);return s}
   };
 })();
+
 const MOTIF_OF={"godina-pred-nama":"lens","za-stolom-odlucivanja":"boardroom","sta-pokrece-adriju":"auto","rane-rezervacije":"travel","sljedeci-kvadrat":"realestate","zene-koje-odlucuju":"circle","poslovna-strana-luksuza":"diamond","energija-i-ulaganja":"energy","vise-od-povezanosti":"telecom","expo-2027-beograd":"globe","poslovna-strana-ljeta":"summer","bolji-proizvod":"loop","hrana-i-agrobiznis":"field","povratak-poslu":"growth","adria-u-pokretu":"routes","poslovanje-na-sajmovima":"fair","kiberneticki-otporna-adria":"cyber","od-stednje-do-ulaganja":"savings","vrhunac-trgovine":"retail"};
-function motifSVG(id,ink,pdf){const f=MOTIF[MOTIF_OF[id]];if(!f)return "";const inner=f(ink);
+let MOTIF_N=0;
+function motifSVG(id,ink,pdf){const f=MOTIF[MOTIF_OF[id]];if(!f)return "";const u="mf"+(++MOTIF_N);const inner=f(ink,u);
   let n=0;const body=inner.replace(/class="d"/g,()=>`class="d" style="animation-delay:${(n++%24)*45}ms"`);
-  return `<svg class="motif" viewBox="0 0 600 400" ${pdf?'width="430" height="287"':""} preserveAspectRatio="xMaxYMid meet" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">${body}</svg>`}
+  const defs=`<defs><radialGradient id="${u}g"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".6" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="${u}s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${ink}"/><stop offset=".55" stop-color="${ink}" stop-opacity=".92"/><stop offset="1" stop-color="${ink}" stop-opacity=".4"/></linearGradient><linearGradient id="${u}w" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="${u}v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><filter id="${u}b" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.4" result="bl"/><feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+  return `<svg class="motif" viewBox="0 0 600 400" ${pdf?'width="430" height="287"':""} preserveAspectRatio="xMaxYMid meet" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">${defs}<g class="art">${body}</g></svg>`}
 
 const LOGO_W="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAsAAAABgCAYAAAATrMQoAAAa+UlEQVR42u2d73XbONPFr338fZkKQldguoLQFVipwHIFliuQXIHlCiRXELkCcysIU4GZCsKtQM8Hga8YvbLEwX9S93eOTnYTUSSAmcEdAATO1us1ToAPAGnH7y4B3IMQ0mYMYCH4/hmrjBAyMN4B5CemJRrtVA2tMS9Ux+aLpgJrACV9iRBCCAnCCEDSsd8uWF0nRQ5gCiBr2Uit7OBlKPZwAdmojm1K5VxvqkIr2h0hhBDilBTAj47frQFcqj/J8Flg/8BoopKmEYA5gMe+F/Q88P0zVZkLbJYpvMPviDQhhBByakwF303YL58Mzx3beoKwg6eDEMC75C0xTIcjhBBC3PS1Em5ZZYNnrIStq+9TAHckVUL4Hd1fXiOEEELIceEi7VdzDdFM+sVU45oHCmC3Weo7NkslCCGEEGLGneZ1I1bdYEmhN9ioex0FsKCCKYIJIYQQ8/40NxDOCatwsHYR4loK4A4k4HIIQgghxISpwbUJer7mk5A+CuC2CGYGSgghhMhIYb6MgS/DDZPK4NqaAtifAzMDJYQQQmTkMB9AysCX4YYqgGvN60oKYH88gKPAhBBCiIRpZL9D4uJJ45rXPhf4Qvj9GrLTP1L151f135kF8Zpgs43LnPZKCCGEHCWHvXdoctUP16zWQTHHZolL3vH7JYDZqQngpQXnGQP4ZuCQtxTAhBBCSCfuLP/epO/ih+zlO7rtulUAuO97YUMsgSiUAL4B8GKYgRJCCCHkc1LYP1n1gdU6SGoA10rcVnv+vcRmFcANzF6ci4KLgPeuVBZZQ29NUQ5gRXslhBBCPmXk4DcT1QcXrN5BslSfDNvBxmoIojcWAdwwUxUszShT2ighhBByEEnfWqP77OqUAnjwlEMuXCy7QMwgX1BPAUwIIYR8zljQVxaQvdWfg0sRCQWwMTWAN+E1/7D5CCGEkE+RvPz2CvmywgmrmFAAm1OyOQghhBArpJAdWrHCZhRY0hdzX35CAWyBis1BCCGEWEHycvkS22WIktnYBDwZjlAAG1MLv/+bzUcIIYTsRSJM22t/58L7cEs0QgFsSCL8fsnmI4QQQv4fY3R/+a3C37s51JDt7pCDo8Ckh1xE9CyZ8PtVz+s+wfZ4yiv1Z4K/99xrhP5v9WeJfhw/malPu1xpK7g2n1+qTFUPE5pElfFWlS39pO3+bZXRxj1HrXr97J6/VAdW9aQOsz0+sM9OisjtX2L3RY/8Gaocu7bXlKex85XFeswBfO1g5yU4GLIPyajsPrH7JhS1I8S1Jdq+2JLu6Ida/WkzRsdAvqdfavvqG+Levm5XGyU7MQC2+oez9Xq9ForOS0eFfhc4nPQ5PgTZ8BLujvhLVGAyyZgLbKarYhM4OTZvHI+g91JEtVM2Fyw6fq/G5rSbQ8FlLCxnU7alZt1ONWzG5J67jAX1BwBnHcqTadiKzTLFYPeuyjNH951y3g6IV4ntXRrEJF2/aseOpwP3TwA8d/y9X5AvA4gtEfsp+P71niQiUf1m17aoVfvXEfijy9gi0SldtITELnHAxhttMelY7rMDcf5bAD/J1X1HkA+G6uujtYyP9XoNB59c+BwL4e9/OPztruV7X9tnsV6vU0dt0uWTrNfr6Xq9/mO5XB/r9Xrs4HlN7DxZr9fPlsqWerabDwt2Mhbe07UfuLKRUHZvuzySmDfbc32q0VZpBLHxs5iYCn7jPWBMtfFZCMr688DvSNtlErDMI6HN6/riu9AWjz13Kny2/JOy/7EQn7Fer5ce/aSJoz8daKMP9dsHY1IMa4AT4chSkwX1JRN/F2aN0lG5D1V/qeeyPah7z2B/G5xUlekD9s+w132en7Cz52WqynXXoX5t2U1zz2lAH3+27AdtG8kGYPft8qSB7f1O2Xvu2KdcxMax+s0Y4kaoWCUp+4vFfvY2UHnfAfyw6Dcx+eIxnlXZk57ZaTuOZo7sYnYsFoQWwIl6QImRLdGPtTpTD51IiKDfiMG5B6drAlEIgb8bYG3ff3lABE/hZgp2FkAE20weDv3+1JMduLb7JlmZBLL3O2WbieN7uIyNTdwIlfCFRFqnxYF/KyFb0pDD78twPuzoJzbT8jGyQP8OIvEVRzvFgvPAjvpTqP4rxD/62zTwLMB9F5CtJ9INOJnnsjUCPwvUlq7E93xPmaaObWfmMaC7rr/dcj07tnufnftzAAGXw/3a6qkHgR0y4QuNpLwFDg8m1ZAdjQyPscWXHSXYjLDeRdjO457ZZog4ejAW+BbAmXqId82O8TviHv1tOvw84DNMlJElDhzOV8d1KBv3GYimjsVbE1zbnYePxMnHiLpP8du2/cWA7N6ngEsd1B08J3ef1eHkRMRvLvS3LuJ2pSFykgHa0RLxbPWWByh/3/XD3lgg3QYtEQbJBH9vYWFS+HvEvd1NiA7/UKLxDuAGdt7KnUbkcEtB8DZhDH9LSiaqo3n2VIeJatN7h/cI5QtjHN7Fo292P8PmbeuV4/u4TvZC1uUUp7FVmmTrsxrdRvsL9d2ufXei4tlsgHb0A3FsW7jomV3GpB+mKpZWugJ47PmBa2xGfguKX7EIXqi6G4rxtkXwb8c2MfXslFee7WeMw9tG2fCJUEyUfcwNxUQsdr+A231KvzqO61ngukx6KBp0/G0k+L4koXoRxsNbR+0dgx0lgdv5AfG/mLfLG7pvz+ajDf9v8Oc88oorsNmjsIj8OReRGuUIZqOKoQPOsWzcVZ2nntszRGLZCMWhYjKimWqK50qJhe/Y7InafG7U371oiljXAm7s2LZ/RCIQMXB7lyCZQVsJfzuD/eUCaSR2FEOf3jdKyGejCxUv75UGbGLptfqtR+jPio0bMR6rAC5UIW8Q/44PU8vOXlku80Tz+WwHnBrb03dsdayhR3Vsl8n3PWN6scO23evaR4LNbI5OgL/EdjlL1foU6u8mLUEsLWuOfh43a3tpRQif6wO50NcKoX0XGu1ukwdHdkT8ieDvHdrkCcAXFSMn2Mz2lq1Y2tjivDXQoLMxwiRGAbxsCd+iB42awmyEtMbfI0ZnrUznTGU79zBf/7eAfPrBtOMqVJZ2rQz6iyrXl5aB646ItYP+JEBy9v1AmV4d3fO+dS9b90wCiSpfdq8jGqV2/wL5LFWhGbhD7mhQqvj8op77Sf1/cSQ+TizY/mdxpLGVx570F64YC232TeMebxq+l1gqn207OmvZ0dlOHO27KK5bvtr46YuKpWXgZ2v6sX08qfaYCZPbSl0jPYVyM/izjos/6nSR2Xq9zgKdirRwdOLObjln6iSUrvdKhae0dDntydbpNLunw+Qap4x9GNRl13o04afAJseWTgn7o0756XLPTLMO545OgovF7t8d2v3MQmyaWTgJyjTmHTpNadKxvfI931t4jiOmttLXk+B8nNiXOO5zXPSzunY0seQ/Lk6CO1bOpEM75oFPghvvxBhbWi8VtlsamwB2dTyoCwGcGpTJ5Fha3SMfJUJRN+CYBLxEiTGX99VlKRRtNgSjjp1kGsL7PeLy7Aos3U4pd2D3i7U9AfPDwX1NO/C5hs3biI9/LMR80wS0TwI49Vi2d4229F0+W0czpxaO6PUlgG0eQe3rKOSZqt/Esj/kgucfx/4SXIp4jyTUmY4s1RSMyTTLCnprCJOO00gp9F6KubewHGSiuZ7nAe7eMK3Uc9XC645NDx9DZ4eGEoePNt1H5mn63NTuC+i/EzC1bPcV7B7Icy+wrxHcv019r2nzu1PgOjHgBuaHcSyVvdUYPi5ffjO91sYSq6mBHc0N4/413G+3abrc4RpuTg11zQz2tmnd7Se69hHZeU8qK0XY40FtiMQKmzWPNhq80jSeLi896QScJ9g7QWqmIeISuHuT3cRJdUXS0qA+58LnTRwnlzHYfd5BNEpii+21grWgo00cJy2Plnz5QdPXSot2dzNw8ZtAviuASVK+0vA903XrOgL6HvbWhI8R7/pym/4SSsC7oOt69fS8ZxUW4nhQW05pe0eLSkNgpR2eXVq2JexvlTbTcOxbB+28hPmopY6Tm4wu1pC/sJI49BUXdq9zgMfYov0sHdTTSvDdkaO2WsLOaFKqIdKfHHTmJewciBIrI6Hvvhn6ok5syQ0SbJ1rn2D/0JgYT6B9xGkc7qLr9124Ou9h4WYIPxJ8p+GULhxorpGd5g4CjovM8FGjXLaFnI3pr0Lj+5Xne6aO/GTpyO5XGmW8OvBvmaAOCkdlkiRLt47ay5YvS5PoCu72G59juNtdTTX80YZP204+Y7cjnf7IJRX6uezBZ/104lzjhy81P80GxvfYTHEXBgV8hp+1izYcs4abESPdTuubxYDjSuA0gqBw2C5d2q2w8Du/hd9/s3BP6chAEoltuvztkSW7eXNYpq6+lDpoM5u+/C0iO/Hx+6H6oFRoWyvPiVqD7jsaMdmRTtJNe46b5ELjIpuCJ1WOrLPn7A8lrGMWv43juByBaIRiLnj+5JMgFmPHlQvbZmXp3qWl36kD3LdCeJaR2X2iYkxlaPelwzL9EiT2qeVnebH4W5nQP5aObXGFzaBJguFwp+EvtniFbI13ohLQpUM7qjzY0RvCH0bjw1+iEqnYnsya4O/jqP/5xKe7+rmWALZJY7RLbKYuJFM6qbpm5vmZM41ggcgc87POU1K2woPQakYbEkG5bIqRENgQNTXCE6PdZ5/YrMRuRg47wSthWWwJ4MqymJbEkX89iYY3xHXyoQkp5MsKbPrjCvKXHO+Ewi0TJiyFh3pfqkQqJP9iuKQqtl5hO8PhNGm9iKjwjZCViOCHAAJYKrJ8OKb0Hvs6z0RobL4csUD3l36uLN63CuQHNYaBD7tfCTukxIJge4ikfmNN9pII7aRJLIcigKUJWGW5ngtVn5nwmXPBc0jt6M1DvdeQzTq5suMhkWMzAzdGgK1uLyKrjJmqjFzgJDn8rs35GmlwN+2kYhT2jdDuKoBtOlAIIVphGJQe66uG2QxB2tM6/hqp3WWR2kqB4aCzE9J7BAnYSNAOaUAbPpYsUgDbEb7TwHUZnQAG5Os+J56DmyQz/c+zeEoNyiDNuH0JxFqjfWqQkPz2eC+JAP46IAEc0sf6mPQNJSaMNGw2jcTO77AZ5OrSFtL+qByYvQ7VjjNsZu3yGB4mxm3QCqGRfYu4sf9E2pF87ZEjSgNOAkK7Hz5faGYnyUOPnz1B97XLSaQxoKYJGtnuz1jEb6wCGJCtL00Q7yjOf7R5QogD/hlIOSgoupPGJB40uWUzniRTRLh3cawCWJrRZeykol2awQ6VEGIjblFE9J/cgYinDcVvt7MYH+wi0gqrI3YAybP5nKZMDcsQa51njm2HhLVFn/bxn4Vkm9i3lWpgNulSPA6BBxx/b0diEwn8vfuR0mVFjB2J36rV39d7+oRO+uRiIJXs0yglo6dXHssvEaQ2BHAOPy8emAp74p/M032SAHZP7AmXxlaKAdmkSyExFPGVOxCsqaf+6IouLsJk1qJWbfoL26336g5289F3AZxE3KCV0ClTuB/hkAb38pNy1YK69xUIYjmli8j814fd5xbsvhba/QRxLCGKVbhL2/wWftYGfuu5Tz0MLD5McHhksNSIBT7ifwbiOmkrsNnXeek6zsUqgKXiymdnIA3wIw8B/tZSGSqBg48A3DsuVwrzKW4SLvjNIrP72oLdN6MR5HB86drx5fAzfZ33uD6zAQqvY4dYxZhIZeASCAnS0d8am21w574e8Dxih3cpSk0oNBzTtUgcC+uqOtC5S7J4153Kg+O2IfGIUx27HwmvKT/5e8muMxmb9ijSUyInHpKxpOdicWgc6z9qYVKUexCnD3RtZ8lCBeDakvjt7OsxCuCxhiHXHp+vEgru3LFQlB7v+cuigHT5VrKOwKEAjisAurZ7iagpD8QJid1wGyf9ROOQsHApXvq8e0IK2QBHnzjWLoWGHcXUH50y0tj/CHsDmb0WwDrBqvT8jNJzxxcOnXIivGal+W+fGfnEUdnuNDLIEiQmFnAz8qYjCsojHW0tsPmUTWtVuCQOY+S05+2lk0TeAzjz/LnRLNuh+KAzk5A5tKOEri2K0ZK+e2XpvqL2j00A6wSrEv5fCFlpGMNzJALjUOdUQ28U2HYHk0O+frQAiTEIuhh9e9awudcjdl8Kbd4V4wEI7BLy0ZzcQb1miHT/UYe2VmHz8lCIpEcnBk8sx3QXSfcIwx2Fd4XktNlfFu8rShhjEcCJ6tR0glUZyNlrDUefWA6M0tGBZYeO6UWj7d4tdtop9EaDnhhzomRiWdhMIZ+KrDp0phL7GcPN8o6psn2b/hSKV41rZhZtJVP12GdyDTsIORDwpnHNg+VEKoPdwSbd/ujUkSQhfyzeV7RE7TwSJ/9pIA5fAz33i8Y1z5YCvG6y0KWudMR9aqnTzjR/pwAPNIiZWWC7LxzYkO2RpvZpSamKieMet/ncwFYWhrHkQcWRpOd+c6dxzWvA511C70Cl3HJ5xgB+WGj/Rpv03Y5iJ7OoJUUDEyEEcGPwz0r5mwinKmDGO4fe0guTAJ8ZJAtFx7qqNcV9I4J1O+0HA1vg6G8/RLCu3Te2pZskPzmwI1tJ3674bcfJBfr7AldtIMbGmrEkV9fNByBaUo3yh+wPmzYvNO3fdj87Un1lauCTQ0iiQvFbqGtM42gTL0Vc+LgJthvjJ7A7tfcU2NmfoDfdMlbBulC/UXUI7HcwGxGS7Nk7h/wltCZoN532E46vRUtUmUzeAl+C63/7wlh9lh7tfonuI7tLZYtdRyQy1UneQG8GovGX/EjikCv/rXrW3jPojWLuxpICm+n1CtsDe9KWjVwpwZMOyFd0djSIYSDgBfIlSrnypfKTfvZFMxFMsTkVbKl+o/TQH5Ftu0lYQO9Fygad90K0BPA4kgquEGax/65QvIXeesC0JQhKVZ72YvB/1HdyC1noi7DzrFWHq7uGrum8FtgeYdg+pOIr7GzuXoOjv30WwhW2R1227T5RnWhi4V5S+3gU2n27k33q6GeZihuTjmXMDYV2yBj9ArPtqdpx8pQYaVwTw0BAAdnJiu3ylgf62QeDeLAv3rT96KrVHyUgNiiF38+ViH10MIhgTQDHlF3cRPIs9zBfJ9Q438jB81XQXzdp2nk1hp07qvuugoPESQq3+2u+aNiHrt03nWyT8P3bGgVJ1OcK29Eunbpqlj+99qiNZ0rspzR3kS1J6+stolioM2L7gM+XOzQDHaYvt7mON2TLCvLVAhPVNl1mj3MVV8Ym2quvAjgm4VOprCXGN0WbRKE26Ly+Ic7Tr17g8chE0jt0E78mEF9pJm5Nwjdx5M//9qwdagDfwfWUEnSWjawiev65hgBOlJiZH/hN3dlWEsbvC432SpWWesZ2Zvw3tjODGbbLaY0572HFej0ruiNLxDkVb7pusOm8qsjKVcL98anEzEfrgPc3TfwQod3H6otd/fUxgvrrA6mGaKgQfjngPvEj5dgWVjGsg+eSOz91lSg/GKtkaqL+O+sgfsshCuBaOcAs0uebReYc95ZGBSrEtfawRDzLX8jnNvMU2PZN7bWOyO6bZyl7bBMhBwleoLdHbQh0XvYqIiyHTlvnR8R/pZLAUMnMKrJEI3YK6O0o5a3v6YsAbkRP7MYXgwiuHdRVLCL4FeYje8QP8wDBz2bi17b7MgJ/LgdgEzP4Hwl+RX9mixLoTfG/RFiWEvrbl3XRAr77gArhZzH66vM+dYPINmIXwLUSlNc96gBmAcViqeqqcBQALgMG20dspkAofvvDBP5e2HKR+DV2fx3I7quexb6uidGlp/j4gn7tHjGC/OW3KlL7qDV95g7dprivPfaxFfq3A0tMduCr7sQzf+cRV9qTCpSzHjZ6oRr91XN9+QgKE/hdi1Wocs0ZS3rJGO5nRQqHiV8ou3/x3MmHEPaukopaJcyTntWLzvKHmNek6vhj0jFpqTz1sRS/8ddhrWLzUnrheWSV9KIq6osSvnXPG32sRLzLjnmpOhOficJSlcvlbhyVMuqhTP+eMjNHAbAROr46qMbuXQrhJnmeYNizHbUq46VFEdMMBFwaJswhxE4Ova3iiojbuICbl+F2+1hX/jjkJHQoSW8Jg5m/80AVUWJ7Osu9CliXKiAWA2z4m1agt9GpNYH+C8K+GTtrCQJbIrVo1deScWMwFBbFY2lJ6NgQwoUlf14pu7/BaZ1s2B4o0K3PAn/PGO6LsV8jrwedrc9i2vv30DPqJAN5wMR0dSJJaJ+T3mbww2iJ2Nl6vU49Fj6UMaWRPWeOzXqv5gSapMMzldjsAaqbVfuq5xzbje+zjh1gocq2clz3IewggWzPwirSskrK0eX3Gh/oss907PYfo93HFvOkPpNhu+fnP63yNM/6q1WHXZ79XSCqnuB/6V2ucU3VAwGcQG8feZOySWJLO768KTFdWypPlzJI66d07Ktd9MhuvZnGzbuO9238/fVIH9C5Ts/W6zXzkjg60LTVeO1AX/U4C03w96bVaSsg9CF4E39ke+yk7QNDKA/tPhx/BB37I/jOwVBo90HpJwKO/hhXzEw/SSSstxMFMCGEkKGLoD+C75/aMhRCTpJzVgEhhJABkwm/X7PKCKEAJoQQQvqM5AWzGtx1hhAKYEIIIaTn5ILvUvwSQgFMCCGEBBOjNhhDtiPGG5uIEApgQgghxBYP2GxHNvV4T+m9CjYTIRTAhBBCiA1SbPfWnQH4Ab2Tz6TiV3KPClwCQQgFMCGEEGKJd/y9D+8IssMppNxBfphFwWYihAKYEEIIscFnI7GpEsEL2B0NfoDeMepPbCpCTgcehEEIIcQVKYCPDt+rsBmBfYLZEbhT6I0qLwHcs7kIoQAmhBBCTEgA/IR8dLfAZjeGEseXJWRK8N7CbDnFJXgkLiEnxQWrgBBCiAOkL6E15DtittoRp4n6pJaec0nxS8jpwRFgQgghthljs7Y3dioANxTAhFAAE0IIISak2LzclvbgWW/A3R8IOUm4CwQhhJBT5InilxAKYEIIIcQGFTYjq2Xk4nfGpiKEApgQQgixKYKvEefeuo8Uv4QQrgEmhBDikhRxrAmusNnrt2CTEEI4AkwIIcS18LxU4rMK9Awv2IxIU/wSQgBwBJgQQohfxgDuYHZwRRdqAK8A5uA2Z4QQCmBCCCERkCoRbFMM19i8fPeGzQEXNauZEEIBTAghJFZybI42TgF8xfa0t0R9doVuje0pcb+U8C0pegkhXfgf8wMxABGIP4kAAAAASUVORK5CYII=";
 const LOGO_B="data:image/png;base64,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";
@@ -1588,6 +1660,8 @@ $("pdfBtn").onclick=async()=>{
   }finally{btn.disabled=false;btn.innerHTML=old}
 };
 
+/* ---------- sticky strip state ---------- */
+try{new IntersectionObserver(([e])=>$("stripNav").classList.toggle("stuck",!e.isIntersecting),{threshold:0}).observe($("stripSentinel"))}catch(e){}
 /* ---------- boot ---------- */
 try{localStorage.removeItem("bba-ind")}catch(e){}
 try{history.scrollRestoration="manual"}catch(e){}
