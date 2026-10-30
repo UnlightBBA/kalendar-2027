@@ -555,6 +555,9 @@ html.gated .gate-in{min-height:100vh;min-height:100svh}
   .hero h1 .yr{margin-top:.1em;line-height:1}
   .gate-title{line-height:1.05}
 }
+/* project view owns the screen (iOS Safari otherwise shows the page through its bars) */
+html.briefing,html.briefing body{background:var(--bg)}
+html.briefing body>*:not(#ov):not(#toast):not(#pdfhost):not(script){display:none!important}
 </style>
 
 </head>
@@ -578,7 +581,7 @@ html.gated .gate-in{min-height:100vh;min-height:100svh}
 
 <div class="wrap">
   <main class="grid" id="grid"></main>
-  <footer class="foot"><span class="fbrand"><a class="brandlink" href="https://bloombergadria.com" target="_blank" rel="noopener"><img class="logo sm" data-logo="w" alt="Bloomberg Adria" width="120" height="14"></a><span id="footT">KOMERCIJALNA STRATEGIJA 2027</span></span><span class="hint" id="hint">Sve cijene su informativne i odnose se na pakete opisane u razradi.</span></footer>
+  <footer class="foot"><span class="fbrand"><a class="brandlink" href="https://bloombergadria.com" target="_blank" rel="noopener"><img class="logo sm" data-logo="w" alt="Bloomberg Adria" width="120" height="14"></a><span id="footT" hidden></span></span><span class="hint" id="hint">Sve cijene su informativne i odnose se na pakete opisane u razradi.</span></footer>
 </div>
 
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="bTitle" hidden>
@@ -1305,7 +1308,7 @@ function applyMarket(id,persist){
   document.documentElement.lang=MKT.lang;document.title=T("title");
   $("h1t").textContent=T("h1");$("tagline").textContent=T("tagline");$("filterLabel").textContent=T("ind");
   $("filter").setAttribute("aria-label",T("filterAria"));$("stripNav").setAttribute("aria-label",T("months"));
-  $("footT").textContent=T("foot");$("hint").textContent=T("hint");
+  $("hint").textContent=T("hint");
   $("prevBtn").setAttribute("aria-label",T("prevA"));$("nextBtn").setAttribute("aria-label",T("nextA"));$("closeBtn").setAttribute("aria-label",T("close"));
   document.querySelectorAll("a.brandlink").forEach(a=>a.href=MKT.url);
   renderCities();renderStrip();renderGrid();applyFilter();
@@ -1455,7 +1458,7 @@ function kpiHTML(p){
 }
 function monthLabel(p,mi){const ms=p.months;if(!ms)return MONTHS[mi].name;const cons=ms.every((v,i)=>!i||v===ms[i-1]+1);return cons?MONTHS[ms[0]].name+" – "+MONTHS[ms[ms.length-1]].name:ms.map(i=>MONTHS[i].name).join(` ${T("and")} `)}
 
-let current=null,lastFocus=null;
+let current=null,lastFocus=null,briefY=0;
 function openBrief(id,mi,from,fromPop){
   const p=P[id];if(!p||p.pending)return;
   if(mi==null)mi=p.month;
@@ -1485,6 +1488,7 @@ function openBrief(id,mi,from,fromPop){
   $("nextBtn").onclick=()=>openBrief(nx.id,nx.mi);
   $("ovBody").querySelectorAll(".nn").forEach(b=>b.onclick=()=>openBrief(b.dataset.id,+b.dataset.m));
   $("ovBody").querySelectorAll(".toc a").forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.getElementById(a.dataset.a);if(t)ov.scrollTo({top:t.getBoundingClientRect().top+ov.scrollTop-70,behavior:"smooth"})});
+  if(!wasOpen){briefY=window.scrollY||0;document.documentElement.classList.add("briefing")}
   ov.hidden=false;ov.scrollTop=0;
   requestAnimationFrame(()=>ov.classList.add("on"));
   document.body.style.overflow="hidden";
@@ -1497,6 +1501,7 @@ function closeBrief(fromPop){
   const ov=$("ov");ov.classList.remove("on");
   setTimeout(()=>{if(!current)ov.hidden=true},220);
   document.body.style.overflow="";current=null;
+  document.documentElement.classList.remove("briefing");window.scrollTo(0,briefY);
   if(fromPop!==true){try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
   if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});
 }
