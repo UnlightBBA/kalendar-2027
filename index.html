@@ -617,6 +617,13 @@ body::after{display:none!important}
 .bhero .motif .art{filter:none}
 .bhero .motif{animation-duration:.35s}
 .bhero .motif .d{animation-duration:1.4s}
+/* layout: no sideways page scroll, roomier desktop gutters, optical margins handled in JS */
+html,body{overflow-x:clip}
+.hero h1{margin-left:0}
+.hero h1 .yr{margin-left:0}
+@media (max-width:640px){.strip-inner{margin-inline:0!important;padding:5px!important;scroll-padding-inline:5px}}
+@media (min-width:900px){.wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+@media (min-width:1280px){.wrap{padding-left:56px;padding-right:56px}}
 </style>
 
 </head>
@@ -1454,7 +1461,7 @@ function applyMarket(id,persist){
 $("cities").addEventListener("click",e=>{const b=e.target.closest(".city");if(b&&b.dataset.mkt!==MKT.id)applyMarket(b.dataset.mkt,true)});
 function renderGate(){
   $("gatePrompt").innerHTML=[...new Set(MARKETS.map(m=>m.prompt))].map(p=>`<span class="gp">${esc(p)}</span>`).join('<span class="gsep" aria-hidden="true"> · </span>');
-  $("gateList").innerHTML=MARKETS.map(m=>`<button type="button" class="gbtn" data-mkt="${m.id}" title="${esc(m.country)}">${esc(m.langName)}</button>`).join("");
+  $("gateList").innerHTML=["rs","hr","ba","si","mk"].map(id=>MARKETS.find(m=>m.id===id)).filter(Boolean).map(m=>`<button type="button" class="gbtn" data-mkt="${m.id}" title="${esc(m.country)}">${esc(m.langName)}</button>`).join("");
   $("gateList").onclick=e=>{const b=e.target.closest(".gbtn");if(!b)return;applyMarket(b.dataset.mkt,true);closeGate()};
 }
 function openGate(){renderGate();const g=$("gate");document.documentElement.classList.add("gated");window.scrollTo(0,0);g.hidden=false;requestAnimationFrame(()=>g.classList.add("on"));document.body.style.overflow="hidden"}
@@ -1739,6 +1746,19 @@ try{history.scrollRestoration="manual"}catch(e){}
 })();
 if(location.hash){try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
 window.scrollTo(0,0);
+
+/* optical left alignment: cancel the first glyph's side bearing so big titles line up with the logo */
+const OPT_CTX=document.createElement("canvas").getContext("2d");
+function optAlign(){
+  const ink=(el,ch)=>{const cs=getComputedStyle(el);OPT_CTX.font=`${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;return Math.max(0,-OPT_CTX.measureText(ch).actualBoundingBoxLeft)};
+  const h=document.querySelector(".hero h1"),t=document.getElementById("h1t"),y=h&&h.querySelector(".yr");
+  if(h&&t&&t.textContent.trim()){const k=ink(h,t.textContent.trim()[0]);h.style.marginLeft=(-k).toFixed(1)+"px";
+    if(y&&y.textContent.trim()){y.style.marginLeft=(k-ink(y,y.textContent.trim()[0])).toFixed(1)+"px"}}
+  document.querySelectorAll(".bt").forEach(el=>{const tx=el.textContent.trim();if(tx)el.style.marginLeft=(-ink(el,tx[0])).toFixed(1)+"px"})}
+{const _am=applyMarket;applyMarket=function(){const r=_am.apply(this,arguments);optAlign();return r};
+ const _ob=openBrief;openBrief=function(){const r=_ob.apply(this,arguments);optAlign();return r};}
+if(document.fonts){document.fonts.ready.then(optAlign);document.fonts.addEventListener&&document.fonts.addEventListener("loadingdone",optAlign)}
+addEventListener("resize",()=>{clearTimeout(optAlign.t);optAlign.t=setTimeout(optAlign,120)});optAlign();
 </script>
 
 </body>
