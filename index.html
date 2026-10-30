@@ -627,7 +627,8 @@ html,body{overflow-x:clip}
 /* touch screens: no sticky hover after a tap */
 @media (hover:none){
   .city:hover:not(.on){color:var(--faint)}
-  .chip:hover:not(.on){color:#c9cfdf;border-color:var(--glass-br)}
+  .chip:hover:not([aria-pressed="true"]){color:#c9cfdf;border-color:var(--glass-br)}
+  .chip[aria-pressed="true"],.chip[aria-pressed="true"]:hover{background:#fff;color:#070a14;border-color:#fff}
   .month:hover,.proj:hover,.seg:hover,.nn:hover,.gbtn:hover{transform:none}
   .month:hover::after{transform:none}
 }
@@ -1173,7 +1174,7 @@ const MOTIF=(function(){
       s+=L(c,cx+R0*Math.cos(a),cy+R0*Math.sin(a),cx+(R0-l)*Math.cos(a),cy+(R0-l)*Math.sin(a),maj?1.8:mid?1.1:.6,maj?.95:.55);
       if(maj){const t=R0-42;s+=`<text x="${r(cx+t*Math.cos(a))}" y="${r(cy+t*Math.sin(a)+5)}" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="16" font-weight="700" fill="${i>=70?"#ff6a5f":c}" fill-opacity=".95">${i/10}</text>`}}
     const na=val(5.2);
-    s+=`<g><animateTransform attributeName="transform" type="rotate" dur="7s" repeatCount="indefinite" calcMode="spline" values="0.0 ${cx} ${cy};0.0 ${cx} ${cy};37.1 ${cx} ${cy};27.0 ${cx} ${cy};28.7 ${cx} ${cy};26.3 ${cx} ${cy};145.1 ${cx} ${cy};33.8 ${cx} ${cy};27.0 ${cx} ${cy};87.8 ${cx} ${cy};232.9 ${cx} ${cy};241.3 ${cx} ${cy};234.6 ${cx} ${cy};241.3 ${cx} ${cy};236.2 ${cx} ${cy};30.4 ${cx} ${cy};27.0 ${cx} ${cy};0.0 ${cx} ${cy};0.0 ${cx} ${cy}" keyTimes="0;0.05;0.11;0.15;0.2;0.25;0.29;0.42;0.47;0.51;0.57;0.6;0.63;0.66;0.69;0.88;0.92;0.96;1" keySplines="0 0 1 1;.15 .7 .3 1;.4 0 .6 1;.4 0 .6 1;.4 0 .6 1;.15 .7 .3 1;.45 0 .55 1;.4 0 .6 1;.15 .7 .3 1;.15 .7 .3 1;.4 0 .6 1;.4 0 .6 1;.4 0 .6 1;.4 0 .6 1;.45 0 .55 1;.4 0 .6 1;.45 0 .55 1;0 0 1 1"/><g transform="rotate(${r(val(0)-270)} ${cx} ${cy})"><path d="M${cx-3.2} ${cy+10} L${cx} ${cy-R0+14} L${cx+3.2} ${cy+10} Z" fill="#ff3b30" filter="url(#${u}b)"/><path d="M${cx-1.2} ${cy+8} L${cx} ${cy-R0+16} L${cx+1.2} ${cy+8} Z" fill="#ffd2cc"/></g></g>`;
+    s+=`<g><animateTransform attributeName="transform" type="rotate" dur="14s" repeatCount="indefinite" calcMode="spline" values="0.0 ${cx} ${cy};0.0 ${cx} ${cy};40.5 ${cx} ${cy};27.0 ${cx} ${cy};29.0 ${cx} ${cy};27.0 ${cx} ${cy};216.0 ${cx} ${cy};135.0 ${cx} ${cy};219.4 ${cx} ${cy};151.9 ${cx} ${cy};222.8 ${cx} ${cy};165.4 ${cx} ${cy};216.0 ${cx} ${cy};33.8 ${cx} ${cy};27.0 ${cx} ${cy};28.3 ${cx} ${cy};27.0 ${cx} ${cy};0.0 ${cx} ${cy};0.0 ${cx} ${cy}" keyTimes="0;0.0286;0.0643;0.0929;0.1214;0.1429;0.2286;0.24;0.3571;0.3686;0.5071;0.5186;0.6857;0.8286;0.8571;0.8929;0.9214;0.9571;1" keySplines="0 0 1 1;.2 .6 .4 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.3 .15 .7 .95;.1 .7 .3 1;.3 .15 .7 .95;.1 .7 .3 1;.3 .15 .7 .95;.1 .7 .3 1;.3 .15 .7 .95;.35 0 .6 1;.45 0 .55 1;.45 0 .55 1;.45 0 .55 1;.35 0 .6 1;0 0 1 1"/><g transform="rotate(${r(val(0)-270)} ${cx} ${cy})"><path d="M${cx-3.2} ${cy+10} L${cx} ${cy-R0+14} L${cx+3.2} ${cy+10} Z" fill="#ff3b30" filter="url(#${u}b)"/><path d="M${cx-1.2} ${cy+8} L${cx} ${cy-R0+16} L${cx+1.2} ${cy+8} Z" fill="#ffd2cc"/></g></g>`;
     s+=Ci(c,cx,cy,16,1.6,.95,`rgba(0,0,0,.25)`)+Dot(c,cx,cy,5);
     s+=`<text x="${cx}" y="${cy+62}" text-anchor="middle" font-family="Onest,Arial,sans-serif" font-size="12" letter-spacing="2" fill="${c}" fill-opacity=".7">×1000 rpm</text>`;
     s+=`<text x="${cx}" y="${cy+106}" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="36" font-weight="800" fill="${c}" fill-opacity=".95">2027</text>`;
