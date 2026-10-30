@@ -571,8 +571,8 @@ html.briefing body>*:not(#ov):not(#toast):not(#pdfhost):not(script){display:none
 .m-spin{animation:mSpin 14s linear infinite}
 .m-spin-slow{animation:mSpin 70s linear infinite}
 .m-sway{animation:mSway 5s ease-in-out infinite alternate}
-.m-rev{animation:mRev 4.2s cubic-bezier(.45,0,.25,1) infinite}
-@keyframes mRev{0%,8%{transform:rotate(0)}38%{transform:rotate(238deg)}44%{transform:rotate(226deg)}50%{transform:rotate(236deg)}82%,100%{transform:rotate(0)}}
+.m-rev{animation:mRev 4.2s linear infinite}
+@keyframes mRev{0%,8%{transform:rotate(0deg);animation-timing-function:ease-in}18%{transform:rotate(60deg);animation-timing-function:linear}28%{transform:rotate(150deg);animation-timing-function:ease-out}38%{transform:rotate(238deg);animation-timing-function:ease-in-out}44%{transform:rotate(226deg)}50%{transform:rotate(236deg);animation-timing-function:ease-in}62%{transform:rotate(160deg);animation-timing-function:linear}72%{transform:rotate(70deg);animation-timing-function:ease-out}82%,100%{transform:rotate(0deg)}}
 .m-float{animation:mFloat 6s ease-in-out infinite alternate}
 .m-pulse{animation:mPulse 2.6s ease-in-out infinite}
 .m-ring{animation:mRing 3s ease-out infinite}
