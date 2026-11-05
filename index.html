@@ -632,6 +632,37 @@ html,body{overflow-x:clip}
   .month:hover,.proj:hover,.seg:hover,.nn:hover,.gbtn:hover{transform:none}
   .month:hover::after{transform:none}
 }
+/* share */
+.btn.share{gap:7px}
+.btn.share svg{flex:none}
+.sh-back{position:fixed;inset:0;z-index:40;background:rgba(3,5,12,.55);opacity:0;transition:opacity .15s}
+.sh-back.on{opacity:1}
+.sh{position:fixed;z-index:41;top:calc(64px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px));width:min(440px,calc(100vw - 40px));background:#0d111d;border:1px solid var(--glass-br);border-radius:18px;padding:18px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7);opacity:0;transform:translateY(-6px);transition:opacity .15s,transform .15s;color:var(--fg)}
+.sh.on{opacity:1;transform:none}
+.sh-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sh-head b{font-family:var(--f-display);font-size:17px;font-weight:700}
+.sh-x{border:0;background:none;color:var(--muted);font-size:16px;cursor:pointer;padding:6px;margin:-6px}
+.sh-proj{margin:4px 0 14px;color:var(--muted);font-size:14px}
+.sh-opts{display:grid;gap:10px}
+.sh-opt{border:1px solid var(--glass-br);border-radius:14px;padding:14px;background:rgba(255,255,255,.03)}
+.sh-t b{display:block;font-size:15px;font-weight:650}
+.sh-t span{display:block;color:var(--muted);font-size:13px;line-height:1.45;margin-top:3px}
+.sh-url{margin:10px 0;font-size:12px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--f-body)}
+.sh-acts{display:flex;gap:8px}
+.sh-acts .btn{flex:1;justify-content:center;font-size:13.5px}
+.sh-copy{background:#fff!important;color:#070a14!important;border-color:#fff!important}
+.sh-copy.ok{background:#1fc48f!important;border-color:#1fc48f!important;color:#04140e!important}
+.sh-lang{margin:12px 2px 0;font-size:12.5px;color:var(--faint)}
+.sh-lang b{color:var(--muted);font-weight:600}
+.sh-toast{position:fixed;z-index:42;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);background:#fff;color:#070a14;font-weight:600;font-size:14px;padding:10px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+.sh-toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:640px){
+  .sh{top:auto;bottom:0;left:0;right:0;width:auto;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));transform:translateY(16px)}
+  .btn.share{padding:8px 11px}
+}
+/* solo link: client sees only this project */
+html.solo #closeBtn,html.solo #prevBtn,html.solo #nextBtn,html.solo #shareBtn,html.solo .nextnav{display:none!important}
+html.solo .ov-bar .crumb{flex:1}
 </style>
 
 </head>
@@ -662,12 +693,21 @@ html,body{overflow-x:clip}
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="bTitle" hidden>
   <div class="ov-bar">
     <span class="crumb" id="crumb"></span>
+    <button class="btn share" id="shareBtn" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/></svg><span class="long" id="shareLbl">Podijeli</span></button>
     <button class="btn sq" id="prevBtn" type="button" aria-label="Prethodni projekat">←</button>
     <button class="btn sq" id="nextBtn" type="button" aria-label="Sljedeći projekat">→</button>
     <button class="btn dl" id="pdfBtn" type="button" hidden><span aria-hidden="true">↓</span> PDF<span class="long">&nbsp;ponude</span></button>
     <button class="btn sq" id="closeBtn" type="button" aria-label="Zatvori">✕</button>
   </div>
   <div id="ovBody"></div>
+  <div class="sh-back" id="shBack" hidden></div>
+  <div class="sh" id="shSheet" role="dialog" aria-modal="true" aria-labelledby="shTitle" hidden>
+    <div class="sh-head"><b id="shTitle"></b><button class="sh-x" id="shClose" type="button" aria-label="✕">✕</button></div>
+    <p class="sh-proj" id="shProj"></p>
+    <div class="sh-opts" id="shOpts"></div>
+    <p class="sh-lang" id="shLang"></p>
+  </div>
+  <div class="sh-toast" id="shToast" role="status" aria-live="polite"></div>
 </div>
 <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" hidden>
   <div class="gate-in">
@@ -1420,11 +1460,11 @@ const MONTH_T={
 };
 const SEASON_OF=[0,0,1,1,1,2,2,2,3,3,3,0];
 const UI={
- ba:{h1:"Kalendar projekata",title:"Kalendar projekata 2027",tagline:"Dvanaest mjeseci, jedan komercijalni ritam. Odaberite mjesec ili industriju i otvorite projekat za razradu i pakete.",ind:"Industrija",all:"Sve",months:"Mjeseci",filterAria:"Filtriraj po industriji",foot:"KOMERCIJALNA STRATEGIJA 2027",hint:"Sve cijene su informativne i odnose se na pakete opisane u razradi.",prev:"Prethodni",next:"Sljedeći",prevA:"Prethodni projekat",nextA:"Sljedeći projekat",close:"Zatvori",from:"od",kpiFrom:"Investicija od",to:"Do",uvod:"Uvod",publika:"Publika",segmenti:"Segmenti",segH:"Šest segmenata luksuza",teme:"Teme",korist:"Korist",koristP:"Korist za partnera",format:"Format",paketi:"Paketi",offer:"Šta nudimo",invest:"Investicija",toc:"Sadržaj",and:"i",market:"Tržište"},
- hr:{h1:"Kalendar projekata",title:"Kalendar projekata 2027",tagline:"Dvanaest mjeseci, jedan komercijalni ritam. Odaberite mjesec ili industriju i otvorite projekt za razradu i pakete.",ind:"Industrija",all:"Sve",months:"Mjeseci",filterAria:"Filtriraj po industriji",foot:"KOMERCIJALNA STRATEGIJA 2027",hint:"Sve cijene su informativne i odnose se na pakete opisane u razradi.",prev:"Prethodni",next:"Sljedeći",prevA:"Prethodni projekt",nextA:"Sljedeći projekt",close:"Zatvori",from:"od",kpiFrom:"Investicija od",to:"Do",uvod:"Uvod",publika:"Publika",segmenti:"Segmenti",segH:"Šest segmenata luksuza",teme:"Teme",korist:"Korist",koristP:"Korist za partnera",format:"Format",paketi:"Paketi",offer:"Što nudimo",invest:"Investicija",toc:"Sadržaj",and:"i",market:"Tržište"},
- rs:{h1:"Kalendar projekata",title:"Kalendar projekata 2027",tagline:"Dvanaest meseci, jedan komercijalni ritam. Izaberite mesec ili industriju i otvorite projekat za razradu i pakete.",ind:"Industrija",all:"Sve",months:"Meseci",filterAria:"Filtriraj po industriji",foot:"KOMERCIJALNA STRATEGIJA 2027",hint:"Sve cene su informativne i odnose se na pakete opisane u razradi.",prev:"Prethodni",next:"Sledeći",prevA:"Prethodni projekat",nextA:"Sledeći projekat",close:"Zatvori",from:"od",kpiFrom:"Investicija od",to:"Do",uvod:"Uvod",publika:"Publika",segmenti:"Segmenti",segH:"Šest segmenata luksuza",teme:"Teme",korist:"Korist",koristP:"Korist za partnera",format:"Format",paketi:"Paketi",offer:"Šta nudimo",invest:"Investicija",toc:"Sadržaj",and:"i",market:"Tržište"},
- si:{h1:"Koledar projektov",title:"Koledar projektov 2027",tagline:"Dvanajst mesecev, en komercialni ritem. Izberite mesec ali panogo in odprite projekt za podrobnosti in pakete.",ind:"Panoga",all:"Vse",months:"Meseci",filterAria:"Filtriraj po panogi",foot:"KOMERCIALNA STRATEGIJA 2027",hint:"Vse cene so informativne in se nanašajo na pakete, opisane v podrobnostih.",prev:"Prejšnji",next:"Naslednji",prevA:"Prejšnji projekt",nextA:"Naslednji projekt",close:"Zapri",from:"od",kpiFrom:"Naložba od",to:"Do",uvod:"Uvod",publika:"Občinstvo",segmenti:"Segmenti",segH:"Šest segmentov luksuza",teme:"Teme",korist:"Korist",koristP:"Korist za partnerja",format:"Format",paketi:"Paketi",offer:"Kaj ponujamo",invest:"Naložba",toc:"Vsebina",and:"in",market:"Trg"},
- mk:{h1:"Календар на проекти",title:"Календар на проекти 2027",tagline:"Дванаесет месеци, еден комерцијален ритам. Изберете месец или индустрија и отворете го проектот за детали и пакети.",ind:"Индустрија",all:"Сите",months:"Месеци",filterAria:"Филтрирај по индустрија",foot:"КОМЕРЦИЈАЛНА СТРАТЕГИЈА 2027",hint:"Сите цени се информативни и се однесуваат на пакетите опишани во деталите.",prev:"Претходен",next:"Следен",prevA:"Претходен проект",nextA:"Следен проект",close:"Затвори",from:"од",kpiFrom:"Инвестиција од",to:"До",uvod:"Вовед",publika:"Публика",segmenti:"Сегменти",segH:"Шест сегменти на луксузот",teme:"Теми",korist:"Придобивка",koristP:"Придобивка за партнерот",format:"Формат",paketi:"Пакети",offer:"Што нудиме",invest:"Инвестиција",toc:"Содржина",and:"и",market:"Пазар"}
+ ba:{share:"Podijeli",shTitle:"Podijeli projekat",shAll:"Projekat i cijeli kalendar",shAllD:"Klijent otvara ovaj projekat i može pregledati i ostale.",shSolo:"Samo ovaj projekat",shSoloD:"Klijent vidi samo ovaj projekat, bez ostatka kalendara.",copy:"Kopiraj link",copied:"Link je kopiran",send:"Pošalji",shLang:"Link se otvara na jeziku:",h1:"Kalendar projekata",title:"Kalendar projekata 2027",tagline:"Dvanaest mjeseci, jedan komercijalni ritam. Odaberite mjesec ili industriju i otvorite projekat za razradu i pakete.",ind:"Industrija",all:"Sve",months:"Mjeseci",filterAria:"Filtriraj po industriji",foot:"KOMERCIJALNA STRATEGIJA 2027",hint:"Sve cijene su informativne i odnose se na pakete opisane u razradi.",prev:"Prethodni",next:"Sljedeći",prevA:"Prethodni projekat",nextA:"Sljedeći projekat",close:"Zatvori",from:"od",kpiFrom:"Investicija od",to:"Do",uvod:"Uvod",publika:"Publika",segmenti:"Segmenti",segH:"Šest segmenata luksuza",teme:"Teme",korist:"Korist",koristP:"Korist za partnera",format:"Format",paketi:"Paketi",offer:"Šta nudimo",invest:"Investicija",toc:"Sadržaj",and:"i",market:"Tržište"},
+ hr:{share:"Podijeli",shTitle:"Podijeli projekt",shAll:"Projekt i cijeli kalendar",shAllD:"Klijent otvara ovaj projekt i može pregledati i ostale.",shSolo:"Samo ovaj projekt",shSoloD:"Klijent vidi samo ovaj projekt, bez ostatka kalendara.",copy:"Kopiraj poveznicu",copied:"Poveznica je kopirana",send:"Pošalji",shLang:"Poveznica se otvara na jeziku:",h1:"Kalendar projekata",title:"Kalendar projekata 2027",tagline:"Dvanaest mjeseci, jedan komercijalni ritam. Odaberite mjesec ili industriju i otvorite projekt za razradu i pakete.",ind:"Industrija",all:"Sve",months:"Mjeseci",filterAria:"Filtriraj po industriji",foot:"KOMERCIJALNA STRATEGIJA 2027",hint:"Sve cijene su informativne i odnose se na pakete opisane u razradi.",prev:"Prethodni",next:"Sljedeći",prevA:"Prethodni projekt",nextA:"Sljedeći projekt",close:"Zatvori",from:"od",kpiFrom:"Investicija od",to:"Do",uvod:"Uvod",publika:"Publika",segmenti:"Segmenti",segH:"Šest segmenata luksuza",teme:"Teme",korist:"Korist",koristP:"Korist za partnera",format:"Format",paketi:"Paketi",offer:"Što nudimo",invest:"Investicija",toc:"Sadržaj",and:"i",market:"Tržište"},
+ rs:{share:"Podeli",shTitle:"Podeli projekat",shAll:"Projekat i ceo kalendar",shAllD:"Klijent otvara ovaj projekat i može da pregleda i ostale.",shSolo:"Samo ovaj projekat",shSoloD:"Klijent vidi samo ovaj projekat, bez ostatka kalendara.",copy:"Kopiraj link",copied:"Link je kopiran",send:"Pošalji",shLang:"Link se otvara na jeziku:",h1:"Kalendar projekata",title:"Kalendar projekata 2027",tagline:"Dvanaest meseci, jedan komercijalni ritam. Izaberite mesec ili industriju i otvorite projekat za razradu i pakete.",ind:"Industrija",all:"Sve",months:"Meseci",filterAria:"Filtriraj po industriji",foot:"KOMERCIJALNA STRATEGIJA 2027",hint:"Sve cene su informativne i odnose se na pakete opisane u razradi.",prev:"Prethodni",next:"Sledeći",prevA:"Prethodni projekat",nextA:"Sledeći projekat",close:"Zatvori",from:"od",kpiFrom:"Investicija od",to:"Do",uvod:"Uvod",publika:"Publika",segmenti:"Segmenti",segH:"Šest segmenata luksuza",teme:"Teme",korist:"Korist",koristP:"Korist za partnera",format:"Format",paketi:"Paketi",offer:"Šta nudimo",invest:"Investicija",toc:"Sadržaj",and:"i",market:"Tržište"},
+ si:{share:"Deli",shTitle:"Deli projekt",shAll:"Projekt in celoten koledar",shAllD:"Stranka odpre ta projekt in si lahko ogleda tudi ostale.",shSolo:"Samo ta projekt",shSoloD:"Stranka vidi samo ta projekt, brez preostalega koledarja.",copy:"Kopiraj povezavo",copied:"Povezava je kopirana",send:"Pošlji",shLang:"Povezava se odpre v jeziku:",h1:"Koledar projektov",title:"Koledar projektov 2027",tagline:"Dvanajst mesecev, en komercialni ritem. Izberite mesec ali panogo in odprite projekt za podrobnosti in pakete.",ind:"Panoga",all:"Vse",months:"Meseci",filterAria:"Filtriraj po panogi",foot:"KOMERCIALNA STRATEGIJA 2027",hint:"Vse cene so informativne in se nanašajo na pakete, opisane v podrobnostih.",prev:"Prejšnji",next:"Naslednji",prevA:"Prejšnji projekt",nextA:"Naslednji projekt",close:"Zapri",from:"od",kpiFrom:"Naložba od",to:"Do",uvod:"Uvod",publika:"Občinstvo",segmenti:"Segmenti",segH:"Šest segmentov luksuza",teme:"Teme",korist:"Korist",koristP:"Korist za partnerja",format:"Format",paketi:"Paketi",offer:"Kaj ponujamo",invest:"Naložba",toc:"Vsebina",and:"in",market:"Trg"},
+ mk:{share:"Сподели",shTitle:"Сподели проект",shAll:"Проектот и целиот календар",shAllD:"Клиентот го отвора овој проект и може да ги разгледа и останатите.",shSolo:"Само овој проект",shSoloD:"Клиентот го гледа само овој проект, без остатокот од календарот.",copy:"Копирај линк",copied:"Линкот е копиран",send:"Испрати",shLang:"Линкот се отвора на јазик:",h1:"Календар на проекти",title:"Календар на проекти 2027",tagline:"Дванаесет месеци, еден комерцијален ритам. Изберете месец или индустрија и отворете го проектот за детали и пакети.",ind:"Индустрија",all:"Сите",months:"Месеци",filterAria:"Филтрирај по индустрија",foot:"КОМЕРЦИЈАЛНА СТРАТЕГИЈА 2027",hint:"Сите цени се информативни и се однесуваат на пакетите опишани во деталите.",prev:"Претходен",next:"Следен",prevA:"Претходен проект",nextA:"Следен проект",close:"Затвори",from:"од",kpiFrom:"Инвестиција од",to:"До",uvod:"Вовед",publika:"Публика",segmenti:"Сегменти",segH:"Шест сегменти на луксузот",teme:"Теми",korist:"Придобивка",koristP:"Придобивка за партнерот",format:"Формат",paketi:"Пакети",offer:"Што нудиме",invest:"Инвестиција",toc:"Содржина",and:"и",market:"Пазар"}
 };
 const IT={
  hr:{"Auto industrija":"Automobilska industrija","Banke i finansije":"Banke i financije","Turizam i hotelijerstvo":"Turizam i ugostiteljstvo","Događaji i sajmovi":"Događanja i sajmovi","Sajmovi i događaji":"Sajmovi i događanja","Cyber sigurnost":"Kibernetička sigurnost"},
@@ -1460,7 +1500,7 @@ function applyMarket(id,persist){
   $("h1t").textContent=T("h1");$("tagline").textContent=T("tagline");$("filterLabel").textContent=T("ind");
   $("filter").setAttribute("aria-label",T("filterAria"));$("stripNav").setAttribute("aria-label",T("months"));
   $("hint").textContent=T("hint");
-  $("prevBtn").setAttribute("aria-label",T("prevA"));$("nextBtn").setAttribute("aria-label",T("nextA"));$("closeBtn").setAttribute("aria-label",T("close"));
+  $("prevBtn").setAttribute("aria-label",T("prevA"));$("nextBtn").setAttribute("aria-label",T("nextA"));$("closeBtn").setAttribute("aria-label",T("close"));$("shareLbl").textContent=T("share");$("shareBtn").setAttribute("aria-label",T("share"));
   document.querySelectorAll("a.brandlink").forEach(a=>a.href=MKT.url);
   renderCities();renderStrip();renderGrid();applyFilter();
   if(current)openBrief(current.id,current.mi);
@@ -1610,11 +1650,32 @@ function kpiHTML(p){
 function monthLabel(p,mi){const ms=p.months;if(!ms)return MONTHS[mi].name;const cons=ms.every((v,i)=>!i||v===ms[i-1]+1);const lc=n=>n.toLocaleLowerCase();return cons?MONTHS[ms[0]].name+" – "+lc(MONTHS[ms[ms.length-1]].name):ms.map((i,k)=>k?lc(MONTHS[i].name):MONTHS[i].name).join(` ${T("and")} `)}
 
 let current=null,lastFocus=null,briefY=0;
+let SOLO=null;
+const SHARE_BASE=/^https?:$/.test(location.protocol)&&!/claude\.ai|claudeusercontent|anthropic/.test(location.hostname)?location.origin+location.pathname:"https://unlightbba.github.io/kalendar-2027/";
+function shareURL(id,mi,solo){const p=P[id];let u=SHARE_BASE+"?m="+MKT.id+"&p="+encodeURIComponent(id);if(mi!=null&&mi!==p.month)u+="&mi="+mi;if(solo)u+="&solo=1";return u}
+function toast(t){const el=$("shToast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),1800)}
+async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){}
+  try{const a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.cssText="position:fixed;opacity:0;top:0";document.body.appendChild(a);a.select();const ok=document.execCommand("copy");a.remove();return ok}catch(e){return false}}
+function openShare(){if(!current)return;const {id,mi}=current,p=P[id];
+  $("shTitle").textContent=T("shTitle");$("shProj").textContent=p.title;
+  $("shLang").innerHTML=`${T("shLang")} <b>${esc(MKT.langName)}</b>`;
+  const can=!!navigator.share&&matchMedia("(hover:none)").matches;
+  $("shOpts").innerHTML=[[false,T("shAll"),T("shAllD")],[true,T("shSolo"),T("shSoloD")]].map(([solo,t,d])=>{const u=shareURL(id,mi,solo);
+    return `<div class="sh-opt"><div class="sh-t"><b>${esc(t)}</b><span>${esc(d)}</span></div>
+      <div class="sh-url" title="${esc(u)}">${esc(u.replace(/^https?:\/\//,""))}</div>
+      <div class="sh-acts"><button class="btn sh-copy" type="button" data-u="${esc(u)}">${esc(T("copy"))}</button>${can?`<button class="btn sh-send" type="button" data-u="${esc(u)}">${esc(T("send"))}</button>`:""}</div></div>`}).join("");
+  $("shOpts").querySelectorAll(".sh-copy").forEach(b=>b.onclick=async()=>{if(await copyText(b.dataset.u)){toast(T("copied"));b.classList.add("ok");setTimeout(()=>b.classList.remove("ok"),1600)}});
+  $("shOpts").querySelectorAll(".sh-send").forEach(b=>b.onclick=()=>{navigator.share({title:p.title,url:b.dataset.u}).catch(()=>{})});
+  $("shBack").hidden=false;$("shSheet").hidden=false;requestAnimationFrame(()=>{$("shSheet").classList.add("on");$("shBack").classList.add("on")});
+  const f=$("shOpts").querySelector(".sh-copy");f&&f.focus({preventScroll:true})}
+function closeShare(){$("shSheet").classList.remove("on");$("shBack").classList.remove("on");$("shSheet").hidden=true;$("shBack").hidden=true;$("shareBtn").focus({preventScroll:true})}
 function openBrief(id,mi,from,fromPop){
   const p=P[id];if(!p||p.pending)return;
+  if(SOLO&&id!==SOLO)return;
   if(mi==null)mi=p.month;
   const wasOpen=!!current;
   current={id,mi};if(from)lastFocus=from;
+  if(!$("shSheet").hidden)closeShare();
   const m=MONTHS[mi],ov=$("ov");setVars(ov,m);
   const role=roleOf(id);
   $("crumb").innerHTML=`<i></i>${m.k} 2027 · ${esc(p.tag)}`;
@@ -1647,7 +1708,7 @@ function openBrief(id,mi,from,fromPop){
   if(!fromPop){try{const st={b:id,mi:mi};if(wasOpen&&history.state&&history.state.b)history.replaceState(st,"","#"+id);else history.pushState(st,"","#"+id)}catch(e){}}
 }
 function closeBrief(fromPop){
-  if(!current)return;
+  if(!current||SOLO)return;
   if(fromPop!==true){try{if(history.state&&history.state.b){history.back();return}}catch(e){}}
   const ov=$("ov");ov.classList.remove("on");
   setTimeout(()=>{if(!current)ov.hidden=true},220);
@@ -1662,6 +1723,7 @@ window.addEventListener("popstate",e=>{
   else if(current)closeBrief(true);
 });
 $("closeBtn").onclick=()=>closeBrief();
+$("shareBtn").onclick=openShare;$("shClose").onclick=closeShare;$("shBack").onclick=closeShare;
 $("ov").addEventListener("scroll",()=>{
   const links=$("ovBody").querySelectorAll(".toc a");let on=null;
   links.forEach(a=>{const t=document.getElementById(a.dataset.a);if(t&&t.getBoundingClientRect().top<160)on=a});
@@ -1669,6 +1731,7 @@ $("ov").addEventListener("scroll",()=>{
 },{passive:true});
 document.addEventListener("keydown",e=>{
   if(!current)return;
+  if(!$("shSheet").hidden){if(e.key==="Escape")closeShare();return}
   if(e.key==="Escape")closeBrief();
   else if(e.key==="ArrowRight"&&!e.target.closest("input,textarea"))$("nextBtn").click();
   else if(e.key==="ArrowLeft"&&!e.target.closest("input,textarea"))$("prevBtn").click();
@@ -1754,6 +1817,15 @@ try{history.scrollRestoration="manual"}catch(e){}
 })();
 if(location.hash){try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
 window.scrollTo(0,0);
+(function(){let q;try{q=new URLSearchParams(location.search)}catch(e){return}
+  const id=q.get("p");if(!id||!P[id]||P[id].pending)return;
+  const p=P[id];let mi=parseInt(q.get("mi"),10);if(!(mi>=0&&mi<12))mi=p.month;
+  if(q.get("solo")==="1"){SOLO=id;document.documentElement.classList.add("solo");openBrief(id,mi,null,true);return}
+  /* calendar link: drop the deep-link params so closing the project (or reloading) lands on the calendar */
+  q.delete("p");q.delete("mi");const rest=q.toString();
+  try{history.replaceState(null,"",location.pathname+(rest?"?"+rest:""))}catch(e){}
+  openBrief(id,mi);
+})();
 
 /* optical left alignment: cancel the first glyph's side bearing so big titles line up with the logo */
 const OPT_CTX=document.createElement("canvas").getContext("2d");
