@@ -643,7 +643,9 @@ html,body{overflow-x:clip}
 .sh-head b{font-family:var(--f-display);font-size:17px;font-weight:700}
 .sh-x{border:0;background:none;color:var(--muted);font-size:16px;cursor:pointer;padding:6px;margin:-6px}
 .sh-proj{margin:4px 0 14px;color:var(--muted);font-size:14px}
-.sh-opts{display:grid;gap:10px}
+.sh-opts{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.sh,.sh *{box-sizing:border-box}
+.sh-opt,.sh-t,.sh-url{min-width:0;max-width:100%}
 .sh-opt{border:1px solid var(--glass-br);border-radius:14px;padding:14px;background:rgba(255,255,255,.03)}
 .sh-t b{display:block;font-size:15px;font-weight:650}
 .sh-t span{display:block;color:var(--muted);font-size:13px;line-height:1.45;margin-top:3px}
