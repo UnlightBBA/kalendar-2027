@@ -2,7 +2,7 @@
 <html lang="bs">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#050812">
 <meta name="description" content="Bloomberg Adria · Kalendar komercijalnih projekata 2027">
@@ -720,6 +720,10 @@ html[data-theme="light"] .gbtn:hover{background:#0b0f1c;color:#fff;border-color:
   .ov-bar .btn.sq,.ov-bar .btn.share{width:38px;height:38px;padding:0;justify-content:center;flex:none}
   .bhero-in,.bbody,.nextnav{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 }
+/* project view lives in the normal page flow (no fixed full-screen scroller):
+   iOS browsers paint their own bars over fixed overlays, which left empty bands top and bottom */
+html.briefing .ov{position:relative;inset:auto;overflow:visible;min-height:100vh;min-height:100svh;transform:none;overscroll-behavior:auto}
+html.briefing body{overflow:visible!important}
 </style>
 
 </head>
@@ -1763,11 +1767,10 @@ function openBrief(id,mi,from,fromPop){
   $("prevBtn").onclick=()=>openBrief(pv.id,pv.mi);
   $("nextBtn").onclick=()=>openBrief(nx.id,nx.mi);
   $("ovBody").querySelectorAll(".nn").forEach(b=>b.onclick=()=>openBrief(b.dataset.id,+b.dataset.m));
-  $("ovBody").querySelectorAll(".toc a").forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.getElementById(a.dataset.a);if(t)ov.scrollTo({top:t.getBoundingClientRect().top+ov.scrollTop-70,behavior:"smooth"})});
+  $("ovBody").querySelectorAll(".toc a").forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.getElementById(a.dataset.a);if(t)window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-70,behavior:"smooth"})});
   if(!wasOpen){briefY=window.scrollY||0;document.documentElement.classList.add("briefing")}
-  ov.hidden=false;ov.scrollTop=0;
+  ov.hidden=false;window.scrollTo({top:0,left:0,behavior:"instant"});
   requestAnimationFrame(()=>ov.classList.add("on"));
-  document.body.style.overflow="hidden";
   $("closeBtn").focus({preventScroll:true});
   if(!fromPop){try{const st={b:id,mi:mi};if(wasOpen&&history.state&&history.state.b)history.replaceState(st,"","#"+id);else history.pushState(st,"","#"+id)}catch(e){}}
 }
@@ -1777,7 +1780,7 @@ function closeBrief(fromPop){
   const ov=$("ov");ov.classList.remove("on");
   setTimeout(()=>{if(!current)ov.hidden=true},220);
   document.body.style.overflow="";current=null;
-  document.documentElement.classList.remove("briefing");window.scrollTo(0,briefY);
+  document.documentElement.classList.remove("briefing");window.scrollTo({top:briefY,left:0,behavior:"instant"});
   if(fromPop!==true){try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
   if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});
 }
@@ -1788,7 +1791,7 @@ window.addEventListener("popstate",e=>{
 });
 $("closeBtn").onclick=()=>closeBrief();
 $("shareBtn").onclick=openShare;$("shClose").onclick=closeShare;$("shBack").onclick=closeShare;
-$("ov").addEventListener("scroll",()=>{
+window.addEventListener("scroll",()=>{if(!current)return;
   const links=$("ovBody").querySelectorAll(".toc a");let on=null;
   links.forEach(a=>{const t=document.getElementById(a.dataset.a);if(t&&t.getBoundingClientRect().top<160)on=a});
   links.forEach(a=>a.classList.toggle("on",a===on));
