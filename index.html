@@ -694,7 +694,7 @@ html[data-theme="light"] .chip[aria-pressed="true"],html[data-theme="light"] .ch
 html[data-theme="light"] .filter-label{color:var(--muted)}
 @media (min-width:641px){html[data-theme="light"] .month{box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 0 0 1px rgba(0,0,0,.04) inset,0 24px 48px -28px rgba(20,24,60,.45)}}
 html[data-theme="light"] .ov{background:var(--bg)}
-html[data-theme="light"] .ov-bar{background:rgba(244,245,249,.85);border-bottom:1px solid var(--line)}
+html[data-theme="light"] .ov-bar{background:rgba(244,245,249,.95);border-bottom:1px solid var(--line)}
 html[data-theme="light"] .btn{background:#fff;border-color:var(--glass-br);color:var(--fg)}
 html[data-theme="light"] .p,html[data-theme="light"] .list li,html[data-theme="light"] .col p,html[data-theme="light"] .notes p,html[data-theme="light"] table.pk td:first-child{color:#3a4155}
 html[data-theme="light"] .ben p,html[data-theme="light"] .pkm-l{color:#4a5166}
@@ -712,6 +712,13 @@ html[data-theme="light"] .gbtn:hover{background:#0b0f1c;color:#fff;border-color:
   html[data-theme="light"] .proj{background:#fff;border-color:var(--glass-br);box-shadow:inset 3px 0 0 var(--c2),0 8px 24px -20px rgba(20,24,60,.4);color:var(--fg)}
   html[data-theme="light"] .proj .meta{color:var(--muted)}
   html[data-theme="light"] .proj .go{color:var(--ink)}
+}
+/* mobile brief: same 16px gutter as the calendar, compact bar */
+@media (max-width:640px){
+  .ov-bar{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:8px}
+  .ov-bar #prevBtn,.ov-bar #nextBtn{display:none}
+  .ov-bar .btn.sq,.ov-bar .btn.share{width:38px;height:38px;padding:0;justify-content:center;flex:none}
+  .bhero-in,.bbody,.nextnav{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 }
 </style>
 
