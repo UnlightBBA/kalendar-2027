@@ -680,7 +680,6 @@ html[data-theme="light"]{color-scheme:light;
   --glass-bg:rgba(255,255,255,.75);--glass-br:rgba(12,16,32,.11)}
 html[data-theme="light"] body{background:var(--bg);color:var(--fg)}
 html[data-theme="light"] :focus-visible{outline-color:rgba(12,16,32,.55)}
-html[data-theme="light"] .aurora{opacity:.22}
 html[data-theme="light"] .tagline{color:#3e4559}
 html[data-theme="light"] .hero h1 .yr{background-image:linear-gradient(105deg,#3b34e0 0%,#6d74ff 22%,#1d1a7a 32%,#5b4dff 44%,#0a8fb0 58%,#2a2690 70%,#7c5cff 86%,#3b34e0 100%)}
 html[data-theme="light"] .city{color:var(--faint)}
@@ -724,6 +723,13 @@ html[data-theme="light"] .gbtn:hover{background:#0b0f1c;color:#fff;border-color:
    iOS browsers paint their own bars over fixed overlays, which left empty bands top and bottom */
 html.briefing .ov{position:relative;inset:auto;overflow:visible;min-height:100vh;min-height:100svh;transform:none;overscroll-behavior:auto}
 html.briefing body{overflow:visible!important}
+/* softer, blended aurora behind the title */
+.aurora::before{width:max(52%,560px);height:640px;left:-6%;top:12%;background:radial-gradient(closest-side,rgba(75,69,255,1) 0%,rgba(75,69,255,0.82) 18%,rgba(75,69,255,0.55) 36%,rgba(75,69,255,0.3) 54%,rgba(75,69,255,0.12) 72%,rgba(75,69,255,0.03) 88%,rgba(75,69,255,0) 100%)}
+.aurora::after{width:max(46%,520px);height:600px;left:42%;top:-2%;background:radial-gradient(closest-side,rgba(15,182,214,1) 0%,rgba(15,182,214,0.82) 18%,rgba(15,182,214,0.55) 36%,rgba(15,182,214,0.3) 54%,rgba(15,182,214,0.12) 72%,rgba(15,182,214,0.03) 88%,rgba(15,182,214,0) 100%)}
+html[data-theme="light"] .aurora{opacity:1}
+html[data-theme="light"] .aurora::before{background:radial-gradient(closest-side,rgba(118,108,255,0.17) 0%,rgba(118,108,255,0.139) 18%,rgba(118,108,255,0.094) 36%,rgba(118,108,255,0.051) 54%,rgba(118,108,255,0.02) 72%,rgba(118,108,255,0.005) 88%,rgba(118,108,255,0.0) 100%)}
+html[data-theme="light"] .aurora::after{background:radial-gradient(closest-side,rgba(64,196,224,0.15) 0%,rgba(64,196,224,0.123) 18%,rgba(64,196,224,0.083) 36%,rgba(64,196,224,0.045) 54%,rgba(64,196,224,0.018) 72%,rgba(64,196,224,0.004) 88%,rgba(64,196,224,0.0) 100%)}
+@media (max-width:640px){.aurora::before{left:-40%;top:16%}.aurora::after{left:20%;top:0}}
 </style>
 
 </head>
