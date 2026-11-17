@@ -1214,7 +1214,9 @@ let P={
 
 /* ---------- January: The Year Ahead and Boardroom ---------- */
 Object.assign(P,{
-"godina-pred-nama":{month:0,months:[0,11],title:"The Year Ahead",tagline:"Business leaders’ perspectives. Regionalni native projekat za 2027.",
+"godina-pred-nama":{month:0,months:[0,11],single:true,
+ byMonth:{0:{facts:[["Trajanje projekta","1.12.2026. – 28.2.2027."],["Rok za materijale","1.12.2026."],["Tržišta","5"]]},11:{shift:["2027","2028"],facts:[["Trajanje projekta","1.12.2027. – 29.2.2028."],["Rok za materijale","1.12.2027."],["Tržišta","5"]]}},
+title:"The Year Ahead",tagline:"Business leaders’ perspectives. Regionalni native projekat za 2027.",
  ind:["Sve industrije"],
  lead:"Vizije lidera. Smjer poslovanja za 2027.",
  intro:["Regionalni projekat Bloomberg Adrije koji okuplja vodeće poslovne lidere i donosi njihove prognoze, prioritete i planove za godinu pred nama.","The Year Ahead realizuje se jednom godišnje, u trenutku kada se definišu ključne poslovne teme i agenda za narednih 12 mjeseci."],
@@ -1233,7 +1235,7 @@ Object.assign(P,{
  facts:[["Trajanje projekta","15.11.2026 – 15.3.2027."],["Rok za materijale","5.11.2026."],["Tržišta","5"]],
  notes:["**Specifikacija materijala:** partner dostavlja tekst intervjua ili autorski tekst na engleskom jeziku, opremljen naslovom i jednim međunaslovom, jednu portretnu fotografiju sagovornika i jednu do dvije prateće fotografije u JPG formatu.","~Sve objave na Bloomberg Adria multiplatformi jasno su označene kao sponzorisani sadržaj."]},
 
-"za-stolom-odlucivanja":{month:0,months:[0,11],title:"Boardroom",tagline:"Godišnji program komunikacije namijenjen C-level donosiocima poslovnih odluka.",
+"za-stolom-odlucivanja":{month:0,months:[0,11],single:true,title:"Boardroom",tagline:"Godišnji program komunikacije namijenjen C-level donosiocima poslovnih odluka.",
  ind:["Sve industrije","Banke i finansije"],
  lead:"Jačamo liderske pozicije. Gradimo kredibilitet. Oblikujemo poslovne razgovore.",
  intro:["Pomažemo kompanijama da komuniciraju svoju strategiju, poslovne rezultate, ključne investicije i stavove o najvažnijim ekonomskim temama kroz kredibilitet i doseg Bloomberg Adria."],
@@ -1558,6 +1560,10 @@ const T=k=>(UI[MKT.id]&&UI[MKT.id][k])||UI.ba[k]||k;
 const indName=i=>(IT[MKT.id]&&IT[MKT.id][i])||i;
 const TR_IDX={};TR.src.forEach((s,i)=>TR_IDX[s]=i);
 const TR_CACHE={};
+/* per-month variant of a project (e.g. The Year Ahead in January vs December) */
+function PV(id,mi){const p=P[id];const v=p&&p.byMonth&&p.byMonth[mi];if(!v)return p;
+  const sh=(o,k)=>{if(typeof o==="string")return v.shift?o.split(v.shift[0]).join(v.shift[1]):o;if(Array.isArray(o))return o.map(x=>sh(x));if(o&&typeof o==="object"){const r={};for(const k in o)r[k]=(k==="ind"||k==="byMonth")?o[k]:sh(o[k],k);return r}return o};
+  const q=v.shift?sh(p):Object.assign({},p);for(const k in v)if(k!=="shift")q[k]=v[k];return q}
 function trDeep(o,L,key){
   if(typeof o==="string"){if(key==="tag")return indName(o);const i=TR_IDX[o];return i===undefined?o:TR[L][i]}
   if(Array.isArray(o))return o.map(x=>trDeep(x,L,key));
@@ -1724,7 +1730,7 @@ function kpiHTML(p){
   const pi=priceInfo(p);if(!pi)return "";
   return `<div class="kpi"><b>${pi.n}</b><span>${pkW(pi.n)}</span></div><div class="kpi"><b>${fmt(pi.min)} €</b><span>${T("kpiFrom")}</span></div>${pi.n>1?`<div class="kpi"><b>${fmt(pi.max)} €</b><span>${T("to")}</span></div>`:""}`;
 }
-function monthLabel(p,mi){const ms=p.months;if(!ms)return MONTHS[mi].name;const cons=ms.every((v,i)=>!i||v===ms[i-1]+1);const lc=n=>n.toLocaleLowerCase();return cons?MONTHS[ms[0]].name+" – "+lc(MONTHS[ms[ms.length-1]].name):ms.map((i,k)=>k?lc(MONTHS[i].name):MONTHS[i].name).join(` ${T("and")} `)}
+function monthLabel(p,mi){const ms=p.months;if(!ms||p.single)return MONTHS[mi].name;const cons=ms.every((v,i)=>!i||v===ms[i-1]+1);const lc=n=>n.toLocaleLowerCase();return cons?MONTHS[ms[0]].name+" – "+lc(MONTHS[ms[ms.length-1]].name):ms.map((i,k)=>k?lc(MONTHS[i].name):MONTHS[i].name).join(` ${T("and")} `)}
 
 let current=null,lastFocus=null,briefY=0;
 let SOLO=null;
@@ -1746,9 +1752,10 @@ function openShare(){if(!current)return;const {id,mi}=current,p=P[id];
   const f=$("shOpts").querySelector(".sh-copy");f&&f.focus({preventScroll:true})}
 function closeShare(){$("shSheet").classList.remove("on");$("shBack").classList.remove("on");$("shSheet").hidden=true;$("shBack").hidden=true;$("shareBtn").focus({preventScroll:true})}
 function openBrief(id,mi,from,fromPop){
-  const p=P[id];if(!p||p.pending)return;
+  let p=P[id];if(!p||p.pending)return;
   if(SOLO&&id!==SOLO)return;
   if(mi==null)mi=p.month;
+  p=PV(id,mi);
   const wasOpen=!!current;
   current={id,mi};if(from)lastFocus=from;
   if(!$("shSheet").hidden)closeShare();
@@ -1827,7 +1834,7 @@ let dl=null;
 (async()=>{try{dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){dl=null}})();
 const slugFile=t=>"Bloomberg-Adria-2027-"+t.replace(/đ/g,"dj").replace(/Đ/g,"Dj").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"")+".pdf";
 function pdfHTML(id,mi){
-  const p=P[id],m=MONTHS[mi];const pi=priceInfo(p);
+  const p=PV(id,mi),m=MONTHS[mi];const pi=priceInfo(p);
   const {h}=bodyHTML(p,true);
   return `<div class="pdf" style="${varStr(m)}">
    <div class="phero">${motifSVG(id,m.ink,true)}<div class="ptop"><img class="plogo" src="${logoFor(m)}" alt="Bloomberg Adria"><span>KOMERCIJALNI PROJEKTI 2027</span></div>
